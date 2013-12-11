@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ORM-Benchmark</string>
+    <string name="show_results">Show Results</string>
+    <string name="task_header">Task</string>
+    <string name="results_title">Results&#8230;</string>
+    <string name="ormlite_header">ORMLite</string>
+    <string name="greendao_header">GreenDAO</string>
+    <string name="run_benchmark">Run Benchmark</string>
+
+</resources>

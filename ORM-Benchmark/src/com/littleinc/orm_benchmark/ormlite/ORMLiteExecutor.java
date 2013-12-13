@@ -24,7 +24,8 @@ public enum ORMLiteExecutor implements BenchmarkExecutable {
 
     @Override
     public void init(Context context, boolean useInMemoryDb) {
-        mHelper = new DataBaseHelper(context, useInMemoryDb);
+        DataBaseHelper.init(context, useInMemoryDb);
+        mHelper = DataBaseHelper.getInstance();
     }
 
     @Override

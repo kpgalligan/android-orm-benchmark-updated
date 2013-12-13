@@ -8,7 +8,7 @@ import de.greenrobot.daogenerator.Schema;
 public class Generator {
 
     // DB CONFIG
-    private static int DB_VERSION = 1;
+    private static int DB_VERSION = 2;
 
     private static String PACKAGE = "com.littleinc.orm_benchmark.greendao";
 
@@ -42,11 +42,10 @@ public class Generator {
         Schema schema = new Schema(DB_VERSION, PACKAGE);
 
         Entity user = schema.addEntity(USER_ENTITY);
-        addCommonColumns(user);
+        Property userPk = addCommonColumns(user);
 
         Entity message = schema.addEntity(MESSAGE_ENTITY);
-        Property messagePk = message.addIdProperty().autoincrement()
-                .getProperty();
+        message.addIdProperty().autoincrement();
         message.addStringProperty(CONTENT);
         message.addLongProperty(CLIENT_ID);
         message.addIntProperty(CREATED_AT);
@@ -56,7 +55,7 @@ public class Generator {
         message.addLongProperty(CHANNEL_ID).notNull();
 
         // One-to-many relationship
-        user.addToMany(message, messagePk, READERS);
+        message.addToMany(user, userPk, READERS);
 
         try {
             new DaoGenerator().generateAll(schema, "../ORM-Benchmark/src/");
@@ -65,9 +64,9 @@ public class Generator {
         }
     }
 
-    private static void addCommonColumns(Entity entity) {
-        entity.addIdProperty().autoincrement();
+    private static Property addCommonColumns(Entity entity) {
         entity.addStringProperty(LAST_NAME_COLUMN);
         entity.addStringProperty(FIRST_NAME_COLUMN);
+        return entity.addIdProperty().autoincrement().getProperty();
     }
 }

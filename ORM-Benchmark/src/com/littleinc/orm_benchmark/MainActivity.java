@@ -28,18 +28,20 @@ import android.widget.Button;
 import com.littleinc.orm_benchmark.BenchmarkExecutable.Task;
 import com.littleinc.orm_benchmark.greendao.GreenDaoExecutor;
 import com.littleinc.orm_benchmark.ormlite.ORMLiteExecutor;
+import com.littleinc.orm_benchmark.sqlite.SQLiteExecutor;
 import com.littleinc.orm_benchmark.util.Util;
 
 public class MainActivity extends FragmentActivity {
 
-    private static final int NUM_ITERATIONS = 10;
+    private static final int NUM_ITERATIONS = 5;
 
     private int mCount = 0;
 
     private Button mShowResultsBtn;
 
     private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[] {
-            ORMLiteExecutor.INSTANCE, GreenDaoExecutor.INSTANCE };
+            SQLiteExecutor.INSTANCE, ORMLiteExecutor.INSTANCE,
+            GreenDaoExecutor.INSTANCE };
 
     private SparseArray<Map<Task, List<Long>>> mGlobalResults;
 
@@ -75,8 +77,7 @@ public class MainActivity extends FragmentActivity {
                 builder.append(orm.getOrmName())
                         .append(" - Avg: ")
                         .append(Util.formatElapsedTime(resultsCount
-                                / numExecutions)).append(" #Exec ")
-                        .append(numExecutions).append(".<br />");
+                                / numExecutions)).append("<br />");
             }
             builder.append("<br />");
         }
@@ -111,8 +112,8 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         protected Void doInBackground(Task... params) {
-            for (Task task : params) {
-                for (BenchmarkExecutable item : mOrms) {
+            for (BenchmarkExecutable item : mOrms) {
+                for (Task task : params) {
                     try {
                         long result = 0;
                         int profilerId = item.getProfilerId();

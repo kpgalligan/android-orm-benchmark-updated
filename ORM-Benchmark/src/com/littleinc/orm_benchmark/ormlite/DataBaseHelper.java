@@ -26,9 +26,9 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return sInstance;
     }
-
-    private DataBaseHelper(Context context) {
-        super(context, DB_NAME, null, DB_VERSION, R.raw.ormlite_config);
+    public DataBaseHelper(Context context, boolean isInMemory) {
+        super(context, (isInMemory ? null : DB_NAME), null, DB_VERSION,
+                R.raw.ormlite_config);
     }
 
     @Override

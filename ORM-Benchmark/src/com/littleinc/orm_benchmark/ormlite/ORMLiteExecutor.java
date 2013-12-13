@@ -23,9 +23,8 @@ public enum ORMLiteExecutor implements BenchmarkExecutable {
     private DataBaseHelper mHelper;
 
     @Override
-    public void init(Context context) {
-        DataBaseHelper.init(context);
-        mHelper = DataBaseHelper.getInstance();
+    public void init(Context context, boolean useInMemoryDb) {
+        mHelper = new DataBaseHelper(context, useInMemoryDb);
     }
 
     @Override
@@ -91,8 +90,9 @@ public enum ORMLiteExecutor implements BenchmarkExecutable {
     @Override
     public long readWholeData() throws SQLException {
         long start = System.nanoTime();
-        Log.d(ORMLiteExecutor.class.getSimpleName(), "Read, "
-                + Message.getDao().queryForAll().size() + " rows");
+        Log.d(ORMLiteExecutor.class.getSimpleName(),
+                "Read, " + mHelper.getDao(Message.class).queryForAll().size()
+                        + " rows");
         return System.nanoTime() - start;
     }
 
@@ -101,8 +101,8 @@ public enum ORMLiteExecutor implements BenchmarkExecutable {
         long start = System.nanoTime();
         Log.d(ORMLiteExecutor.class.getSimpleName(),
                 "Read, "
-                        + Message
-                                .getDao()
+                        + mHelper
+                                .getDao(Message.class)
                                 .queryForEq(Message.COMMAND_ID,
                                         LOOK_BY_INDEXED_FIELD).size() + " rows");
         return System.nanoTime() - start;
@@ -112,9 +112,12 @@ public enum ORMLiteExecutor implements BenchmarkExecutable {
     public long readSearch() throws SQLException {
         SelectArg arg = new SelectArg("%" + SEARCH_TERM + "%");
         long start = System.nanoTime();
-        Log.d(ORMLiteExecutor.class.getSimpleName(), "Read, "
-                + Message.getDao().queryBuilder().limit(SEARCH_LIMIT).where()
-                        .like(Message.CONTENT, arg).query().size() + " rows");
+        Log.d(ORMLiteExecutor.class.getSimpleName(),
+                "Read, "
+                        + mHelper.getDao(Message.class).queryBuilder()
+                                .limit(SEARCH_LIMIT).where()
+                                .like(Message.CONTENT, arg).query().size()
+                        + " rows");
         return System.nanoTime() - start;
     }
 
@@ -129,7 +132,7 @@ public enum ORMLiteExecutor implements BenchmarkExecutable {
 
     @Override
     public int getProfilerId() {
-        return 1;
+        return 2;
     }
 
     @Override

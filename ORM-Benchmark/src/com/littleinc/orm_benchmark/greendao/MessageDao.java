@@ -1,6 +1,5 @@
 package com.littleinc.orm_benchmark.greendao;
 
-import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -8,8 +7,6 @@ import android.database.sqlite.SQLiteStatement;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
-import de.greenrobot.dao.query.Query;
-import de.greenrobot.dao.query.QueryBuilder;
 
 import com.littleinc.orm_benchmark.greendao.Message;
 
@@ -36,7 +33,8 @@ public class MessageDao extends AbstractDao<Message, Long> {
         public final static Property Channel_id = new Property(7, long.class, "channel_id", false, "CHANNEL_ID");
     };
 
-    private Query<Message> user_ReadersQuery;
+    private DaoSession daoSession;
+
 
     public MessageDao(DaoConfig config) {
         super(config);
@@ -44,6 +42,7 @@ public class MessageDao extends AbstractDao<Message, Long> {
     
     public MessageDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -107,6 +106,12 @@ public class MessageDao extends AbstractDao<Message, Long> {
         stmt.bindLong(8, entity.getChannel_id());
     }
 
+    @Override
+    protected void attachEntity(Message entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
+    }
+
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
@@ -165,18 +170,4 @@ public class MessageDao extends AbstractDao<Message, Long> {
         return true;
     }
     
-    /** Internal query to resolve the "readers" to-many relationship of User. */
-    public List<Message> _queryUser_Readers(Long id) {
-        synchronized (this) {
-            if (user_ReadersQuery == null) {
-                QueryBuilder<Message> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.Id.eq(null));
-                user_ReadersQuery = queryBuilder.build();
-            }
-        }
-        Query<Message> query = user_ReadersQuery.forCurrentThread();
-        query.setParameter(0, id);
-        return query.list();
-    }
-
 }

@@ -1,5 +1,6 @@
 package com.littleinc.orm_benchmark.greendao;
 
+import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -7,6 +8,8 @@ import android.database.sqlite.SQLiteStatement;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
+import de.greenrobot.dao.query.Query;
+import de.greenrobot.dao.query.QueryBuilder;
 
 import com.littleinc.orm_benchmark.greendao.User;
 
@@ -23,13 +26,12 @@ public class UserDao extends AbstractDao<User, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Last_name = new Property(1, String.class, "last_name", false, "LAST_NAME");
-        public final static Property First_name = new Property(2, String.class, "first_name", false, "FIRST_NAME");
+        public final static Property Last_name = new Property(0, String.class, "last_name", false, "LAST_NAME");
+        public final static Property First_name = new Property(1, String.class, "first_name", false, "FIRST_NAME");
+        public final static Property Id = new Property(2, Long.class, "id", true, "_id");
     };
 
-    private DaoSession daoSession;
-
+    private Query<User> message_ReadersQuery;
 
     public UserDao(DaoConfig config) {
         super(config);
@@ -37,16 +39,15 @@ public class UserDao extends AbstractDao<User, Long> {
     
     public UserDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'USER' (" + //
-                "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "'LAST_NAME' TEXT," + // 1: last_name
-                "'FIRST_NAME' TEXT);"); // 2: first_name
+                "'LAST_NAME' TEXT," + // 0: last_name
+                "'FIRST_NAME' TEXT," + // 1: first_name
+                "'_id' INTEGER PRIMARY KEY AUTOINCREMENT );"); // 2: id
     }
 
     /** Drops the underlying database table. */
@@ -60,41 +61,35 @@ public class UserDao extends AbstractDao<User, Long> {
     protected void bindValues(SQLiteStatement stmt, User entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
- 
         String last_name = entity.getLast_name();
         if (last_name != null) {
-            stmt.bindString(2, last_name);
+            stmt.bindString(1, last_name);
         }
  
         String first_name = entity.getFirst_name();
         if (first_name != null) {
-            stmt.bindString(3, first_name);
+            stmt.bindString(2, first_name);
         }
-    }
-
-    @Override
-    protected void attachEntity(User entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(3, id);
+        }
     }
 
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2);
     }    
 
     /** @inheritdoc */
     @Override
     public User readEntity(Cursor cursor, int offset) {
         User entity = new User( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // last_name
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // first_name
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // last_name
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // first_name
+            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2) // id
         );
         return entity;
     }
@@ -102,9 +97,9 @@ public class UserDao extends AbstractDao<User, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, User entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setLast_name(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setFirst_name(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setLast_name(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setFirst_name(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setId(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
      }
     
     /** @inheritdoc */
@@ -130,4 +125,18 @@ public class UserDao extends AbstractDao<User, Long> {
         return true;
     }
     
+    /** Internal query to resolve the "readers" to-many relationship of Message. */
+    public List<User> _queryMessage_Readers(Long id) {
+        synchronized (this) {
+            if (message_ReadersQuery == null) {
+                QueryBuilder<User> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.Id.eq(null));
+                message_ReadersQuery = queryBuilder.build();
+            }
+        }
+        Query<User> query = message_ReadersQuery.forCurrentThread();
+        query.setParameter(0, id);
+        return query.list();
+    }
+
 }

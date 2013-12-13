@@ -10,7 +10,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
-import com.littleinc.orm_benchmark.greendao.DaoMaster.DevOpenHelper;
 import com.littleinc.orm_benchmark.greendao.MessageDao.Properties;
 import com.littleinc.orm_benchmark.util.Util;
 
@@ -20,18 +19,19 @@ public enum GreenDaoExecutor implements BenchmarkExecutable {
 
     private static String DB_NAME = "greendao_db";
 
-    private DevOpenHelper mHelper;
+    private DataBaseHelper mHelper;
 
     private DaoMaster mDaoMaster;
 
     @Override
     public int getProfilerId() {
-        return 2;
+        return 3;
     }
 
     @Override
-    public void init(Context context) {
-        mHelper = new DevOpenHelper(context, DB_NAME, null);
+    public void init(Context context, boolean useInMemoryDb) {
+        mHelper = new DataBaseHelper(context, (useInMemoryDb ? null : DB_NAME),
+                null);
     }
 
     @Override
@@ -49,8 +49,8 @@ public enum GreenDaoExecutor implements BenchmarkExecutable {
     public long writeWholeData() throws SQLException {
         final List<User> users = new LinkedList<User>();
         for (int i = 0; i < NUM_USER_INSERTS; i++) {
-            User newUser = new User(null, getRandomString(10),
-                    getRandomString(10));
+            User newUser = new User(getRandomString(10), getRandomString(10),
+                    null);
             users.add(newUser);
         }
 

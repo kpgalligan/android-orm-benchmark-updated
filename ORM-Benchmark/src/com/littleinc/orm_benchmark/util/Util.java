@@ -32,6 +32,10 @@ public class Util {
         return new String(buf);
     }
 
+    /**
+     * @return mm:ss.millis e.g 0:0:1 are 1 millisecond, 0:0.100 are 100
+     * milliseconds
+     */
     public static String formatElapsedTime(long nanos) {
         return String.format("%s:%s.%s", TimeUnit.NANOSECONDS.toMinutes(nanos),
                 TimeUnit.NANOSECONDS.toSeconds(nanos),

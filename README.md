@@ -26,7 +26,7 @@ Building and running the ORM-Benchmark project produces the output below.
 - An "M" in front of the test shows the in-memory result so you can compare it to the on disk database.
 - The results below are for running the tests on a Nexus 4 on 20th Dec 2013.
 
-```
+<pre>
 Task CREATE_DB
 M RAW - Avg: 4
 RAW - Avg: 230
@@ -86,7 +86,7 @@ ORMLite - Avg: 558
 
 M GreenDAO - Avg: 8
 GreenDAO - Avg: 369
-```
+</pre>
 
 ##Technical Reference
 ###Customizing Benchmark Tests

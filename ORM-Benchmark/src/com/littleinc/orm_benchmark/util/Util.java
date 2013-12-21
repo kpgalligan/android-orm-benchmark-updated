@@ -33,11 +33,9 @@ public class Util {
     }
 
     /**
-     * @return mm:ss.millis
+     * @return millis
      */
     public static String formatElapsedTime(long nanos) {
-        return String.format("%s:%s.%s", TimeUnit.NANOSECONDS.toMinutes(nanos),
-                TimeUnit.NANOSECONDS.toSeconds(nanos),
-                String.format("%04d", TimeUnit.NANOSECONDS.toMillis(nanos)));
+        return String.valueOf(TimeUnit.NANOSECONDS.toMillis(nanos));
     }
 }

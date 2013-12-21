@@ -20,7 +20,9 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ShareCompat.IntentBuilder;
 import android.text.Html;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +38,8 @@ public class MainActivity extends FragmentActivity {
     private static final int NUM_ITERATIONS = 5;
 
     private int mCount = 0;
+
+    private String mResults;
 
     private Button mShowResultsBtn;
 
@@ -55,6 +59,31 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void showGlobalResults(View v) {
+        ResultDialog dialog = ResultDialog.newInstance(R.string.results_title,
+                mResults);
+        FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+        tx.add(dialog, ResultDialog.class.getSimpleName());
+        tx.commit();
+    }
+
+    public void runBenchmark(View v) {
+        if (mCount < NUM_ITERATIONS) {
+            v.setEnabled(false);
+            mShowResultsBtn.setEnabled(false);
+
+            new ProfilerTask(v).execute(CREATE_DB, WRITE_DATA, READ_DATA,
+                    READ_INDEXED, READ_SEARCH, DROP_DB);
+        } else {
+            mResults = buildResults();
+            Log.d(MainActivity.class.getSimpleName(), "Results:\n" + mResults);
+
+            mCount = 0;
+            v.setEnabled(true);
+            mShowResultsBtn.setEnabled(true);
+        }
+    }
+
+    private String buildResults() {
         StringBuilder builder = new StringBuilder();
         tasks: for (Task task : Task.values()) {
             builder.append("<b>Task ").append(task).append("</b><br />");
@@ -81,25 +110,7 @@ public class MainActivity extends FragmentActivity {
             }
             builder.append("<br />");
         }
-        ResultDialog dialog = ResultDialog.newInstance(R.string.results_title,
-                builder.toString());
-        FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-        tx.add(dialog, ResultDialog.class.getSimpleName());
-        tx.commit();
-    }
-
-    public void runBenchmark(View v) {
-        if (mCount < NUM_ITERATIONS) {
-            v.setEnabled(false);
-            mShowResultsBtn.setEnabled(false);
-
-            new ProfilerTask(v).execute(CREATE_DB, WRITE_DATA, READ_DATA,
-                    READ_INDEXED, READ_SEARCH, DROP_DB);
-        } else {
-            mCount = 0;
-            v.setEnabled(true);
-            mShowResultsBtn.setEnabled(true);
-        }
+        return builder.toString();
     }
 
     private class ProfilerTask extends AsyncTask<Task, Void, Void> {

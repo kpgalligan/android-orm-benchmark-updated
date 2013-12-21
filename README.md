@@ -2,7 +2,7 @@
 
 ##Summary
 
-ORM-Benchmark is an Android application that benchmarks the following against each other:
+ORM-Benchmark is an Android application built in Eclipse that benchmarks the following against each other:
 
 - [ORMLite](http://ormlite.com/)
 - [GreenDAO](http://greendao-orm.com/)
@@ -11,20 +11,22 @@ ORM-Benchmark is an Android application that benchmarks the following against ea
 The benchmark runs the following tasks:
 
 - CREATE_DB - Creation of database structure
-- WRITE_DATA - Writing X number of records
-- READ_DATA - Read the whole table data
-- READ_INDEXED - Read an indexed field
-- READ_SEARCH - Query limited amount of records that matches a search term
+- WRITE_DATA - Writing 1000 'user' objects and 10000 'message' objects
+- READ_DATA - Read all 10000 'message' objects in the table
+- READ_INDEXED - Read an indexed field (the 5000th 'message' in the table)
+- READ_SEARCH - Query the first 100 rows that matches a search term (using LIKE)
 - DROP_DB - Drop database strucuture
+
+Each task is run 5 times, and the application reports the average time for each in milliseconds.
 
 ##Sample Output
 
-Building and running the ORM-Benchmark project produces the output below. 
+Building and running the ORM-Benchmark project produces output similar to that below. 
 
 - The times are in milliseconds.
 - The results are shown on the device and are also logged to Logcat.  
-- An "M" in front of the test shows the in-memory result so you can compare it to the on disk database.
-- The results below are for running the tests on a Nexus 4 on 20th Dec 2013.
+
+The results below combine the in-memory database results with the on disk database results side by side.  They are from a Nexus 4 on 20th Dec 2013, and we've put an "M" in front of the tests for the in-memory results.
 
 <pre>
 Task CREATE_DB

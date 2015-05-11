@@ -15,6 +15,30 @@ import java.util.List;
 
 import static com.littleinc.orm_benchmark.util.Util.getRandomString;
 
+/**
+ * This executor takes the basic idea of the standard Android sqlLite query helper, but adds a few optimizations.
+ *
+ * Select optimization
+ * A Cursor can only access columns by their respective position in the result
+ * the standard way of reading the fields value is cursor.getString(cursor.getColumnIndex("field_name"))
+ * this actually loops through all column names until it finds one that matches and then return that index.
+ *
+ * To decrease unnecessary lookup, we do this once before we read any of the rows, and remembers the position
+ * in local variables.
+ *
+ * Insert optimizations
+ * The database.Insert function does not cache the insert query. Instead it re-creates the full statement
+ * for each time its called including adding all values to the statement
+ * What we do here instead is to create the SQL-statement manually and let the database driver compile it
+ * for us. This creates a re-usable and very fast executable statement for us.
+ *
+ * For each row we just need to insert the values into the statement via the bind function and then
+ * execute it.
+ *
+ * Everything should of course still be encapsulated by a transaction, otherwise you will get a huge overhead
+ * per row.
+ *
+ */
 public enum SQLiteRawExecutor implements BenchmarkExecutable {
 
     INSTANCE;

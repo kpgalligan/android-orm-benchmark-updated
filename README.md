@@ -53,8 +53,8 @@ Task READ_DATA
 M RAW - Avg: 803
 RAW - Avg: 808
 
-M ORMLite - Avg: 14275
-ORMLite - Avg: 15729
+M ORMLite - Avg: 1656
+ORMLite - Avg: 1729
 
 M GreenDAO - Avg: 1183
 GreenDAO - Avg: 1186

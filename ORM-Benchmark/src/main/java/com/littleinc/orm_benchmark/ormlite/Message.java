@@ -56,7 +56,7 @@ public class Message {
     @DatabaseField(columnName = CHANNEL_ID, canBeNull = false, dataType = DataType.LONG)
     private long mChannelId;
 
-    @ForeignCollectionField(eager = true, columnName = READERS)
+    @ForeignCollectionField(eager = false, columnName = READERS)
     private ForeignCollection<User> mReaders;
 
     private static Dao<Message, Long> sDao;

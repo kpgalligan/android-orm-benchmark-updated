@@ -6,21 +6,21 @@ import android.content.Context;
 
 public interface BenchmarkExecutable {
 
-    public static final String SEARCH_TERM = "a";
+    String SEARCH_TERM = "a";
 
-    public static final long SEARCH_LIMIT = 100;
+    long SEARCH_LIMIT = 100;
 
-    public static final int NUM_READERS = 10;
+    int NUM_READERS = 10;
 
-    public static final int NUM_USER_INSERTS = 1000;
+    int NUM_USER_INSERTS = 1000;
 
-    public static final int NUM_MESSAGE_INSERTS = 10000;
+    int NUM_MESSAGE_INSERTS = 10000;
 
-    public static final int NUM_MESSAGES_WITH_READERS = 50;
+    int NUM_MESSAGES_WITH_READERS = 50;
 
-    public static final int LOOK_BY_INDEXED_FIELD = 5000;
+    int LOOK_BY_INDEXED_FIELD = 5000;
 
-    public static enum Task {
+    enum Task {
         CREATE_DB, WRITE_DATA, READ_DATA, READ_INDEXED, READ_SEARCH, DROP_DB;
     }
 

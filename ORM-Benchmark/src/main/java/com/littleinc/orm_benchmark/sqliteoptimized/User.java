@@ -1,4 +1,4 @@
-package com.littleinc.orm_benchmark.optimizedsqlite;
+package com.littleinc.orm_benchmark.sqliteoptimized;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;

@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ShareCompat.IntentBuilder;
 import android.text.Html;
 import android.util.Log;
 import android.util.SparseArray;
@@ -31,6 +30,7 @@ import com.littleinc.orm_benchmark.BenchmarkExecutable.Task;
 import com.littleinc.orm_benchmark.greendao.GreenDaoExecutor;
 import com.littleinc.orm_benchmark.ormlite.ORMLiteExecutor;
 import com.littleinc.orm_benchmark.sqlite.SQLiteExecutor;
+import com.littleinc.orm_benchmark.optimizedsqlite.SQLiteRawExecutor;
 import com.littleinc.orm_benchmark.util.Util;
 
 public class MainActivity extends FragmentActivity {
@@ -44,7 +44,9 @@ public class MainActivity extends FragmentActivity {
     private Button mShowResultsBtn;
 
     private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[] {
-            SQLiteExecutor.INSTANCE, ORMLiteExecutor.INSTANCE,
+            SQLiteExecutor.INSTANCE,
+            SQLiteRawExecutor.INSTANCE,
+            ORMLiteExecutor.INSTANCE,
             GreenDaoExecutor.INSTANCE };
 
     private SparseArray<Map<Task, List<Long>>> mGlobalResults;
@@ -71,8 +73,13 @@ public class MainActivity extends FragmentActivity {
             v.setEnabled(false);
             mShowResultsBtn.setEnabled(false);
 
-            new ProfilerTask(v).execute(CREATE_DB, WRITE_DATA, READ_DATA,
-                    READ_INDEXED, READ_SEARCH, DROP_DB);
+            new ProfilerTask(v).execute(
+                CREATE_DB,
+                WRITE_DATA,
+                READ_DATA,
+                READ_INDEXED,
+                READ_SEARCH,
+                DROP_DB);
         } else {
             mResults = buildResults();
             Log.d(MainActivity.class.getSimpleName(), "Results:\n" + mResults);

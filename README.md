@@ -93,15 +93,15 @@ GreenDAO - Avg: 369
 ##Technical Reference
 ###Customizing Benchmark Tests
 
-- Enable/disable the usage of [in-memory](https://www.sqlite.org/inmemorydb.html) SQLite databases. Check [Application#USE_IN_MEMORY_DB](<https://github.com/littleinc/android-orm-benchmark/blob/master/ORM-Benchmark/src/com/littleinc/orm_benchmark/Application.java#L9>)
-- Number of times to run the tests. Check [MainActivity#NUM_ITERATIONS](https://github.com/littleinc/android-orm-benchmark/blob/master/ORM-Benchmark/src/com/littleinc/orm_benchmark/MainActivity.java#L36)
-- Implementing your own [BenchmarkExecutable](https://github.com/littleinc/android-orm-benchmark/blob/master/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java) you can add more tests.
-- Search term. Check [BenchmarkExecutable#SEARCH_TERM](https://github.com/littleinc/android-orm-benchmark/blob/master/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java#L9)
-- Search limit. Check [BenchmarkExecutable#SEARCH_LIMIT](https://github.com/littleinc/android-orm-benchmark/blob/master/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java#L11)
-- Number of users to be saved into the db. Check [BenchmarkExecutable#NUM_USER_INSERTS](https://github.com/littleinc/android-orm-benchmark/blob/master/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java#L15)
-- Number of messages to be saved into the db. Check [BenchmarkExecutable#NUM_MESSAGE_INSERTS](https://github.com/littleinc/android-orm-benchmark/blob/master/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java#L17)
-- Number of messages with readers. Check [BenchmarkExecutable#NUM_MESSAGES_WITH_READERS](https://github.com/littleinc/android-orm-benchmark/blob/master/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java#L19)
-- Number of reades on messages. Check [BenchmarkExecutable#NUM_READERS](https://github.com/littleinc/android-orm-benchmark/blob/master/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java#L13)
+- Enable/disable the usage of [in-memory](https://www.sqlite.org/inmemorydb.html) SQLite databases. Check [MainActivity#USE_IN_MEMORY_DB](/ORM-Benchmark/src/com/littleinc/orm_benchmark/MainActivity.java#L38)
+- Number of times to run the tests. Check [MainActivity#NUM_ITERATIONS](/ORM-Benchmark/src/com/littleinc/orm_benchmark/MainActivity.java#L40)
+- Implementing your own [BenchmarkExecutable](/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java) you can add more tests.
+- Search term. Check [BenchmarkExecutable#SEARCH_TERM](/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java#L9)
+- Search limit. Check [BenchmarkExecutable#SEARCH_LIMIT](/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java#L11)
+- Number of users to be saved into the db. Check [BenchmarkExecutable#NUM_USER_INSERTS](/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java#L15)
+- Number of messages to be saved into the db. Check [BenchmarkExecutable#NUM_MESSAGE_INSERTS](/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java#L17)
+- Number of messages with readers. Check [BenchmarkExecutable#NUM_MESSAGES_WITH_READERS](/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java#L19)
+- Number of reades on messages. Check [BenchmarkExecutable#NUM_READERS](/ORM-Benchmark/src/com/littleinc/orm_benchmark/BenchmarkExecutable.java#L13)
 
 ###Changing The GreenDao Tests 
 

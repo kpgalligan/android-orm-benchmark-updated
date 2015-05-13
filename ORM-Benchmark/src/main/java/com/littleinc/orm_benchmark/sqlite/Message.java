@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 public class Message {
@@ -26,28 +27,28 @@ public class Message {
 
     public static final String CREATED_AT = "created_at";
 
-    private long mId;
+    protected long mId;
 
-    private long mClientId;
+    protected long mClientId;
 
-    private long mCommandId;
+    protected long mCommandId;
 
-    private double mSortedBy;
+    protected double mSortedBy;
 
-    private int mCreatedAt;
+    protected int mCreatedAt;
 
-    private String mContent;
+    protected String mContent;
 
-    private long mSenderId;
+    protected long mSenderId;
 
-    private long mChannelId;
+    protected long mChannelId;
 
-    private List<User> mReaders;
+    protected List<User> mReaders;
 
     public static final String[] PROJECTION = new String[] { CONTENT,
             SORTED_BY, CLIENT_ID, SENDER_ID, CHANNEL_ID, COMMAND_ID, CREATED_AT };
 
-    public static void createTable(DataBaseHelper helper) {
+    public static void createTable(SQLiteOpenHelper helper) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         db.execSQL(new StringBuilder("CREATE TABLE '").append(TABLE_NAME)
@@ -65,7 +66,7 @@ public class Message {
                 .append(");").toString());
     }
 
-    public static void dropTable(DataBaseHelper helper) {
+    public static void dropTable(SQLiteOpenHelper helper) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         db.execSQL(new StringBuilder("DROP TABLE '").append(TABLE_NAME)

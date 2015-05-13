@@ -3,7 +3,7 @@ package com.littleinc.orm_benchmark;
 import com.littleinc.orm_benchmark.greendao.GreenDaoExecutor;
 import com.littleinc.orm_benchmark.ormlite.ORMLiteExecutor;
 import com.littleinc.orm_benchmark.sqlite.SQLiteExecutor;
-import com.littleinc.orm_benchmark.sqliteoptimized.SQLiteRawExecutor;
+import com.littleinc.orm_benchmark.sqliteoptimized.OptimizedSQLiteExecutor;
 
 public class Application extends android.app.Application {
 
@@ -14,7 +14,7 @@ public class Application extends android.app.Application {
         super.onCreate();
 
         SQLiteExecutor.INSTANCE.init(this, USE_IN_MEMORY_DB);
-        SQLiteRawExecutor.INSTANCE.init(this, USE_IN_MEMORY_DB);
+        OptimizedSQLiteExecutor.INSTANCE.init(this, USE_IN_MEMORY_DB);
         ORMLiteExecutor.INSTANCE.init(this, USE_IN_MEMORY_DB);
         GreenDaoExecutor.INSTANCE.init(this, USE_IN_MEMORY_DB);
     }

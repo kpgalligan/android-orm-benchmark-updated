@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
+import com.littleinc.orm_benchmark.sqlite.Message;
 import com.littleinc.orm_benchmark.util.Util;
 
 import java.sql.SQLException;
@@ -39,7 +40,7 @@ import static com.littleinc.orm_benchmark.util.Util.getRandomString;
  * per row.
  *
  */
-public enum SQLiteRawExecutor implements BenchmarkExecutable {
+public enum OptimizedSQLiteExecutor implements BenchmarkExecutable {
 
     INSTANCE;
 
@@ -79,9 +80,9 @@ public enum SQLiteRawExecutor implements BenchmarkExecutable {
             users.add(newUser);
         }
 
-        List<Message> messages = new LinkedList<Message>();
+        List<OptimizedMessage> messages = new LinkedList<OptimizedMessage>();
         for (int i = 0; i < NUM_MESSAGE_INSERTS; i++) {
-            Message newMessage = new Message();
+            OptimizedMessage newMessage = new OptimizedMessage();
             newMessage.setCommandId(i);
             newMessage.setSortedBy(System.nanoTime());
             newMessage.setContent(Util.getRandomString(100));
@@ -106,14 +107,14 @@ public enum SQLiteRawExecutor implements BenchmarkExecutable {
 
         SQLiteStatement insertMessage = db.compileStatement(
             String.format("Insert into %s (%s, %s, %s, %s, %s, %s, %s) values (?,?,?,?,?,?,?)",
-                Message.TABLE_NAME,
-                Message.CONTENT,
-                Message.SORTED_BY,
-                Message.CLIENT_ID,
-                Message.SENDER_ID,
-                Message.CHANNEL_ID,
-                Message.COMMAND_ID,
-                Message.CREATED_AT ));
+                OptimizedMessage.TABLE_NAME,
+                OptimizedMessage.CONTENT,
+                OptimizedMessage.SORTED_BY,
+                OptimizedMessage.CLIENT_ID,
+                OptimizedMessage.SENDER_ID,
+                OptimizedMessage.CHANNEL_ID,
+                OptimizedMessage.COMMAND_ID,
+                OptimizedMessage.CREATED_AT ));
 
         try {
             db.beginTransaction();
@@ -122,14 +123,14 @@ public enum SQLiteRawExecutor implements BenchmarkExecutable {
                 user.prepareForInsert(insertUser);
                 insertUser.execute();
             }
-            Log.d(SQLiteRawExecutor.class.getSimpleName(), "Done, wrote "
+            Log.d(OptimizedSQLiteExecutor.class.getSimpleName(), "Done, wrote "
                     + NUM_USER_INSERTS + " users");
 
-            for (Message message : messages) {
+            for (OptimizedMessage message : messages) {
                 message.prepareForInsert(insertMessage);
                 insertMessage.execute();
             }
-            Log.d(SQLiteRawExecutor.class.getSimpleName(), "Done, wrote "
+            Log.d(OptimizedSQLiteExecutor.class.getSimpleName(), "Done, wrote "
                     + NUM_MESSAGE_INSERTS + " messages");
             db.setTransactionSuccessful();
         } finally {
@@ -144,22 +145,22 @@ public enum SQLiteRawExecutor implements BenchmarkExecutable {
         Cursor c = null;
         try {
             SQLiteDatabase db = mHelper.getReadableDatabase();
-            List<Message> messages = new LinkedList<Message>();
-            c = db.query(Message.TABLE_NAME, Message.PROJECTION, null, null,
+            List<OptimizedMessage> messages = new LinkedList<OptimizedMessage>();
+            c = db.query(OptimizedMessage.TABLE_NAME, OptimizedMessage.PROJECTION, null, null,
                     null, null, null);
 
             if(c != null) {
 
-                int channelIdIndex = c.getColumnIndex(Message.CHANNEL_ID);
-                int clientIdIndex = c.getColumnIndex(Message.CLIENT_ID);
-                int commandIdIndex = c.getColumnIndex(Message.COMMAND_ID);
-                int contentIndex = c.getColumnIndex(Message.CONTENT);
-                int createdAtIndex = c.getColumnIndex(Message.CREATED_AT);
-                int senderIdIndex = c.getColumnIndex(Message.SENDER_ID);
-                int sortedByIndex = c.getColumnIndex(Message.SORTED_BY);
+                int channelIdIndex = c.getColumnIndex(OptimizedMessage.CHANNEL_ID);
+                int clientIdIndex = c.getColumnIndex(OptimizedMessage.CLIENT_ID);
+                int commandIdIndex = c.getColumnIndex(OptimizedMessage.COMMAND_ID);
+                int contentIndex = c.getColumnIndex(OptimizedMessage.CONTENT);
+                int createdAtIndex = c.getColumnIndex(OptimizedMessage.CREATED_AT);
+                int senderIdIndex = c.getColumnIndex(OptimizedMessage.SENDER_ID);
+                int sortedByIndex = c.getColumnIndex(OptimizedMessage.SORTED_BY);
 
                 while (c.moveToNext()) {
-                    Message newMessage = new Message();
+                    OptimizedMessage newMessage = new OptimizedMessage();
                     newMessage.setChannelId(c.getLong(channelIdIndex));
                     newMessage.setClientId(c.getLong(clientIdIndex));
                     newMessage.setCommandId(c.getLong(commandIdIndex));
@@ -171,7 +172,7 @@ public enum SQLiteRawExecutor implements BenchmarkExecutable {
                     messages.add(newMessage);
                 }
             }
-            Log.d(SQLiteRawExecutor.class.getSimpleName(),
+            Log.d(OptimizedSQLiteExecutor.class.getSimpleName(),
                     "Read, " + messages.size() + " rows");
         } finally {
             if (c != null) {
@@ -187,30 +188,30 @@ public enum SQLiteRawExecutor implements BenchmarkExecutable {
         Cursor c = null;
         try {
             SQLiteDatabase db = mHelper.getReadableDatabase();
-            String selection = Message.COMMAND_ID + "=?";
+            String selection = OptimizedMessage.COMMAND_ID + "=?";
             String[] selectionArgs = new String[] { String
                     .valueOf(LOOK_BY_INDEXED_FIELD) };
-            c = db.query(Message.TABLE_NAME, Message.PROJECTION, selection,
+            c = db.query(OptimizedMessage.TABLE_NAME, OptimizedMessage.PROJECTION, selection,
                     selectionArgs, null, null, null);
 
             if (c != null && c.moveToFirst()) {
-                Message newMessage = new Message();
+                OptimizedMessage newMessage = new OptimizedMessage();
                 newMessage.setChannelId(c.getLong(c
-                        .getColumnIndex(Message.CHANNEL_ID)));
+                        .getColumnIndex(OptimizedMessage.CHANNEL_ID)));
                 newMessage.setClientId(c.getLong(c
-                        .getColumnIndex(Message.CLIENT_ID)));
+                        .getColumnIndex(OptimizedMessage.CLIENT_ID)));
                 newMessage.setCommandId(c.getLong(c
-                        .getColumnIndex(Message.COMMAND_ID)));
+                        .getColumnIndex(OptimizedMessage.COMMAND_ID)));
                 newMessage.setContent(c.getString(c
-                        .getColumnIndex(Message.CONTENT)));
+                        .getColumnIndex(OptimizedMessage.CONTENT)));
                 newMessage.setCreatedAt(c.getInt(c
-                        .getColumnIndex(Message.CREATED_AT)));
+                        .getColumnIndex(OptimizedMessage.CREATED_AT)));
                 newMessage.setSenderId(c.getLong(c
-                        .getColumnIndex(Message.SENDER_ID)));
+                        .getColumnIndex(OptimizedMessage.SENDER_ID)));
                 newMessage.setSortedBy(c.getDouble(c
-                        .getColumnIndex(Message.SORTED_BY)));
+                        .getColumnIndex(OptimizedMessage.SORTED_BY)));
 
-                Log.d(SQLiteRawExecutor.class.getSimpleName(),
+                Log.d(OptimizedSQLiteExecutor.class.getSimpleName(),
                         "Read, " + c.getCount() + " rows");
             }
         } finally {
@@ -227,25 +228,25 @@ public enum SQLiteRawExecutor implements BenchmarkExecutable {
         Cursor c = null;
         try {
             SQLiteDatabase db = mHelper.getReadableDatabase();
-            String selection = Message.CONTENT + " LIKE ?";
-            List<Message> messages = new LinkedList<Message>();
+            String selection = OptimizedMessage.CONTENT + " LIKE ?";
+            List<OptimizedMessage> messages = new LinkedList<OptimizedMessage>();
             String[] selectionArgs = new String[] { '%' + SEARCH_TERM + '%' };
-            c = db.query(Message.TABLE_NAME, Message.PROJECTION, selection,
+            c = db.query(OptimizedMessage.TABLE_NAME, OptimizedMessage.PROJECTION, selection,
                     selectionArgs, null, null, null,
                     String.valueOf(SEARCH_LIMIT));
 
             if(c != null) {
 
-                int channelIdIndex = c.getColumnIndex(Message.CHANNEL_ID);
-                int clientIdIndex = c.getColumnIndex(Message.CLIENT_ID);
-                int commandIdIndex = c.getColumnIndex(Message.COMMAND_ID);
-                int contentIndex = c.getColumnIndex(Message.CONTENT);
-                int createdAtIndex = c.getColumnIndex(Message.CREATED_AT);
-                int senderIdIndex = c.getColumnIndex(Message.SENDER_ID);
-                int sortedByIndex = c.getColumnIndex(Message.SORTED_BY);
+                int channelIdIndex = c.getColumnIndex(OptimizedMessage.CHANNEL_ID);
+                int clientIdIndex = c.getColumnIndex(OptimizedMessage.CLIENT_ID);
+                int commandIdIndex = c.getColumnIndex(OptimizedMessage.COMMAND_ID);
+                int contentIndex = c.getColumnIndex(OptimizedMessage.CONTENT);
+                int createdAtIndex = c.getColumnIndex(OptimizedMessage.CREATED_AT);
+                int senderIdIndex = c.getColumnIndex(OptimizedMessage.SENDER_ID);
+                int sortedByIndex = c.getColumnIndex(OptimizedMessage.SORTED_BY);
 
                 while (c.moveToNext()) {
-                    Message newMessage = new Message();
+                    OptimizedMessage newMessage = new OptimizedMessage();
                     newMessage.setChannelId(c.getLong(channelIdIndex));
                     newMessage.setClientId(c.getLong(clientIdIndex));
                     newMessage.setCommandId(c.getLong(commandIdIndex));
@@ -258,7 +259,7 @@ public enum SQLiteRawExecutor implements BenchmarkExecutable {
                 }
             }
 
-            Log.d(SQLiteRawExecutor.class.getSimpleName(),
+            Log.d(OptimizedSQLiteExecutor.class.getSimpleName(),
                     "Read, " + messages.size() + " rows");
         } finally {
             if (c != null) {

@@ -90,6 +90,14 @@ M GreenDAO - Avg: 8
 GreenDAO - Avg: 369
 </pre>
 
+##Screenshots
+
+![main](/screenshots/main.png?raw=true "Main screen")
+
+After pressing "Run Benchmark" you can press "Show Results" to see the results:
+
+![results](/screenshots/results.png?raw=true "Results")
+
 ##Technical Reference
 ###Customizing Benchmark Tests
 

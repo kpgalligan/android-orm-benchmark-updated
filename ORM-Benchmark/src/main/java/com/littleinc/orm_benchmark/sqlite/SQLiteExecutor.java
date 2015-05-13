@@ -11,16 +11,17 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-public enum SQLiteExecutor implements BenchmarkExecutable {
+/**
+ * An unoptimized set of SQLite operations for reading and writing the test database objects.
+ *
+ * See {@link com.littleinc.orm_benchmark.sqliteoptimized.OptimizedSQLiteExecutor} for optimized
+ * versions of these SQLite operations.
+ */
+public class SQLiteExecutor implements BenchmarkExecutable {
 
-    INSTANCE;
-
+    private static final String TAG = "SQLiteExecutor";
+    
     private DataBaseHelper mHelper;
-
-    @Override
-    public int getProfilerId() {
-        return 1;
-    }
 
     @Override
     public String getOrmName() {
@@ -29,6 +30,7 @@ public enum SQLiteExecutor implements BenchmarkExecutable {
 
     @Override
     public void init(Context context, boolean useInMemoryDb) {
+        Log.d(TAG, "Creating DataBaseHelper");
         mHelper = new DataBaseHelper(context, useInMemoryDb);
     }
 
@@ -65,14 +67,12 @@ public enum SQLiteExecutor implements BenchmarkExecutable {
             for (User user : users) {
                 db.insert(User.TABLE_NAME, null, user.prepareForInsert());
             }
-            Log.d(SQLiteExecutor.class.getSimpleName(), "Done, wrote "
-                    + NUM_USER_INSERTS + " users");
+            Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
 
             for (Message message : messages) {
                 db.insert(Message.TABLE_NAME, null, message.prepareForInsert());
             }
-            Log.d(SQLiteExecutor.class.getSimpleName(), "Done, wrote "
-                    + NUM_MESSAGE_INSERTS + " messages");
+            Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -109,7 +109,7 @@ public enum SQLiteExecutor implements BenchmarkExecutable {
 
                 messages.add(newMessage);
             }
-            Log.d(SQLiteExecutor.class.getSimpleName(),
+            Log.d(TAG,
                     "Read, " + messages.size() + " rows");
         } finally {
             if (c != null) {
@@ -148,7 +148,7 @@ public enum SQLiteExecutor implements BenchmarkExecutable {
                 newMessage.setSortedBy(c.getDouble(c
                         .getColumnIndex(Message.SORTED_BY)));
 
-                Log.d(SQLiteExecutor.class.getSimpleName(),
+                Log.d(TAG,
                         "Read, " + c.getCount() + " rows");
             }
         } finally {
@@ -191,7 +191,7 @@ public enum SQLiteExecutor implements BenchmarkExecutable {
 
                 messages.add(newMessage);
             }
-            Log.d(SQLiteExecutor.class.getSimpleName(),
+            Log.d(TAG,
                     "Read, " + messages.size() + " rows");
         } finally {
             if (c != null) {

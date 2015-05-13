@@ -16,14 +16,15 @@ import com.j256.ormlite.table.TableUtils;
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
 import com.littleinc.orm_benchmark.util.Util;
 
-public enum ORMLiteExecutor implements BenchmarkExecutable {
+public class ORMLiteExecutor implements BenchmarkExecutable {
 
-    INSTANCE;
-
+    private static final String TAG = "ORMLiteExecutor";
+    
     private DataBaseHelper mHelper;
 
     @Override
     public void init(Context context, boolean useInMemoryDb) {
+        Log.d(TAG, "Creating DataBaseHelper");
         DataBaseHelper.init(context, useInMemoryDb);
         mHelper = DataBaseHelper.getInstance();
     }
@@ -72,14 +73,12 @@ public enum ORMLiteExecutor implements BenchmarkExecutable {
             for (User user : users) {
                 User.getDao().createOrUpdate(user);
             }
-            Log.d(ORMLiteExecutor.class.getSimpleName(), "Done, wrote "
-                    + NUM_USER_INSERTS + " users");
+            Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
 
             for (Message message : messages) {
                 Message.getDao().createOrUpdate(message);
             }
-            Log.d(ORMLiteExecutor.class.getSimpleName(), "Done, wrote "
-                    + NUM_MESSAGE_INSERTS + " messages");
+            Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
 
             db.setTransactionSuccessful();
         } finally {
@@ -91,7 +90,7 @@ public enum ORMLiteExecutor implements BenchmarkExecutable {
     @Override
     public long readWholeData() throws SQLException {
         long start = System.nanoTime();
-        Log.d(ORMLiteExecutor.class.getSimpleName(),
+        Log.d(TAG,
                 "Read, " + mHelper.getDao(Message.class).queryForAll().size()
                         + " rows");
         return System.nanoTime() - start;
@@ -100,7 +99,7 @@ public enum ORMLiteExecutor implements BenchmarkExecutable {
     @Override
     public long readIndexedField() throws SQLException {
         long start = System.nanoTime();
-        Log.d(ORMLiteExecutor.class.getSimpleName(),
+        Log.d(TAG,
                 "Read, "
                         + mHelper
                                 .getDao(Message.class)
@@ -113,11 +112,11 @@ public enum ORMLiteExecutor implements BenchmarkExecutable {
     public long readSearch() throws SQLException {
         SelectArg arg = new SelectArg("%" + SEARCH_TERM + "%");
         long start = System.nanoTime();
-        Log.d(ORMLiteExecutor.class.getSimpleName(),
+        Log.d(TAG,
                 "Read, "
                         + mHelper.getDao(Message.class).queryBuilder()
-                                .limit(SEARCH_LIMIT).where()
-                                .like(Message.CONTENT, arg).query().size()
+                        .limit(SEARCH_LIMIT).where()
+                        .like(Message.CONTENT, arg).query().size()
                         + " rows");
         return System.nanoTime() - start;
     }
@@ -129,11 +128,6 @@ public enum ORMLiteExecutor implements BenchmarkExecutable {
         TableUtils.dropTable(connectionSource, User.class, true);
         TableUtils.dropTable(connectionSource, Message.class, true);
         return System.nanoTime() - start;
-    }
-
-    @Override
-    public int getProfilerId() {
-        return 2;
     }
 
     @Override

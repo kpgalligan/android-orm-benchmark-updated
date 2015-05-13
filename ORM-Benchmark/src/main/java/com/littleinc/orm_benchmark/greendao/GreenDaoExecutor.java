@@ -13,9 +13,9 @@ import com.littleinc.orm_benchmark.BenchmarkExecutable;
 import com.littleinc.orm_benchmark.greendao.MessageDao.Properties;
 import com.littleinc.orm_benchmark.util.Util;
 
-public enum GreenDaoExecutor implements BenchmarkExecutable {
+public class GreenDaoExecutor implements BenchmarkExecutable {
 
-    INSTANCE;
+    private static final String TAG = "GreenDaoExecutor";
 
     private static String DB_NAME = "greendao_db";
 
@@ -24,12 +24,8 @@ public enum GreenDaoExecutor implements BenchmarkExecutable {
     private DaoMaster mDaoMaster;
 
     @Override
-    public int getProfilerId() {
-        return 3;
-    }
-
-    @Override
     public void init(Context context, boolean useInMemoryDb) {
+        Log.d(TAG, "Creating DataBaseHelper");
         mHelper = new DataBaseHelper(context, (useInMemoryDb ? null : DB_NAME),
                 null);
     }
@@ -61,12 +57,9 @@ public enum GreenDaoExecutor implements BenchmarkExecutable {
             newMessage.setSorted_by(Double.valueOf(System.nanoTime()));
             newMessage.setContent(Util.getRandomString(100));
             newMessage.setClient_id(System.currentTimeMillis());
-            newMessage
-                    .setSender_id(Math.round(Math.random() * NUM_USER_INSERTS));
-            newMessage.setChannel_id(Math.round(Math.random()
-                    * NUM_USER_INSERTS));
-            newMessage
-                    .setCreated_at((int) (System.currentTimeMillis() / 1000L));
+            newMessage.setSender_id(Math.round(Math.random() * NUM_USER_INSERTS));
+            newMessage.setChannel_id(Math.round(Math.random() * NUM_USER_INSERTS));
+            newMessage.setCreated_at((int) (System.currentTimeMillis() / 1000L));
 
             messages.add(newMessage);
         }

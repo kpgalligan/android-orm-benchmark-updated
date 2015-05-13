@@ -24,8 +24,6 @@ public interface BenchmarkExecutable {
         CREATE_DB, WRITE_DATA, READ_DATA, READ_INDEXED, READ_SEARCH, DROP_DB;
     }
 
-    int getProfilerId();
-
     String getOrmName();
 
     void init(Context context, boolean useInMemoryDb);

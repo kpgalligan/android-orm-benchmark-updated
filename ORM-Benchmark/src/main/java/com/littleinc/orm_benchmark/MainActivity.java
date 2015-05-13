@@ -35,6 +35,8 @@ import com.littleinc.orm_benchmark.util.Util;
 
 public class MainActivity extends FragmentActivity {
 
+    private static final boolean USE_IN_MEMORY_DB = true;
+
     private static final int NUM_ITERATIONS = 5;
 
     private int mCount = 0;
@@ -44,20 +46,30 @@ public class MainActivity extends FragmentActivity {
     private Button mShowResultsBtn;
 
     private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[] {
-            SQLiteExecutor.INSTANCE,
-            OptimizedSQLiteExecutor.INSTANCE,
-            ORMLiteExecutor.INSTANCE,
-            GreenDaoExecutor.INSTANCE };
+            new SQLiteExecutor(),
+            new OptimizedSQLiteExecutor(),
+            new ORMLiteExecutor(),
+            new GreenDaoExecutor() };
 
-    private SparseArray<Map<Task, List<Long>>> mGlobalResults;
+    private boolean mWasInitialized = false;
+
+    private Map<String, Map<Task, List<Long>>> mGlobalResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mGlobalResults = new SparseArray<Map<Task, List<Long>>>();
+        mGlobalResults = new HashMap<>();
         mShowResultsBtn = (Button) findViewById(R.id.show_results_btn);
+
+        if (!mWasInitialized) {
+            for (BenchmarkExecutable orm : mOrms) {
+                orm.init(this, USE_IN_MEMORY_DB);
+            }
+
+            mWasInitialized = true;
+        }
     }
 
     public void showGlobalResults(View v) {
@@ -96,8 +108,8 @@ public class MainActivity extends FragmentActivity {
             builder.append("<b>Task ").append(task).append("</b><br />");
             orms: for (BenchmarkExecutable orm : mOrms) {
 
-                Map<Task, List<Long>> results = mGlobalResults.get(orm
-                        .getProfilerId());
+                Map<Task, List<Long>> results = mGlobalResults.get(orm.getOrmName());
+
                 if (results == null) {
                     continue orms;
                 }
@@ -134,7 +146,7 @@ public class MainActivity extends FragmentActivity {
                 for (Task task : params) {
                     try {
                         long result = 0;
-                        int profilerId = item.getProfilerId();
+
                         switch (task) {
                             case CREATE_DB:
                                 result = item.createDbStructure();
@@ -155,7 +167,7 @@ public class MainActivity extends FragmentActivity {
                                 result = item.writeWholeData();
                                 break;
                         }
-                        addProfilerResult(profilerId, task, result);
+                        addProfilerResult(item.getOrmName(), task, result);
                     } catch (SQLException e) {
                         e.printStackTrace();
                         continue;
@@ -170,17 +182,16 @@ public class MainActivity extends FragmentActivity {
             runBenchmark(mView);
         };
 
-        private void addProfilerResult(int profilerId, Task task, long result) {
-            Map<Task, List<Long>> profilerResults = mGlobalResults
-                    .get(profilerId);
+        private void addProfilerResult(String benchmarkName, Task task, long result) {
+            Map<Task, List<Long>> profilerResults = mGlobalResults.get(benchmarkName);
             if (profilerResults == null) {
-                profilerResults = new HashMap<Task, List<Long>>();
+                profilerResults = new HashMap<>();
                 profilerResults.put(task, new LinkedList<Long>());
-                mGlobalResults.put(profilerId, profilerResults);
+                mGlobalResults.put(benchmarkName, profilerResults);
             }
             List<Long> resultPerTask = profilerResults.get(task);
             if (resultPerTask == null) {
-                resultPerTask = new LinkedList<Long>();
+                resultPerTask = new LinkedList<>();
                 profilerResults.put(task, resultPerTask);
             }
             resultPerTask.add(result);

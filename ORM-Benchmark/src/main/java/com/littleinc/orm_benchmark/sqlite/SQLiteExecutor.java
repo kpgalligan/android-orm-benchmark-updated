@@ -1,18 +1,15 @@
 package com.littleinc.orm_benchmark.sqlite;
 
-import static com.littleinc.orm_benchmark.util.Util.getRandomString;
-
-import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
-import com.littleinc.orm_benchmark.util.Util;
+
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public enum SQLiteExecutor implements BenchmarkExecutable {
 
@@ -45,28 +42,17 @@ public enum SQLiteExecutor implements BenchmarkExecutable {
 
     @Override
     public long writeWholeData() throws SQLException {
-        List<User> users = new LinkedList<User>();
+        List<User> users = new LinkedList<>();
         for (int i = 0; i < NUM_USER_INSERTS; i++) {
             User newUser = new User();
-            newUser.setLastName(getRandomString(10));
-            newUser.setFirstName(getRandomString(10));
-
+            newUser.fillUserWithRandomData();
             users.add(newUser);
         }
 
-        List<Message> messages = new LinkedList<Message>();
+        List<Message> messages = new LinkedList<>();
         for (int i = 0; i < NUM_MESSAGE_INSERTS; i++) {
             Message newMessage = new Message();
-            newMessage.setCommandId(i);
-            newMessage.setSortedBy(System.nanoTime());
-            newMessage.setContent(Util.getRandomString(100));
-            newMessage.setClientId(System.currentTimeMillis());
-            newMessage
-                    .setSenderId(Math.round(Math.random() * NUM_USER_INSERTS));
-            newMessage
-                    .setChannelId(Math.round(Math.random() * NUM_USER_INSERTS));
-            newMessage.setCreatedAt((int) (System.currentTimeMillis() / 1000L));
-
+            newMessage.fillMessageWithRandomData(i, NUM_USER_INSERTS);
             messages.add(newMessage);
         }
 

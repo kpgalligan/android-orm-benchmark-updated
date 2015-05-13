@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import static com.littleinc.orm_benchmark.util.Util.getRandomString;
+
 public class User {
 
     public static final String TABLE_NAME = "user";
@@ -58,6 +60,11 @@ public class User {
 
     public void setFirstName(String firstName) {
         this.mFirstName = firstName;
+    }
+
+    public void fillUserWithRandomData() {
+        setLastName(getRandomString(10));
+        setFirstName(getRandomString(10));
     }
 
     public ContentValues prepareForInsert() {

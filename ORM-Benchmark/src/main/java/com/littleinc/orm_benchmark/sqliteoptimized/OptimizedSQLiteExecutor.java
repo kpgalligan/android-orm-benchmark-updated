@@ -72,26 +72,17 @@ public enum OptimizedSQLiteExecutor implements BenchmarkExecutable {
 
     @Override
     public long writeWholeData() throws SQLException {
-        List<OptimizedUser> users = new LinkedList<OptimizedUser>();
+        List<OptimizedUser> users = new LinkedList<>();
         for (int i = 0; i < NUM_USER_INSERTS; i++) {
             OptimizedUser newUser = new OptimizedUser();
-            newUser.setLastName(getRandomString(10));
-            newUser.setFirstName(getRandomString(10));
-
+            newUser.fillUserWithRandomData();
             users.add(newUser);
         }
 
-        List<OptimizedMessage> messages = new LinkedList<OptimizedMessage>();
+        List<OptimizedMessage> messages = new LinkedList<>();
         for (int i = 0; i < NUM_MESSAGE_INSERTS; i++) {
             OptimizedMessage newMessage = new OptimizedMessage();
-            newMessage.setCommandId(i);
-            newMessage.setSortedBy(System.nanoTime());
-            newMessage.setContent(Util.getRandomString(100));
-            newMessage.setClientId(System.currentTimeMillis());
-            newMessage.setSenderId(Math.round(Math.random() * NUM_USER_INSERTS));
-            newMessage.setChannelId(Math.round(Math.random() * NUM_USER_INSERTS));
-            newMessage.setCreatedAt((int) (System.currentTimeMillis() / 1000L));
-
+            newMessage.fillMessageWithRandomData(i, NUM_USER_INSERTS);
             messages.add(newMessage);
         }
 

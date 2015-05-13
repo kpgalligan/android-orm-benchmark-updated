@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import com.littleinc.orm_benchmark.util.Util;
+
 public class Message {
 
     public static final String TABLE_NAME = "message";
@@ -147,6 +149,16 @@ public class Message {
 
     public boolean hasReaders() {
         return mReaders != null && !mReaders.isEmpty();
+    }
+
+    public void fillMessageWithRandomData(int messageNumber, int totalNumber) {
+        setCommandId(messageNumber);
+        setSortedBy(System.nanoTime());
+        setContent(Util.getRandomString(100));
+        setClientId(System.currentTimeMillis());
+        setSenderId(Math.round(Math.random() * totalNumber));
+        setChannelId(Math.round(Math.random() * totalNumber));
+        setCreatedAt((int) (System.currentTimeMillis() / 1000L));
     }
 
     public ContentValues prepareForInsert() {

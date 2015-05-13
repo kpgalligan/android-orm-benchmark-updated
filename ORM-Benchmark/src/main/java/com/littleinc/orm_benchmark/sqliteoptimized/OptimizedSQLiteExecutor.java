@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
 import com.littleinc.orm_benchmark.sqlite.Message;
+import com.littleinc.orm_benchmark.sqlite.User;
 import com.littleinc.orm_benchmark.util.Util;
 
 import java.sql.SQLException;
@@ -71,9 +72,9 @@ public enum OptimizedSQLiteExecutor implements BenchmarkExecutable {
 
     @Override
     public long writeWholeData() throws SQLException {
-        List<User> users = new LinkedList<User>();
+        List<OptimizedUser> users = new LinkedList<OptimizedUser>();
         for (int i = 0; i < NUM_USER_INSERTS; i++) {
-            User newUser = new User();
+            OptimizedUser newUser = new OptimizedUser();
             newUser.setLastName(getRandomString(10));
             newUser.setFirstName(getRandomString(10));
 
@@ -87,10 +88,8 @@ public enum OptimizedSQLiteExecutor implements BenchmarkExecutable {
             newMessage.setSortedBy(System.nanoTime());
             newMessage.setContent(Util.getRandomString(100));
             newMessage.setClientId(System.currentTimeMillis());
-            newMessage
-                    .setSenderId(Math.round(Math.random() * NUM_USER_INSERTS));
-            newMessage
-                    .setChannelId(Math.round(Math.random() * NUM_USER_INSERTS));
+            newMessage.setSenderId(Math.round(Math.random() * NUM_USER_INSERTS));
+            newMessage.setChannelId(Math.round(Math.random() * NUM_USER_INSERTS));
             newMessage.setCreatedAt((int) (System.currentTimeMillis() / 1000L));
 
             messages.add(newMessage);
@@ -101,9 +100,9 @@ public enum OptimizedSQLiteExecutor implements BenchmarkExecutable {
 
         SQLiteStatement insertUser = db.compileStatement(
             String.format("Insert into %s (%s, %s) values (?,?)",
-                User.TABLE_NAME,
-                User.FIRST_NAME_COLUMN,
-                User.LAST_NAME_COLUMN));
+                OptimizedUser.TABLE_NAME,
+                OptimizedUser.FIRST_NAME_COLUMN,
+                OptimizedUser.LAST_NAME_COLUMN));
 
         SQLiteStatement insertMessage = db.compileStatement(
             String.format("Insert into %s (%s, %s, %s, %s, %s, %s, %s) values (?,?,?,?,?,?,?)",
@@ -119,7 +118,7 @@ public enum OptimizedSQLiteExecutor implements BenchmarkExecutable {
         try {
             db.beginTransaction();
 
-            for (User user : users) {
+            for (OptimizedUser user : users) {
                 user.prepareForInsert(insertUser);
                 insertUser.execute();
             }

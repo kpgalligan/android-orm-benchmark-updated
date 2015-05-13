@@ -2,6 +2,7 @@ package com.littleinc.orm_benchmark.sqlite;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 public class User {
@@ -12,13 +13,13 @@ public class User {
 
     public static final String FIRST_NAME_COLUMN = "first_name";
 
-    private long mId;
+    protected long mId;
 
-    private String mLastName;
+    protected String mLastName;
 
-    private String mFirstName;
+    protected String mFirstName;
 
-    public static void createTable(DataBaseHelper helper) {
+    public static void createTable(SQLiteOpenHelper helper) {
         helper.getWritableDatabase().execSQL(
                 new StringBuilder("CREATE TABLE '").append(TABLE_NAME)
                         .append("' ('").append(BaseColumns._ID)
@@ -28,7 +29,7 @@ public class User {
                         .toString());
     }
 
-    public static void dropTable(DataBaseHelper helper) {
+    public static void dropTable(SQLiteOpenHelper helper) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         db.execSQL(new StringBuilder("DROP TABLE '").append(TABLE_NAME)

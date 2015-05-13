@@ -41,16 +41,11 @@ import static com.littleinc.orm_benchmark.util.Util.getRandomString;
  * per row.
  *
  */
-public enum OptimizedSQLiteExecutor implements BenchmarkExecutable {
+public class OptimizedSQLiteExecutor implements BenchmarkExecutable {
 
-    INSTANCE;
+    private static final String TAG = "OptimizedSQLiteExecutor";
 
     private DataBaseHelper mHelper;
-
-    @Override
-    public int getProfilerId() {
-        return 4;
-    }
 
     @Override
     public String getOrmName() {
@@ -59,6 +54,7 @@ public enum OptimizedSQLiteExecutor implements BenchmarkExecutable {
 
     @Override
     public void init(Context context, boolean useInMemoryDb) {
+        Log.d(TAG, "Creating DataBaseHelper");
         mHelper = new DataBaseHelper(context, useInMemoryDb);
     }
 
@@ -113,15 +109,13 @@ public enum OptimizedSQLiteExecutor implements BenchmarkExecutable {
                 user.prepareForInsert(insertUser);
                 insertUser.execute();
             }
-            Log.d(OptimizedSQLiteExecutor.class.getSimpleName(), "Done, wrote "
-                    + NUM_USER_INSERTS + " users");
+            Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
 
             for (OptimizedMessage message : messages) {
                 message.prepareForInsert(insertMessage);
                 insertMessage.execute();
             }
-            Log.d(OptimizedSQLiteExecutor.class.getSimpleName(), "Done, wrote "
-                    + NUM_MESSAGE_INSERTS + " messages");
+            Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -162,8 +156,7 @@ public enum OptimizedSQLiteExecutor implements BenchmarkExecutable {
                     messages.add(newMessage);
                 }
             }
-            Log.d(OptimizedSQLiteExecutor.class.getSimpleName(),
-                    "Read, " + messages.size() + " rows");
+            Log.d(TAG, "Read, " + messages.size() + " rows");
         } finally {
             if (c != null) {
                 c.close();
@@ -201,8 +194,7 @@ public enum OptimizedSQLiteExecutor implements BenchmarkExecutable {
                 newMessage.setSortedBy(c.getDouble(c
                         .getColumnIndex(OptimizedMessage.SORTED_BY)));
 
-                Log.d(OptimizedSQLiteExecutor.class.getSimpleName(),
-                        "Read, " + c.getCount() + " rows");
+                Log.d(TAG, "Read, " + c.getCount() + " rows");
             }
         } finally {
             if (c != null) {
@@ -249,8 +241,7 @@ public enum OptimizedSQLiteExecutor implements BenchmarkExecutable {
                 }
             }
 
-            Log.d(OptimizedSQLiteExecutor.class.getSimpleName(),
-                    "Read, " + messages.size() + " rows");
+            Log.d(TAG, "Read, " + messages.size() + " rows");
         } finally {
             if (c != null) {
                 c.close();

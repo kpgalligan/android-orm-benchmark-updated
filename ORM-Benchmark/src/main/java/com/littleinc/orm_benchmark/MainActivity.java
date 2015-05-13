@@ -73,8 +73,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void showGlobalResults(View v) {
-        ResultDialog dialog = ResultDialog.newInstance(R.string.results_title,
-                mResults);
+        ResultDialog dialog = ResultDialog.newInstance(R.string.results_title, mResults);
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
         tx.add(dialog, ResultDialog.class.getSimpleName());
         tx.commit();
@@ -200,7 +199,7 @@ public class MainActivity extends FragmentActivity {
 
     public static class ResultDialog extends DialogFragment {
 
-        private static String TITLE_RES_ID = "tittle_res_id";
+        private static String TITLE_RES_ID = "title_res_id";
 
         private static String MESSAGE = "message";
 
@@ -220,8 +219,7 @@ public class MainActivity extends FragmentActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             return builder
                     .setTitle(getArguments().getInt(TITLE_RES_ID))
-                    .setMessage(
-                            Html.fromHtml(getArguments().getString(MESSAGE)))
+                    .setMessage(Html.fromHtml(getArguments().getString(MESSAGE)))
                     .create();
         }
     }

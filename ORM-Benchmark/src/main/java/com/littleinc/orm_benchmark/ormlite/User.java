@@ -13,8 +13,8 @@ public class User extends Contact {
 
     private static Dao<User, Long> sDao;
 
-    @DatabaseField(columnName = "message_id", foreign = true, foreignAutoRefresh = false)
-    private Message mMessage;
+//    @DatabaseField(columnName = "message_id", foreign = true, foreignAutoRefresh = false)
+//    private Message mMessage;
 
     public User() {
     }

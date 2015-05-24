@@ -33,31 +33,31 @@ public class Message {
     public static final String CREATED_AT = "created_at";
 
     @DatabaseField(columnName = BaseColumns._ID, generatedId = true, dataType = DataType.LONG)
-    private long mId;
+    public long mId;
 
     @DatabaseField(columnName = CLIENT_ID, dataType = DataType.LONG)
-    private long mClientId;
+    public long mClientId;
 
     @DatabaseField(columnName = COMMAND_ID, index = true, dataType = DataType.LONG)
-    private long mCommandId;
+    public long mCommandId;
 
     @DatabaseField(columnName = SORTED_BY, dataType = DataType.DOUBLE)
-    private double mSortedBy;
+    public double mSortedBy;
 
     @DatabaseField(columnName = CREATED_AT, dataType = DataType.INTEGER)
-    private int mCreatedAt;
+    public int mCreatedAt;
 
     @DatabaseField(columnName = CONTENT, dataType = DataType.STRING)
-    private String mContent;
+    public String mContent;
 
     @DatabaseField(columnName = SENDER_ID, canBeNull = false, dataType = DataType.LONG)
-    private long mSenderId;
+    public long mSenderId;
 
     @DatabaseField(columnName = CHANNEL_ID, canBeNull = false, dataType = DataType.LONG)
-    private long mChannelId;
+    public long mChannelId;
 
-    @ForeignCollectionField(eager = false, columnName = READERS)
-    private ForeignCollection<User> mReaders;
+//    @ForeignCollectionField(eager = false, columnName = READERS)
+//    private ForeignCollection<User> mReaders;
 
     private static Dao<Message, Long> sDao;
 
@@ -136,7 +136,7 @@ public class Message {
         this.mChannelId = channelId;
     }
 
-    public ForeignCollection<User> getReaders() {
-        return mReaders;
-    }
+//    public ForeignCollection<User> getReaders() {
+//        return mReaders;
+//    }
 }

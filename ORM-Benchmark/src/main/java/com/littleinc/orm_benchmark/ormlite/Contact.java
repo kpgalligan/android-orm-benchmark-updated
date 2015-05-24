@@ -12,13 +12,13 @@ public class Contact {
     public static final String FIRST_NAME_COLUMN = "first_name";
 
     @DatabaseField(columnName = BaseColumns._ID, generatedId = true, dataType = DataType.LONG)
-    private long mId;
+    public long mId;
 
     @DatabaseField(columnName = LAST_NAME_COLUMN, dataType = DataType.STRING)
-    private String mLastName;
+    public String mLastName;
 
     @DatabaseField(columnName = FIRST_NAME_COLUMN, dataType = DataType.STRING)
-    private String mFirstName;
+    public String mFirstName;
 
     public long getId() {
         return mId;

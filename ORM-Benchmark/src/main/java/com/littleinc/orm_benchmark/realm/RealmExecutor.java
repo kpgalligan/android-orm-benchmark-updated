@@ -1,0 +1,164 @@
+package com.littleinc.orm_benchmark.realm;
+import android.content.Context;
+import android.util.Log;
+
+import com.littleinc.orm_benchmark.BenchmarkExecutable;
+import com.littleinc.orm_benchmark.ormlite.*;
+import com.littleinc.orm_benchmark.util.Util;
+
+import java.sql.SQLException;
+
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+
+
+import static com.littleinc.orm_benchmark.util.Util.getRandomString;
+
+/**
+ * Created by kgalligan on 6/17/15.
+ */
+public class RealmExecutor implements BenchmarkExecutable
+{
+
+    private static final String TAG = "RealmExecutor";
+
+    //private DataBaseHelper mHelper;
+    private Context mContext;
+
+    @Override
+    public void init(Context context, boolean useInMemoryDb)
+    {
+        mContext = context;
+        Realm.getInstance(context);
+
+    }
+
+    @Override
+    public String getOrmName()
+    {
+        return "Realm";
+    }
+
+    @Override
+    public long createDbStructure() throws SQLException
+    {
+        return 0;
+    }
+
+    @Override
+    public long writeWholeData() throws SQLException
+    {
+        long start = System.nanoTime();
+        Realm realm = Realm.getInstance(mContext);
+        realm.beginTransaction();
+
+        for( int i = 0; i < NUM_USER_INSERTS; i++)
+        {
+            User newUser = realm.createObject(User.class);
+            newUser.setId(i);
+            newUser.setmLastName(getRandomString(10));
+            newUser.setmFirstName(getRandomString(10));
+        }
+
+        String userLog = "Done, wrote " + NUM_USER_INSERTS + " users" + (System.nanoTime() - start);
+
+
+        long messageStart = System.nanoTime();
+
+        for ( int i =0; i < NUM_MESSAGE_INSERTS; i++)
+        {
+            Message message = realm.createObject(Message.class);
+
+            message.setId(i);
+            message.setCommandId(i);
+            message.setSortedBy(System.nanoTime());
+            message.setContent(Util.getRandomString(100));
+            message.setClientId(System.currentTimeMillis());
+            message.setSenderId(Math.round(Math.random() * NUM_MESSAGE_INSERTS));
+            message.setChannelId(Math.round(Math.random() * NUM_MESSAGE_INSERTS));
+            message.setCreatedAt((int) (System.currentTimeMillis() / 1000L));
+        }
+
+        realm.commitTransaction();
+
+        realm.close();
+
+        long totalTime = System.nanoTime() - start;
+
+        Log.d(TAG, userLog);
+        Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages"  + (System.nanoTime() - messageStart));
+
+        return totalTime;
+    }
+
+    @Override
+    public long readWholeData() throws SQLException
+    {
+        long start = System.nanoTime();
+        Realm realm = Realm.getInstance(mContext);
+
+        RealmQuery<User> userQuery = realm.where(User.class);
+        RealmResults<User> userResults = userQuery.findAll();
+        for(User user : userResults)
+        {
+            int id = user.getId();
+            String first =  user.getmFirstName();
+            String last = user.getmLastName();
+        }
+
+        String userLog = "Read " + NUM_USER_INSERTS + " users in " + (System.nanoTime() - start);
+
+        long messageStart = System.nanoTime();
+
+        RealmQuery <Message> messageQuery = realm.where(Message.class);
+        RealmResults<Message> messageResults =messageQuery.findAll();
+        for(Message message : messageResults)
+        {
+            int id = message.getId();
+            long channel = message.getChannelId();
+            long client = message.getClientId();
+            long command = message.getCommandId();
+            String content = message.getContent();
+            int created = message.getCreatedAt();
+            long sender = message.getSenderId();
+            double sorted = message.getSortedBy();
+        }
+
+        realm.close();
+
+        long totalTime = System.nanoTime() - start;
+        Log.d(TAG, userLog);
+        Log.d(TAG,
+              "Read " + NUM_MESSAGE_INSERTS + " messages in " + (System.nanoTime() - messageStart));
+
+        return totalTime;
+    }
+
+    @Override
+    public long readIndexedField() throws SQLException
+    {
+        return 0;
+    }
+
+    @Override
+    public long readSearch() throws SQLException
+    {
+        return 0;
+    }
+
+    @Override
+    public long dropDb() throws SQLException
+    {
+        long start = System.nanoTime();
+        Realm realm = Realm.getInstance(mContext);
+
+        realm.beginTransaction();
+        realm.where(User.class).findAll().clear();
+        realm.where(Message.class).findAll().clear();
+        realm.commitTransaction();
+
+        realm.close();
+        return System.nanoTime() - start;
+    }
+}

@@ -10,6 +10,7 @@ import static com.littleinc.orm_benchmark.util.Util.getRandomString;
  */
 public class User extends RealmObject
 {
+    @PrimaryKey
     private int id;
     private String mLastName;
     private String mFirstName;

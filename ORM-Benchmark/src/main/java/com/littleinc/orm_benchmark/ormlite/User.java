@@ -1,31 +1,73 @@
 package com.littleinc.orm_benchmark.ormlite;
 
-import java.sql.SQLException;
+import android.provider.BaseColumns;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.sql.SQLException;
+
 @DatabaseTable(tableName = User.TABLE_NAME)
-public class User extends Contact {
+public class User
+{
 
     public static final String TABLE_NAME = "user";
 
     private static Dao<User, Long> sDao;
 
-//    @DatabaseField(columnName = "message_id", foreign = true, foreignAutoRefresh = false)
-//    private Message mMessage;
+    @DatabaseField(columnName = BaseColumns._ID, generatedId = true)
+    public Long mId;
 
-    public User() {
+    @DatabaseField
+    public String mLastName;
+
+    @DatabaseField
+    public String mFirstName;
+
+    public long getId()
+    {
+        return mId;
     }
 
-    public static Dao<User, Long> getDao() {
-        if (sDao == null) {
-            try {
-                sDao = DataBaseHelper.getInstance().getDao(User.class);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    public void setId(long id)
+    {
+        this.mId = id;
+    }
+
+    public String getLastName()
+    {
+        return mLastName;
+    }
+
+    public void setLastName(String lastName)
+    {
+        this.mLastName = lastName;
+    }
+
+    public String getFirstName()
+    {
+        return mFirstName;
+    }
+
+    public void setFirstName(String firstName)
+    {
+        this.mFirstName = firstName;
+    }
+
+    //    @DatabaseField(columnName = "message_id", foreign = true, foreignAutoRefresh = false)
+    //    private Message mMessage;
+
+    public User()
+    {
+    }
+
+    public static Dao<User, Long> getDao() throws SQLException
+    {
+        if(sDao == null)
+        {
+            sDao = DataBaseHelper.getInstance().getDao(User.class);
+
         }
         return sDao;
     }

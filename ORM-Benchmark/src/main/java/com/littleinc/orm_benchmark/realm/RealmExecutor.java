@@ -7,6 +7,7 @@ import com.littleinc.orm_benchmark.ormlite.*;
 import com.littleinc.orm_benchmark.util.Util;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class RealmExecutor implements BenchmarkExecutable
     @Override
     public long writeWholeData() throws SQLException
     {
-        List<User> users = new LinkedList<User>();
+        List<User> users = new ArrayList<User>(NUM_USER_INSERTS);
         for (int i = 0; i < NUM_USER_INSERTS; i++) {
             User newUser = new User();
             newUser.setId(i);
@@ -61,7 +62,7 @@ public class RealmExecutor implements BenchmarkExecutable
             users.add(newUser);
         }
 
-        List<Message> messages = new LinkedList<Message>();
+        List<Message> messages = new ArrayList<Message>(NUM_MESSAGE_INSERTS);
         for (int i = 0; i < NUM_MESSAGE_INSERTS; i++) {
             Message newMessage = new Message();
             newMessage.setId(i);

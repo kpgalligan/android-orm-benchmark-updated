@@ -7,6 +7,8 @@ import com.littleinc.orm_benchmark.ormlite.*;
 import com.littleinc.orm_benchmark.util.Util;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -49,42 +51,58 @@ public class RealmExecutor implements BenchmarkExecutable
     @Override
     public long writeWholeData() throws SQLException
     {
-        long start = System.nanoTime();
-        Realm realm = Realm.getInstance(mContext);
-        realm.beginTransaction();
-
-        for( int i = 0; i < NUM_USER_INSERTS; i++)
-        {
-            User newUser = realm.createObject(User.class);
+        List<User> users = new LinkedList<User>();
+        for (int i = 0; i < NUM_USER_INSERTS; i++) {
+            User newUser = new User();
             newUser.setId(i);
             newUser.setmLastName(getRandomString(10));
             newUser.setmFirstName(getRandomString(10));
+
+            users.add(newUser);
+        }
+
+        List<Message> messages = new LinkedList<Message>();
+        for (int i = 0; i < NUM_MESSAGE_INSERTS; i++) {
+            Message newMessage = new Message();
+            newMessage.setId(i);
+            newMessage.setCommandId(i);
+            newMessage.setSortedBy(System.nanoTime());
+            newMessage.setContent(Util.getRandomString(100));
+            newMessage.setClientId(System.currentTimeMillis());
+            newMessage
+                    .setSenderId(Math.round(Math.random() * NUM_USER_INSERTS));
+            newMessage
+                    .setChannelId(Math.round(Math.random() * NUM_USER_INSERTS));
+            newMessage.setCreatedAt((int) (System.currentTimeMillis() / 1000L));
+
+            messages.add(newMessage);
+        }
+
+        Realm realm = Realm.getInstance(mContext);
+
+        long start = System.nanoTime();
+
+        realm.beginTransaction();
+
+        for(User newUser : users)
+        {
+            realm.copyToRealm(newUser);
         }
 
         String userLog = "Done, wrote " + NUM_USER_INSERTS + " users" + (System.nanoTime() - start);
 
-
         long messageStart = System.nanoTime();
 
-        for ( int i =0; i < NUM_MESSAGE_INSERTS; i++)
+        for(Message message : messages)
         {
-            Message message = realm.createObject(Message.class);
-
-            message.setId(i);
-            message.setCommandId(i);
-            message.setSortedBy(System.nanoTime());
-            message.setContent(Util.getRandomString(100));
-            message.setClientId(System.currentTimeMillis());
-            message.setSenderId(Math.round(Math.random() * NUM_MESSAGE_INSERTS));
-            message.setChannelId(Math.round(Math.random() * NUM_MESSAGE_INSERTS));
-            message.setCreatedAt((int) (System.currentTimeMillis() / 1000L));
+            realm.copyToRealm(message);
         }
 
         realm.commitTransaction();
 
-        realm.close();
-
         long totalTime = System.nanoTime() - start;
+
+        realm.close();
 
         Log.d(TAG, userLog);
         Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages"  + (System.nanoTime() - messageStart));
@@ -95,8 +113,9 @@ public class RealmExecutor implements BenchmarkExecutable
     @Override
     public long readWholeData() throws SQLException
     {
-        long start = System.nanoTime();
         Realm realm = Realm.getInstance(mContext);
+
+        long start = System.nanoTime();
 
         RealmQuery<User> userQuery = realm.where(User.class);
         RealmResults<User> userResults = userQuery.findAll();
@@ -125,9 +144,9 @@ public class RealmExecutor implements BenchmarkExecutable
             double sorted = message.getSortedBy();
         }
 
-        realm.close();
-
         long totalTime = System.nanoTime() - start;
+
+        realm.close();
         Log.d(TAG, userLog);
         Log.d(TAG,
               "Read " + NUM_MESSAGE_INSERTS + " messages in " + (System.nanoTime() - messageStart));

@@ -52,15 +52,15 @@ public class DBFlowExecutor  implements BenchmarkExecutable
     @Override
     public long writeWholeData() throws SQLException
     {
-        /*List<User> users = new LinkedList<User>();
+        List<User> users = new LinkedList<User>();
         for(int i = 0; i < NUM_USER_INSERTS; i++)
         {
             User newUser = new User();
-            newUser.setLastName(getRandomString(10));
-            newUser.setFirstName(getRandomString(10));
+            newUser.mLastName = (getRandomString(10));
+            newUser.mFirstName = (getRandomString(10));
 
             users.add(newUser);
-        }*/
+        }
 
         List<Message> messages = new LinkedList<Message>();
         for (int i = 0; i < NUM_MESSAGE_INSERTS; i++) {
@@ -87,9 +87,9 @@ public class DBFlowExecutor  implements BenchmarkExecutable
         db.beginTransaction();
 
         try {
-            /*for (User user : users) {
-                User.getDao().createOrUpdate(user);
-            }*/
+            for (User user : users) {
+                user.save();
+            }
             Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
 
             for (Message message : messages) {
@@ -144,6 +144,7 @@ public class DBFlowExecutor  implements BenchmarkExecutable
     public long dropDb() throws SQLException {
         long start = System.nanoTime();
         Delete.table(Message.class);
+        Delete.table(User.class);
 //        applicationContext.deleteDatabase(DatabaseModule.NAME +".db");
         /*ConnectionSource connectionSource = mHelper.getConnectionSource();
         TableUtils.dropTable(connectionSource, User.class, true);

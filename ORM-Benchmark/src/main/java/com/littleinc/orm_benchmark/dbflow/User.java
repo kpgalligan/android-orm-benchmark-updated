@@ -8,7 +8,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
  * Created by kgalligan on 10/12/15.
  */
 @Table(databaseName = DatabaseModule.NAME)
-public class Contact extends BaseModel
+public class User extends BaseModel
 {
     @Column
     @PrimaryKey(autoincrement = true)

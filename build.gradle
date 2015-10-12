@@ -15,6 +15,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        mavenLocal()
         maven { url "https://raw.github.com/Raizlabs/maven-releases/master/releases" }
     }
 }

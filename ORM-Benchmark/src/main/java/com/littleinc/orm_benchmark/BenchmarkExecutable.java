@@ -12,9 +12,9 @@ public interface BenchmarkExecutable {
 
     int NUM_READERS = 10;
 
-    int NUM_USER_INSERTS = 1000;
+    int NUM_USER_INSERTS = 2000;
 
-    int NUM_MESSAGE_INSERTS = 10000;
+    int NUM_MESSAGE_INSERTS = 20000;
 
     int NUM_MESSAGES_WITH_READERS = 50;
 

@@ -32,6 +32,7 @@ import com.littleinc.orm_benchmark.greendao.GreenDaoExecutor;
 import com.littleinc.orm_benchmark.ormlite.ORMLiteExecutor;
 import com.littleinc.orm_benchmark.sqlite.SQLiteExecutor;
 import com.littleinc.orm_benchmark.sqliteoptimized.OptimizedSQLiteExecutor;
+import com.littleinc.orm_benchmark.squeaky.SqueakyExecutor;
 import com.littleinc.orm_benchmark.util.Util;
 
 public class MainActivity extends FragmentActivity {
@@ -46,8 +47,10 @@ public class MainActivity extends FragmentActivity {
 
     private Button mShowResultsBtn;
 
+
     private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[] {
             new SQLiteExecutor(),
+            new SqueakyExecutor(),
             new DBFlowExecutor(),
             new OptimizedSQLiteExecutor(),
             new ORMLiteExecutor(),

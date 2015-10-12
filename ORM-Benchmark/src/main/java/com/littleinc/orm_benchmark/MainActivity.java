@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable.Task;
+import com.littleinc.orm_benchmark.dbflow.DBFlowExecutor;
 import com.littleinc.orm_benchmark.greendao.GreenDaoExecutor;
 import com.littleinc.orm_benchmark.ormlite.ORMLiteExecutor;
 import com.littleinc.orm_benchmark.sqlite.SQLiteExecutor;
@@ -37,7 +38,7 @@ public class MainActivity extends FragmentActivity {
 
     private static final boolean USE_IN_MEMORY_DB = true;
 
-    private static final int NUM_ITERATIONS = 5;
+    private static final int NUM_ITERATIONS = 2;
 
     private int mCount = 0;
 
@@ -47,24 +48,28 @@ public class MainActivity extends FragmentActivity {
 
     private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[] {
             new SQLiteExecutor(),
+            new DBFlowExecutor(),
             new OptimizedSQLiteExecutor(),
             new ORMLiteExecutor(),
-            new GreenDaoExecutor() };
+            new GreenDaoExecutor()};
 
     private boolean mWasInitialized = false;
 
     private Map<String, Map<Task, List<Long>>> mGlobalResults;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mGlobalResults = new HashMap<>();
         mShowResultsBtn = (Button) findViewById(R.id.show_results_btn);
 
-        if (!mWasInitialized) {
-            for (BenchmarkExecutable orm : mOrms) {
+        if(! mWasInitialized)
+        {
+            for(BenchmarkExecutable orm : mOrms)
+            {
                 orm.init(this, USE_IN_MEMORY_DB);
             }
 
@@ -72,26 +77,26 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    public void showGlobalResults(View v) {
+    public void showGlobalResults(View v)
+    {
         ResultDialog dialog = ResultDialog.newInstance(R.string.results_title, mResults);
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
         tx.add(dialog, ResultDialog.class.getSimpleName());
         tx.commit();
     }
 
-    public void runBenchmark(View v) {
-        if (mCount < NUM_ITERATIONS) {
+    public void runBenchmark(View v)
+    {
+        if(mCount < NUM_ITERATIONS)
+        {
             v.setEnabled(false);
             mShowResultsBtn.setEnabled(false);
 
-            new ProfilerTask(v).execute(
-                CREATE_DB,
-                WRITE_DATA,
-                READ_DATA,
-                READ_INDEXED,
-                READ_SEARCH,
-                DROP_DB);
-        } else {
+            new ProfilerTask(v)
+                    .execute(CREATE_DB, WRITE_DATA, READ_DATA, READ_INDEXED, READ_SEARCH, DROP_DB);
+        }
+        else
+        {
             mResults = buildResults();
             Log.d(MainActivity.class.getSimpleName(), "Results:\n" + mResults);
 
@@ -101,9 +106,11 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    private String buildResults() {
+    private String buildResults()
+    {
         StringBuilder builder = new StringBuilder();
-        tasks: for (Task task : Task.values()) {
+        tasks:
+        for(Task task : Task.values()) {
             builder.append("<b>Task ").append(task).append("</b><br />");
             orms: for (BenchmarkExecutable orm : mOrms) {
 

@@ -44,8 +44,8 @@ public class SqueakyExecutor implements BenchmarkExecutable
         List<User> users = new LinkedList<User>();
         for (int i = 0; i < NUM_USER_INSERTS; i++) {
             User newUser = new User();
-            newUser.setLastName(Util.getRandomString(10));
-            newUser.setFirstName(Util.getRandomString(10));
+            newUser.lastName = (Util.getRandomString(10));
+            newUser.firstName = (Util.getRandomString(10));
 
             users.add(newUser);
         }
@@ -53,15 +53,15 @@ public class SqueakyExecutor implements BenchmarkExecutable
         List<Message> messages = new LinkedList<Message>();
         for (int i = 0; i < NUM_MESSAGE_INSERTS; i++) {
             Message newMessage = new Message();
-            newMessage.setCommandId(i);
-            newMessage.setSortedBy(System.nanoTime());
-            newMessage.setContent(Util.getRandomString(100));
-            newMessage.setClientId(System.currentTimeMillis());
+            newMessage.commandId = (i);
+            newMessage.sortedBy = (System.nanoTime());
+            newMessage.content = (Util.getRandomString(100));
+            newMessage.clientId = (System.currentTimeMillis());
             newMessage
-                    .setSenderId(Math.round(Math.random() * NUM_USER_INSERTS));
+                    .senderId = (Math.round(Math.random() * NUM_USER_INSERTS));
             newMessage
-                    .setChannelId(Math.round(Math.random() * NUM_USER_INSERTS));
-            newMessage.setCreatedAt((int) (System.currentTimeMillis() / 1000L));
+                    .channelId = (Math.round(Math.random() * NUM_USER_INSERTS));
+            newMessage.createdAt = ((int) (System.currentTimeMillis() / 1000L));
 
             messages.add(newMessage);
         }

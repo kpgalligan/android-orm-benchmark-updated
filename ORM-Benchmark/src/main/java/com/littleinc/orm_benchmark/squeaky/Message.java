@@ -34,93 +34,26 @@ public class Message
     public static final String CREATED_AT = "created_at";
 
     @DatabaseField(columnName = BaseColumns._ID, generatedId = true, dataType = DataType.LONG)
-    private long id;
+    public long id;
 
     @DatabaseField(columnName = CLIENT_ID, dataType = DataType.LONG)
-    private long clientId;
+    public long clientId;
 
     @DatabaseField(columnName = COMMAND_ID, index = true, dataType = DataType.LONG)
-    private long commandId;
+    public long commandId;
 
     @DatabaseField(columnName = SORTED_BY, dataType = DataType.DOUBLE)
-    private double sortedBy;
+    public double sortedBy;
 
     @DatabaseField(columnName = CREATED_AT, dataType = DataType.INTEGER)
-    private int createdAt;
+    public int createdAt;
 
     @DatabaseField(columnName = CONTENT, dataType = DataType.STRING)
-    private String content;
+    public String content;
 
     @DatabaseField(columnName = SENDER_ID, canBeNull = false, dataType = DataType.LONG)
-    private long senderId;
+    public long senderId;
 
     @DatabaseField(columnName = CHANNEL_ID, canBeNull = false, dataType = DataType.LONG)
-    private long channelId;
-
-    public long getId()
-    {
-        return id;
-    }
-
-    public void setId(long id)
-    {
-        this.id = id;
-    }
-
-    public long getClientId()
-    {
-        return clientId;
-    }
-
-    public void setClientId(long clientId) {
-        this.clientId = clientId;
-    }
-
-    public long getCommandId() {
-        return commandId;
-    }
-
-    public void setCommandId(long commandId) {
-        this.commandId = commandId;
-    }
-
-    public double getSortedBy() {
-        return sortedBy;
-    }
-
-    public void setSortedBy(double sortedBy) {
-        this.sortedBy = sortedBy;
-    }
-
-    public int getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(int createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public long getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(long senderId) {
-        this.senderId = senderId;
-    }
-
-    public long getChannelId() {
-        return channelId;
-    }
-
-    public void setChannelId(long channelId) {
-        this.channelId = channelId;
-    }
+    public long channelId;
 }

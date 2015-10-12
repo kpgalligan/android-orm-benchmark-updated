@@ -1,4 +1,4 @@
-package com.littleinc.orm_benchmark.squeaky;
+package com.littleinc.orm_benchmark.squeakyfinal;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -19,12 +19,13 @@ import co.touchlab.squeaky.table.TableUtils;
 public class SqueakyExecutor implements BenchmarkExecutable
 {
 
-    private static final String TAG = "SqueakyExecutor";
+    private static final String TAG = "SqueakyFinalExecutor";
 
     private DataBaseHelper mHelper;
 
     @Override
-    public void init(Context context, boolean useInMemoryDb) {
+    public void init(Context context, boolean useInMemoryDb)
+    {
         Log.d(TAG, "Creating DataBaseHelper");
         DataBaseHelper.init(context, useInMemoryDb);
         mHelper = DataBaseHelper.getInstance();
@@ -34,34 +35,28 @@ public class SqueakyExecutor implements BenchmarkExecutable
     public long createDbStructure() throws SQLException
     {
         long start = System.nanoTime();
-        co.touchlab.squeaky.table.TableUtils.createTables(mHelper.getWritableDatabase(), User.class, Message.class);
+        TableUtils.createTables(mHelper.getWritableDatabase(), User.class, Message.class);
         return System.nanoTime() - start;
     }
 
     @Override
-    public long writeWholeData() throws SQLException {
+    public long writeWholeData() throws SQLException
+    {
         List<User> users = new LinkedList<User>();
-        for (int i = 0; i < NUM_USER_INSERTS; i++) {
-            User newUser = new User();
-            newUser.lastName = (Util.getRandomString(10));
-            newUser.firstName = (Util.getRandomString(10));
+        for(int i = 0; i < NUM_USER_INSERTS; i++)
+        {
+            User newUser = new User(Util.getRandomString(10), Util.getRandomString(10));
 
             users.add(newUser);
         }
 
         List<Message> messages = new LinkedList<Message>();
         for (int i = 0; i < NUM_MESSAGE_INSERTS; i++) {
-            Message newMessage = new Message();
-            newMessage.commandId = (i);
-            newMessage.sortedBy = (System.nanoTime());
-            newMessage.content = (Util.getRandomString(100));
-            newMessage.clientId = (System.currentTimeMillis());
-            newMessage
-                    .senderId = (Math.round(Math.random() * NUM_USER_INSERTS));
-            newMessage
-                    .channelId = (Math.round(Math.random() * NUM_USER_INSERTS));
-            newMessage.createdAt = ((int) (System.currentTimeMillis() / 1000L));
-
+            Message newMessage = new Message(System.currentTimeMillis(), i, System.nanoTime(),
+                                             ((int) (System.currentTimeMillis() / 1000L)),
+                                             Util.getRandomString(100),
+                                             (Math.round(Math.random() * NUM_USER_INSERTS)),
+                                             (Math.round(Math.random() * NUM_USER_INSERTS)));
             messages.add(newMessage);
         }
 
@@ -137,6 +132,6 @@ public class SqueakyExecutor implements BenchmarkExecutable
 
     @Override
     public String getOrmName() {
-        return "Squeaky";
+        return "SqueakyFinal";
     }
 }

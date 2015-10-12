@@ -51,9 +51,11 @@ public class MainActivity extends FragmentActivity {
     private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[] {
             new SQLiteExecutor(),
             new SqueakyExecutor(),
+            new com.littleinc.orm_benchmark.squeakyfinal.SqueakyExecutor(),
+
             new DBFlowExecutor(),
             new OptimizedSQLiteExecutor(),
-            new ORMLiteExecutor(),
+//            new ORMLiteExecutor(),
             new GreenDaoExecutor()};
 
     private boolean mWasInitialized = false;

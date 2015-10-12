@@ -6,11 +6,6 @@ dataClass=com.littleinc.orm_benchmark.ormlite.User
 tableName=user
 # --table-fields-start--
 # --field-start--
-fieldName=mMessage
-columnName=message_id
-foreign=true
-# --field-end--
-# --field-start--
 fieldName=mId
 columnName=_id
 dataPersister=LONG

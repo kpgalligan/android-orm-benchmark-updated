@@ -5,10 +5,8 @@ import java.sql.SQLException;
 import android.provider.BaseColumns;
 
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = Message.TABLE_NAME)
@@ -32,111 +30,126 @@ public class Message {
 
     public static final String CREATED_AT = "created_at";
 
-    @DatabaseField(columnName = BaseColumns._ID, generatedId = true, dataType = DataType.LONG)
-    private long mId;
+    @DatabaseField(columnName = BaseColumns._ID, generatedId = true)
+    private Long id;
 
     @DatabaseField(columnName = CLIENT_ID, dataType = DataType.LONG)
-    private long mClientId;
+    private long clientId;
 
     @DatabaseField(columnName = COMMAND_ID, index = true, dataType = DataType.LONG)
-    private long mCommandId;
+    private long commandId;
 
     @DatabaseField(columnName = SORTED_BY, dataType = DataType.DOUBLE)
-    private double mSortedBy;
+    private double sortedBy;
 
     @DatabaseField(columnName = CREATED_AT, dataType = DataType.INTEGER)
-    private int mCreatedAt;
+    private int createdAt;
 
     @DatabaseField(columnName = CONTENT, dataType = DataType.STRING)
-    private String mContent;
+    private String content;
 
     @DatabaseField(columnName = SENDER_ID, canBeNull = false, dataType = DataType.LONG)
-    private long mSenderId;
+    private long senderId;
 
     @DatabaseField(columnName = CHANNEL_ID, canBeNull = false, dataType = DataType.LONG)
-    private long mChannelId;
+    private long channelId;
 
-    @ForeignCollectionField(eager = false, columnName = READERS)
-    private ForeignCollection<User> mReaders;
+    //    @ForeignCollectionField(eager = false, columnName = READERS)
+    //    private ForeignCollection<User> mReaders;
 
     private static Dao<Message, Long> sDao;
 
-    public static Dao<Message, Long> getDao() {
-        if (sDao == null) {
-            try {
-                sDao = DataBaseHelper.getInstance().getDao(Message.class);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    public static Dao<Message, Long> getDao() throws SQLException
+    {
+        if(sDao == null)
+        {
+            sDao = DataBaseHelper.getInstance().getDao(Message.class);
+
         }
         return sDao;
     }
 
-    public long getId() {
-        return mId;
+    public Long getId()
+    {
+        return id;
     }
 
-    public void setId(long id) {
-        this.mId = id;
+    public void setId(Long id)
+    {
+        this.id = id;
     }
 
-    public long getClientId() {
-        return mClientId;
+    public long getClientId()
+    {
+        return clientId;
     }
 
-    public void setClientId(long clientId) {
-        this.mClientId = clientId;
+    public void setClientId(long clientId)
+    {
+        this.clientId = clientId;
     }
 
-    public long getCommandId() {
-        return mCommandId;
+    public long getCommandId()
+    {
+        return commandId;
     }
 
-    public void setCommandId(long commandId) {
-        this.mCommandId = commandId;
+    public void setCommandId(long commandId)
+    {
+        this.commandId = commandId;
     }
 
-    public double getSortedBy() {
-        return mSortedBy;
+    public double getSortedBy()
+    {
+        return sortedBy;
     }
 
-    public void setSortedBy(double sortedBy) {
-        this.mSortedBy = sortedBy;
+    public void setSortedBy(double sortedBy)
+    {
+        this.sortedBy = sortedBy;
     }
 
-    public int getCreatedAt() {
-        return mCreatedAt;
+    public int getCreatedAt()
+    {
+        return createdAt;
     }
 
-    public void setCreatedAt(int createdAt) {
-        this.mCreatedAt = createdAt;
+    public void setCreatedAt(int createdAt)
+    {
+        this.createdAt = createdAt;
     }
 
-    public String getContent() {
-        return mContent;
+    public String getContent()
+    {
+        return content;
     }
 
-    public void setContent(String content) {
-        this.mContent = content;
+    public void setContent(String content)
+    {
+        this.content = content;
     }
 
-    public long getSenderId() {
-        return mSenderId;
+    public long getSenderId()
+    {
+        return senderId;
     }
 
-    public void setSenderId(long senderId) {
-        this.mSenderId = senderId;
+    public void setSenderId(long senderId)
+    {
+        this.senderId = senderId;
     }
 
-    public long getChannelId() {
-        return mChannelId;
+    public long getChannelId()
+    {
+        return channelId;
     }
 
-    public void setChannelId(long channelId) {
-        this.mChannelId = channelId;
+    public void setChannelId(long channelId)
+    {
+        this.channelId = channelId;
     }
 
-    public ForeignCollection<User> getReaders() {
-        return mReaders;
-    }
+    //    public ForeignCollection<User> getReaders() {
+//        return mReaders;
+//    }
 }

@@ -3,7 +3,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21"
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "com.littleinc.orm_benchmark"
@@ -32,4 +32,6 @@ dependencies {
 
     compile 'co.touchlab.squeaky:squeaky-core:0.3.1.0'
     apt 'co.touchlab.squeaky:squeaky-processor:0.3.1.0'
+
+    compile 'io.realm:realm-android:0.80.3'
 }

@@ -30,6 +30,7 @@ import com.littleinc.orm_benchmark.BenchmarkExecutable.Task;
 import com.littleinc.orm_benchmark.dbflow.DBFlowExecutor;
 import com.littleinc.orm_benchmark.greendao.GreenDaoExecutor;
 import com.littleinc.orm_benchmark.ormlite.ORMLiteExecutor;
+import com.littleinc.orm_benchmark.realm.RealmExecutor;
 import com.littleinc.orm_benchmark.sqlite.SQLiteExecutor;
 import com.littleinc.orm_benchmark.sqliteoptimized.OptimizedSQLiteExecutor;
 import com.littleinc.orm_benchmark.squeaky.SqueakyExecutor;
@@ -52,7 +53,7 @@ public class MainActivity extends FragmentActivity {
             new SQLiteExecutor(),
             new SqueakyExecutor(),
             new com.littleinc.orm_benchmark.squeakyfinal.SqueakyExecutor(),
-
+            new RealmExecutor(),
             new DBFlowExecutor(),
             new OptimizedSQLiteExecutor(),
 //            new ORMLiteExecutor(),
@@ -136,7 +137,7 @@ public class MainActivity extends FragmentActivity {
                 builder.append(orm.getOrmName())
                         .append(" - Avg: ")
                         .append(Util.formatElapsedTime(resultsCount
-                                / numExecutions)).append("<br />");
+                                / numExecutions)).append("ms (avg)<br />");
             }
             builder.append("<br />");
         }

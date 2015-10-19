@@ -3,10 +3,6 @@ package com.littleinc.orm_benchmark.squeaky;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.support.ConnectionSource;
-import com.littleinc.orm_benchmark.R;
-
 import co.touchlab.squeaky.dao.SqueakyOpenHelper;
 
 public class DataBaseHelper extends SqueakyOpenHelper

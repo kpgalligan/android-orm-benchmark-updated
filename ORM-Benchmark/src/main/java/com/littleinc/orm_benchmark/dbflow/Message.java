@@ -1,6 +1,8 @@
 package com.littleinc.orm_benchmark.dbflow;
 
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
@@ -35,4 +37,13 @@ public class Message extends BaseModel
 
     @Column
     public long mChannelId;
+
+    @Column
+    @ForeignKey(
+            references = {@ForeignKeyReference(columnName = "user_id",
+                    columnType = Long.class,
+                    foreignColumnName = "mId")},
+
+            saveForeignKeyModel = false)
+    public User user;
 }

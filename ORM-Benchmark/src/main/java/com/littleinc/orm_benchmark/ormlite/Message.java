@@ -1,13 +1,13 @@
 package com.littleinc.orm_benchmark.ormlite;
 
-import java.sql.SQLException;
-
 import android.provider.BaseColumns;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import java.sql.SQLException;
 
 @DatabaseTable(tableName = Message.TABLE_NAME)
 public class Message {
@@ -53,6 +53,9 @@ public class Message {
 
     @DatabaseField(columnName = CHANNEL_ID, canBeNull = false, dataType = DataType.LONG)
     private long channelId;
+
+    @DatabaseField(foreign = true, foreignAutoRefresh = false)
+    private User user;
 
     //    @ForeignCollectionField(eager = false, columnName = READERS)
     //    private ForeignCollection<User> mReaders;
@@ -147,6 +150,16 @@ public class Message {
     public void setChannelId(long channelId)
     {
         this.channelId = channelId;
+    }
+
+    public User getUser()
+    {
+        return user;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
     }
 
     //    public ForeignCollection<User> getReaders() {

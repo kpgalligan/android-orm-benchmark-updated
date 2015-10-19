@@ -55,9 +55,6 @@ public class User
         this.mFirstName = firstName;
     }
 
-    //    @DatabaseField(columnName = "message_id", foreign = true, foreignAutoRefresh = false)
-    //    private Message mMessage;
-
     public User()
     {
     }

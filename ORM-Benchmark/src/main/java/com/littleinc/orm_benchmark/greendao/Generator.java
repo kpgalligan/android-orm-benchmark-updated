@@ -1,12 +1,19 @@
 package com.littleinc.orm_benchmark.greendao;
 
+import android.util.Log;
+
+import java.io.File;
+
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
 
-public class Generator {
-
+/**
+ * Created by kgalligan on 10/19/15.
+ */
+public class Generator
+{
     // DB CONFIG
     private static int DB_VERSION = 2;
 
@@ -53,13 +60,14 @@ public class Generator {
         message.addLongProperty(COMMAND_ID).index();
         message.addLongProperty(SENDER_ID).notNull();
         message.addLongProperty(CHANNEL_ID).notNull();
-        message.add
 
         // One-to-many relationship
         message.addToMany(user, userPk, READERS);
 
         try {
-            new DaoGenerator().generateAll(schema, "../ORM-Benchmark/src/");
+            File thisdir = new File(".");
+            System.out.println("asdfasdf: "+ thisdir.getAbsolutePath());
+            new DaoGenerator().generateAll(schema, "ORM-Benchmark/src/main/java");
         } catch (Exception e) {
             e.printStackTrace();
         }

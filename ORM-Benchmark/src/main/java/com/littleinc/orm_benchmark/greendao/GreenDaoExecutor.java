@@ -1,17 +1,18 @@
 package com.littleinc.orm_benchmark.greendao;
 
-import static com.littleinc.orm_benchmark.util.Util.getRandomString;
-
-import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
-
 import android.content.Context;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
 import com.littleinc.orm_benchmark.greendao.MessageDao.Properties;
 import com.littleinc.orm_benchmark.util.Util;
+
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
+
+
+import static com.littleinc.orm_benchmark.util.Util.getRandomString;
 
 public class GreenDaoExecutor implements BenchmarkExecutable {
 

@@ -1,18 +1,5 @@
 package com.littleinc.orm_benchmark;
 
-import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.CREATE_DB;
-import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.DROP_DB;
-import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.READ_DATA;
-import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.READ_INDEXED;
-import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.READ_SEARCH;
-import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.WRITE_DATA;
-
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.AsyncTask;
@@ -22,19 +9,31 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable.Task;
 import com.littleinc.orm_benchmark.dbflow.DBFlowExecutor;
 import com.littleinc.orm_benchmark.greendao.GreenDaoExecutor;
-import com.littleinc.orm_benchmark.ormlite.ORMLiteExecutor;
 import com.littleinc.orm_benchmark.realm.RealmExecutor;
 import com.littleinc.orm_benchmark.sqlite.SQLiteExecutor;
 import com.littleinc.orm_benchmark.sqliteoptimized.OptimizedSQLiteExecutor;
 import com.littleinc.orm_benchmark.squeaky.SqueakyExecutor;
 import com.littleinc.orm_benchmark.util.Util;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+
+import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.CREATE_DB;
+import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.DROP_DB;
+import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.READ_DATA;
+import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.READ_INDEXED;
+import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.READ_SEARCH;
+import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.WRITE_DATA;
 
 public class MainActivity extends FragmentActivity {
 
@@ -50,14 +49,15 @@ public class MainActivity extends FragmentActivity {
 
 
     private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[] {
-            new SQLiteExecutor(),
-            new SqueakyExecutor(),
-            new com.littleinc.orm_benchmark.squeakyfinal.SqueakyExecutor(),
-            new RealmExecutor(),
+//            new SQLiteExecutor(),
+//            new SqueakyExecutor(),
+//            new com.littleinc.orm_benchmark.squeakyfinal.SqueakyExecutor(),
+//            new RealmExecutor(),
             new DBFlowExecutor(),
-            new OptimizedSQLiteExecutor(),
+//            new OptimizedSQLiteExecutor(),
 //            new ORMLiteExecutor(),
-            new GreenDaoExecutor()};
+//            new GreenDaoExecutor()
+    };
 
     private boolean mWasInitialized = false;
 

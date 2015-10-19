@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+
 import static com.littleinc.orm_benchmark.util.Util.getRandomString;
 
 public class User {

@@ -1,11 +1,5 @@
 package com.littleinc.orm_benchmark.ormlite;
 
-import static com.littleinc.orm_benchmark.util.Util.getRandomString;
-
-import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -15,6 +9,14 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
 import com.littleinc.orm_benchmark.util.Util;
+
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
+
+import static com.littleinc.orm_benchmark.util.Util.getRandomString;
 
 public class ORMLiteExecutor implements BenchmarkExecutable {
 
@@ -40,6 +42,7 @@ public class ORMLiteExecutor implements BenchmarkExecutable {
 
     @Override
     public long writeWholeData() throws SQLException {
+        Random random = new Random();
         List<User> users = new LinkedList<User>();
         for (int i = 0; i < NUM_USER_INSERTS; i++) {
             User newUser = new User();
@@ -62,6 +65,7 @@ public class ORMLiteExecutor implements BenchmarkExecutable {
                     .setChannelId(Math.round(Math.random() * NUM_USER_INSERTS));
             newMessage.setCreatedAt((int) (System.currentTimeMillis() / 1000L));
 
+            newMessage.setUser(users.get(random.nextInt(users.size())));
             messages.add(newMessage);
         }
 

@@ -1,13 +1,13 @@
 package com.littleinc.orm_benchmark.sqlite;
 
-import java.util.List;
-
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import com.littleinc.orm_benchmark.util.Util;
+
+import java.util.List;
 
 public class Message {
 

@@ -2,9 +2,6 @@ package com.littleinc.orm_benchmark.realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-
-import static com.littleinc.orm_benchmark.util.Util.getRandomString;
-
 /**
  * Created by kgalligan on 6/17/15.
  */

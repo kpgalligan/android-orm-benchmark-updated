@@ -9,6 +9,7 @@ import com.littleinc.orm_benchmark.util.Util;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import co.touchlab.squeaky.dao.Dao;
 import co.touchlab.squeaky.table.TableUtils;
@@ -42,6 +43,7 @@ public class SqueakyExecutor implements BenchmarkExecutable
     @Override
     public long writeWholeData() throws SQLException
     {
+        Random random = new Random();
         List<User> users = new LinkedList<User>();
         for(int i = 0; i < NUM_USER_INSERTS; i++)
         {
@@ -57,6 +59,7 @@ public class SqueakyExecutor implements BenchmarkExecutable
                                              Util.getRandomString(100),
                                              (Math.round(Math.random() * NUM_USER_INSERTS)),
                                              (Math.round(Math.random() * NUM_USER_INSERTS)));
+            newMessage.user = users.get(random.nextInt(users.size()));
             messages.add(newMessage);
         }
 
@@ -88,7 +91,7 @@ public class SqueakyExecutor implements BenchmarkExecutable
     public long readWholeData() throws SQLException {
         long start = System.nanoTime();
         Log.d(TAG,
-              "Read, " + mHelper.getDao(Message.class).queryForAll().size()
+              "Read, " + mHelper.getDao(Message.class).queryForAll().list().size()
                       + " rows");
         return System.nanoTime() - start;
     }
@@ -101,7 +104,7 @@ public class SqueakyExecutor implements BenchmarkExecutable
                       + mHelper
                       .getDao(Message.class)
                       .queryForEq(Message.COMMAND_ID,
-                                  LOOK_BY_INDEXED_FIELD).size() + " rows");
+                                  LOOK_BY_INDEXED_FIELD).list().size() + " rows");
         return System.nanoTime() - start;
     }
 

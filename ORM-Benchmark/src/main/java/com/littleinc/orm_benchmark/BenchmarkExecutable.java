@@ -1,8 +1,8 @@
 package com.littleinc.orm_benchmark;
 
-import java.sql.SQLException;
-
 import android.content.Context;
+
+import java.sql.SQLException;
 
 public interface BenchmarkExecutable {
 

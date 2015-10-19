@@ -9,13 +9,10 @@ import android.util.Log;
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
 import com.littleinc.orm_benchmark.sqlite.Message;
 import com.littleinc.orm_benchmark.sqlite.User;
-import com.littleinc.orm_benchmark.util.Util;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.littleinc.orm_benchmark.util.Util.getRandomString;
 
 /**
  * This executor takes the basic idea of the standard Android sqlLite query helper, but adds a few optimizations.

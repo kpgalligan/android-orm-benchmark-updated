@@ -3,13 +3,12 @@ import android.content.Context;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
-import com.littleinc.orm_benchmark.ormlite.*;
 import com.littleinc.orm_benchmark.util.Util;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -52,6 +51,7 @@ public class RealmExecutor implements BenchmarkExecutable
     @Override
     public long writeWholeData() throws SQLException
     {
+        Random random = new Random();
         List<User> users = new ArrayList<User>(NUM_USER_INSERTS);
         for (int i = 0; i < NUM_USER_INSERTS; i++) {
             User newUser = new User();
@@ -76,6 +76,7 @@ public class RealmExecutor implements BenchmarkExecutable
                     .setChannelId(Math.round(Math.random() * NUM_USER_INSERTS));
             newMessage.setCreatedAt((int) (System.currentTimeMillis() / 1000L));
 
+
             messages.add(newMessage);
         }
 
@@ -97,6 +98,7 @@ public class RealmExecutor implements BenchmarkExecutable
         for(Message message : messages)
         {
             realm.copyToRealm(message);
+            message.setUser(users.get(random.nextInt(users.size())));
         }
 
         realm.commitTransaction();

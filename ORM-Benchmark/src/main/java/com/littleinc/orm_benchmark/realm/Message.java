@@ -1,6 +1,4 @@
 package com.littleinc.orm_benchmark.realm;
-import com.littleinc.orm_benchmark.util.Util;
-
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -18,6 +16,7 @@ public class Message extends RealmObject
     private String content;
     private long senderId;
     private long channelId;
+    private User user;
 
     public int getId()
     {
@@ -99,4 +98,13 @@ public class Message extends RealmObject
         this.channelId = channelId;
     }
 
+    public User getUser()
+    {
+        return user;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
+    }
 }

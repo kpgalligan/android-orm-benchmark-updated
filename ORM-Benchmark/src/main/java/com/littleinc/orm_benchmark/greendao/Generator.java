@@ -61,8 +61,8 @@ public class Generator
         message.addLongProperty(SENDER_ID).notNull();
         message.addLongProperty(CHANNEL_ID).notNull();
 
-        // One-to-many relationship
-        message.addToMany(user, userPk, READERS);
+//        // One-to-many relationship
+//        message.addToMany(user, userPk, READERS);
 
         try {
             File thisdir = new File(".");

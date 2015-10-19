@@ -65,7 +65,6 @@ public class ORMLiteExecutor implements BenchmarkExecutable {
                     .setChannelId(Math.round(Math.random() * NUM_USER_INSERTS));
             newMessage.setCreatedAt((int) (System.currentTimeMillis() / 1000L));
 
-            newMessage.setUser(users.get(random.nextInt(users.size())));
             messages.add(newMessage);
         }
 

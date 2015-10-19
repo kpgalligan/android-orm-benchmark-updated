@@ -59,7 +59,6 @@ public class SqueakyExecutor implements BenchmarkExecutable
                                              Util.getRandomString(100),
                                              (Math.round(Math.random() * NUM_USER_INSERTS)),
                                              (Math.round(Math.random() * NUM_USER_INSERTS)));
-            newMessage.user = users.get(random.nextInt(users.size()));
             messages.add(newMessage);
         }
 

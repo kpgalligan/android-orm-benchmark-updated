@@ -98,7 +98,6 @@ public class RealmExecutor implements BenchmarkExecutable
         for(Message message : messages)
         {
             realm.copyToRealm(message);
-            message.setUser(users.get(random.nextInt(users.size())));
         }
 
         realm.commitTransaction();

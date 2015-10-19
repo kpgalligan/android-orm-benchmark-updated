@@ -64,7 +64,6 @@ public class SqueakyExecutor implements BenchmarkExecutable
                     .channelId = (Math.round(Math.random() * NUM_USER_INSERTS));
             newMessage.createdAt = ((int) (System.currentTimeMillis() / 1000L));
 
-            newMessage.user = users.get(random.nextInt(users.size()));
             messages.add(newMessage);
         }
 

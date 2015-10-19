@@ -79,8 +79,6 @@ public class DBFlowExecutor  implements BenchmarkExecutable
                     .mChannelId = (Math.round(Math.random() * NUM_USER_INSERTS));
             newMessage.mCreatedAt = ((int) (System.currentTimeMillis() / 1000L));
 
-            newMessage.user = users.get(random.nextInt(users.size()));
-
             messages.add(newMessage);
         }
 

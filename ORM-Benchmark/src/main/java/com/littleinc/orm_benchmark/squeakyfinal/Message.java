@@ -52,9 +52,6 @@ public class Message
     @DatabaseField(columnName = CHANNEL_ID, canBeNull = false, dataType = DataType.LONG)
     public final long channelId;
 
-    @DatabaseField(foreign = true, foreignAutoRefresh = false)
-    public User user;
-
     public Message(long clientId, long commandId, double sortedBy, int createdAt, String content, long senderId, long channelId)
     {
         this.clientId = clientId;

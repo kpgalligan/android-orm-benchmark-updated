@@ -51,7 +51,4 @@ public class Message
 
     @DatabaseField(columnName = CHANNEL_ID, canBeNull = false, dataType = DataType.LONG)
     public long channelId;
-
-    @DatabaseField(foreign = true, foreignAutoRefresh = false)
-    public User user;
 }

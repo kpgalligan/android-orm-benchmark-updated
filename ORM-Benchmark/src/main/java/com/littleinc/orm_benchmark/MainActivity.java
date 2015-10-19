@@ -10,11 +10,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable.Task;
 import com.littleinc.orm_benchmark.dbflow.DBFlowExecutor;
 import com.littleinc.orm_benchmark.greendao.GreenDaoExecutor;
+import com.littleinc.orm_benchmark.ormlite.ORMLiteExecutor;
 import com.littleinc.orm_benchmark.realm.RealmExecutor;
 import com.littleinc.orm_benchmark.sqlite.SQLiteExecutor;
 import com.littleinc.orm_benchmark.sqliteoptimized.OptimizedSQLiteExecutor;
@@ -39,7 +41,7 @@ public class MainActivity extends FragmentActivity {
 
     private static final boolean USE_IN_MEMORY_DB = true;
 
-    private static final int NUM_ITERATIONS = 2;
+    private static final int NUM_ITERATIONS = 5;
 
     private int mCount = 0;
 
@@ -49,14 +51,14 @@ public class MainActivity extends FragmentActivity {
 
 
     private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[] {
-//            new SQLiteExecutor(),
-//            new SqueakyExecutor(),
-//            new com.littleinc.orm_benchmark.squeakyfinal.SqueakyExecutor(),
-//            new RealmExecutor(),
+            new SQLiteExecutor(),
+            new SqueakyExecutor(),
+            new com.littleinc.orm_benchmark.squeakyfinal.SqueakyExecutor(),
+            new RealmExecutor(),
             new DBFlowExecutor(),
-//            new OptimizedSQLiteExecutor(),
-//            new ORMLiteExecutor(),
-//            new GreenDaoExecutor()
+            new OptimizedSQLiteExecutor(),
+            new ORMLiteExecutor(),
+            new GreenDaoExecutor()
     };
 
     private boolean mWasInitialized = false;
@@ -71,6 +73,8 @@ public class MainActivity extends FragmentActivity {
 
         mGlobalResults = new HashMap<>();
         mShowResultsBtn = (Button) findViewById(R.id.show_results_btn);
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         if(! mWasInitialized)
         {
@@ -115,8 +119,10 @@ public class MainActivity extends FragmentActivity {
     private String buildResults()
     {
         StringBuilder builder = new StringBuilder();
+        Task[] reportTasks = new Task[]{WRITE_DATA, READ_DATA};
         tasks:
-        for(Task task : Task.values()) {
+        for(Task task : reportTasks)
+        {
             builder.append("<b>Task ").append(task).append("</b><br />");
             orms: for (BenchmarkExecutable orm : mOrms) {
 

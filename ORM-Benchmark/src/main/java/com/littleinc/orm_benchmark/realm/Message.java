@@ -16,7 +16,6 @@ public class Message extends RealmObject
     private String content;
     private long senderId;
     private long channelId;
-    private User user;
 
     public int getId()
     {
@@ -96,15 +95,5 @@ public class Message extends RealmObject
     public void setChannelId(long channelId)
     {
         this.channelId = channelId;
-    }
-
-    public User getUser()
-    {
-        return user;
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
     }
 }

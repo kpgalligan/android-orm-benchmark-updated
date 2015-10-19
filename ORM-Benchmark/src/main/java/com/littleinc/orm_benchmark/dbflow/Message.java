@@ -37,13 +37,4 @@ public class Message extends BaseModel
 
     @Column
     public long mChannelId;
-
-    @Column
-    @ForeignKey(
-            references = {@ForeignKeyReference(columnName = "user_id",
-                    columnType = Long.class,
-                    foreignColumnName = "mId")},
-
-            saveForeignKeyModel = false)
-    public User user;
 }

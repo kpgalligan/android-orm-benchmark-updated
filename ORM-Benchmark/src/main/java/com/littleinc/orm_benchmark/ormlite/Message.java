@@ -54,12 +54,6 @@ public class Message {
     @DatabaseField(columnName = CHANNEL_ID, canBeNull = false, dataType = DataType.LONG)
     private long channelId;
 
-    @DatabaseField(foreign = true, foreignAutoRefresh = false)
-    private User user;
-
-    //    @ForeignCollectionField(eager = false, columnName = READERS)
-    //    private ForeignCollection<User> mReaders;
-
     private static Dao<Message, Long> sDao;
 
     public static Dao<Message, Long> getDao() throws SQLException
@@ -152,17 +146,4 @@ public class Message {
         this.channelId = channelId;
     }
 
-    public User getUser()
-    {
-        return user;
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
-
-    //    public ForeignCollection<User> getReaders() {
-//        return mReaders;
-//    }
 }

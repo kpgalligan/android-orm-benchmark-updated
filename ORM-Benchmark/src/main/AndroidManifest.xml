@@ -12,7 +12,9 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".sugarorm.SugarWeirdAppExtensionBecauseBadDesign">
+
         <activity
             android:name="com.littleinc.orm_benchmark.MainActivity"
             android:label="@string/app_name" >
@@ -22,6 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data android:name="DATABASE" android:value="sugar_example.db" />
+        <meta-data android:name="VERSION" android:value="2" />
+        <meta-data android:name="QUERY_LOG" android:value="false" />
+        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.littleinc.orm_benchmark.sugarorm" />
+
     </application>
 
 </manifest>

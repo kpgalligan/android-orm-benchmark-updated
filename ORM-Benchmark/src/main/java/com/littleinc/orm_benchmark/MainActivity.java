@@ -21,6 +21,8 @@ import com.littleinc.orm_benchmark.realm.RealmExecutor;
 import com.littleinc.orm_benchmark.sqlite.SQLiteExecutor;
 import com.littleinc.orm_benchmark.sqliteoptimized.OptimizedSQLiteExecutor;
 import com.littleinc.orm_benchmark.squeaky.SqueakyExecutor;
+import com.littleinc.orm_benchmark.squidb.SquidbExecutor;
+import com.littleinc.orm_benchmark.sugarorm.SugarOrmExecutor;
 import com.littleinc.orm_benchmark.util.Util;
 
 import java.sql.SQLException;
@@ -51,14 +53,16 @@ public class MainActivity extends FragmentActivity {
 
 
     private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[] {
-            new SQLiteExecutor(),
-            new SqueakyExecutor(),
-            new com.littleinc.orm_benchmark.squeakyfinal.SqueakyExecutor(),
-            new RealmExecutor(),
-            new DBFlowExecutor(),
-            new OptimizedSQLiteExecutor(),
-            new ORMLiteExecutor(),
-            new GreenDaoExecutor()
+            new SquidbExecutor(),
+            //            new SugarOrmExecutor(),
+                        new SQLiteExecutor(),
+                        new SqueakyExecutor(),
+            //            new com.littleinc.orm_benchmark.squeakyfinal.SqueakyExecutor(),
+            //            new RealmExecutor(),
+            //            new DBFlowExecutor(),
+                        new OptimizedSQLiteExecutor(),
+                        new ORMLiteExecutor(),
+            //            new GreenDaoExecutor()
     };
 
     private boolean mWasInitialized = false;
@@ -119,7 +123,7 @@ public class MainActivity extends FragmentActivity {
     private String buildResults()
     {
         StringBuilder builder = new StringBuilder();
-        Task[] reportTasks = new Task[]{WRITE_DATA, READ_DATA};
+        Task[] reportTasks = new Task[] {WRITE_DATA, READ_DATA};
         tasks:
         for(Task task : reportTasks)
         {

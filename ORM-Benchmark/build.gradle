@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.littleinc.orm_benchmark"
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 21
     }
 
@@ -35,4 +35,10 @@ dependencies {
     apt 'co.touchlab.squeaky:squeaky-processor:0.3.1.0'
 
     compile 'io.realm:realm-android:0.83.1'
+
+    compile 'com.github.satyan:sugar:1.3.1'
+
+    compile 'com.yahoo.squidb:squidb:2.0.0'
+    compile 'com.yahoo.squidb:squidb-annotations:2.0.0'
+    apt 'com.yahoo.squidb:squidb-processor:2.0.0'
 }

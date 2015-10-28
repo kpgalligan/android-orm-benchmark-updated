@@ -20,5 +20,6 @@ public class Message extends SugarRecord<Message>
 
     public long channelId;
 
+    //This will blow up your spot
     public Message chasingTail;
 }

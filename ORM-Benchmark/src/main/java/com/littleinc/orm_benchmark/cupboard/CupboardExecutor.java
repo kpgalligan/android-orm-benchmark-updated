@@ -119,20 +119,6 @@ public class CupboardExecutor  implements BenchmarkExecutable
     }
 
     @Override
-    public long readIndexedField() throws SQLException {
-        long start = System.nanoTime();
-
-        return System.nanoTime() - start;
-    }
-
-    @Override
-    public long readSearch() throws SQLException {
-        long start = System.nanoTime();
-
-        return System.nanoTime() - start;
-    }
-
-    @Override
     public long dropDb() throws SQLException {
         long start = System.nanoTime();
         cupboard().withDatabase(mHelper.getWritableDatabase()).dropAllTables();

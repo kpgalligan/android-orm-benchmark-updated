@@ -69,13 +69,13 @@ public class SqueakyExecutor implements BenchmarkExecutable
         try {
             Dao userDao = mHelper.getDao(User.class);
             for (User user : users) {
-                userDao.createOrUpdate(user);
+                userDao.create(user);
             }
             Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
 
             Dao messageDao = mHelper.getDao(Message.class);
             for (Message message : messages) {
-                messageDao.createOrUpdate(message);
+                messageDao.create(message);
             }
             Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
 
@@ -92,36 +92,6 @@ public class SqueakyExecutor implements BenchmarkExecutable
         Log.d(TAG,
               "Read, " + mHelper.getDao(Message.class).queryForAll().list().size()
                       + " rows");
-        return System.nanoTime() - start;
-    }
-
-    @Override
-    public long readIndexedField() throws SQLException {
-        long start = System.nanoTime();
-        Log.d(TAG,
-              "Read, "
-                      + mHelper
-                      .getDao(Message.class)
-                      .queryForEq(Message.COMMAND_ID,
-                                  LOOK_BY_INDEXED_FIELD).list().size() + " rows");
-        return System.nanoTime() - start;
-    }
-
-    @Override
-    public long readSearch() throws SQLException {
-//        SelectArg arg = new SelectArg("%" + SEARCH_TERM + "%");
-        long start = System.nanoTime();
-        /*Dao dao = mHelper.getDao(Message.class);
-        Where where = dao.createWhere()
-                            .like(Message.COMMAND_ID, "%" + SEARCH_TERM + "%");
-
-        dao.query()
-        Log.d(TAG,
-              "Read, "
-                      + mHelper.mHelper.getDao(Message.class).queryBuilder()
-                               .limit(SEARCH_LIMIT).where()
-                               .like(Message.CONTENT, arg).query().size()
-                      + " rows");*/
         return System.nanoTime() - start;
     }
 

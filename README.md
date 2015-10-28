@@ -1,5 +1,53 @@
 #android-orm-benchmark
 
+##Hey!
+
+This project was originally built to basically show how much faster GreenDAO is than ORMLite.
+The speed difference was mostly caused by putting a foreign collection on the ORMLite entity,
+and not on the GreenDAO entity, so ORMLite was WAY slower in measurements.  As a general rule,
+  benchmarks tend to show the result the author wants (sorry, benchmark person).
+
+I was the original ORMLite Android adapter author (not the ORMLite author, which was WAY more
+work).  Since I found this benchmark, I've been using it to demostrate relative speed of
+different ORMs.  I've been using this one mostly toung in cheek.  It was originally designed
+with a huge bias to show what was desired, so ha ha.  I've tried to remove as much bias as
+possible, but if experts in the target ORMs understand them better, please update.
+
+The benchmark only tests basic table marshalling.  Testing foreign object fetching is tricky
+because different frameworks do it differently (or don't at all).  However, if you understand
+which mechanism is used, you can pretty much extrapolate what the performance will be like.
+
+In general, source-gen frameworks are 2x reflection frameworks.  Ironically, considering the
+initial goal, GreenDAO is by far the slowest source gen (not including SquiDB, which is
+slower than some reflection frameworks).
+
+Performance isn't everything, though.  Whatever.  Here's the original README.  The numbers
+I ran were on Lollipop, which may explain why relfection vs source gen performance is much better now.
+
+Currently tested frameworks
+
+DBFlow
+
+Cupboard
+
+GreenDAO
+
+ORMLite
+
+Realm
+
+SQLite
+
+SQLite (optimized)
+
+Squeaky
+
+Squeaky (immutables)
+
+SquiDB
+
+SugarORM
+
 ##Summary
 
 ORM-Benchmark is an Android application built in Eclipse that benchmarks the following against each other:

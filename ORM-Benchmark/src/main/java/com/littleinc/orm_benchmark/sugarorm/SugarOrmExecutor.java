@@ -104,18 +104,6 @@ public class SugarOrmExecutor implements BenchmarkExecutable
     }
 
     @Override
-    public long readIndexedField() throws SQLException
-    {
-        return 0;
-    }
-
-    @Override
-    public long readSearch() throws SQLException
-    {
-        return 0;
-    }
-
-    @Override
     public long dropDb() throws SQLException
     {
         User.deleteAll(Message.class);

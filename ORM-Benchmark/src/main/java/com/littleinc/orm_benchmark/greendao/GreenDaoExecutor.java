@@ -102,39 +102,6 @@ public class GreenDaoExecutor implements BenchmarkExecutable {
     }
 
     @Override
-    public long readIndexedField() throws SQLException {
-        long start = System.nanoTime();
-        DaoSession daoSession = mDaoMaster.newSession();
-        MessageDao messageDao = daoSession.getMessageDao();
-        Log.d(GreenDaoExecutor.class.getSimpleName(),
-                "Read, "
-                        + messageDao
-                                .queryBuilder()
-                                .where(Properties.Command_id
-                                        .eq(LOOK_BY_INDEXED_FIELD)).list()
-                                .size() + " rows");
-        daoSession.clear();
-        return System.nanoTime() - start;
-    }
-
-    @Override
-    public long readSearch() throws SQLException {
-        long start = System.nanoTime();
-        DaoSession daoSession = mDaoMaster.newSession();
-        MessageDao messageDao = daoSession.getMessageDao();
-        Log.d(GreenDaoExecutor.class.getSimpleName(),
-                "Read, "
-                        + messageDao
-                                .queryBuilder()
-                                .limit((int) SEARCH_LIMIT)
-                                .where(Properties.Content.like("%"
-                                        + SEARCH_TERM + "%")).list().size()
-                        + " rows");
-        daoSession.clear();
-        return System.nanoTime() - start;
-    }
-
-    @Override
     public long dropDb() throws SQLException {
         long start = System.nanoTime();
         DaoMaster.dropAllTables(mHelper.getWritableDatabase(), true);

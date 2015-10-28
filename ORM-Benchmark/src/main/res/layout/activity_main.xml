@@ -12,14 +12,13 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="runBenchmark"
+        android:id="@+id/runBenchmark"
         android:text="@string/run_benchmark" />
 
     <Button
         android:id="@+id/show_results_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="showGlobalResults"
         android:text="@string/show_results" />
 
 </LinearLayout>

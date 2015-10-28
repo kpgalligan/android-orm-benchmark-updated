@@ -10,13 +10,9 @@ public interface BenchmarkExecutable {
 
     long SEARCH_LIMIT = 100;
 
-    int NUM_READERS = 10;
-
     int NUM_USER_INSERTS = 2000;
 
     int NUM_MESSAGE_INSERTS = 20000;
-
-    int NUM_MESSAGES_WITH_READERS = 50;
 
     int LOOK_BY_INDEXED_FIELD = 5000;
 
@@ -33,10 +29,6 @@ public interface BenchmarkExecutable {
     long writeWholeData() throws SQLException;
 
     long readWholeData() throws SQLException;
-
-    long readIndexedField() throws SQLException;
-
-    long readSearch() throws SQLException;
 
     long dropDb() throws SQLException;
 }

@@ -11,7 +11,7 @@ public class DataBaseHelper extends SqueakyOpenHelper
     // DB CONFIG
     private static int DB_VERSION = 1;
 
-    private static String DB_NAME = "squeaky_final_db";
+    private static String DB_NAME = "squeaky_db";
 
     private static DataBaseHelper sInstance;
 

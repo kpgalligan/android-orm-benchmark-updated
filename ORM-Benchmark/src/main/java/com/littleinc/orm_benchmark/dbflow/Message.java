@@ -13,26 +13,26 @@ public class Message extends BaseModel
 {
     @Column
     @PrimaryKey(autoincrement = true)
-    public long mId;
+    public long id;
 
     @Column
-    public long mClientId;
+    public long clientId;
 
     @Column
-    public long mCommandId;
+    public long commandId;
 
     @Column
-    public double mSortedBy;
+    public double sortedBy;
 
     @Column
-    public int mCreatedAt;
+    public int createdAt;
 
     @Column
-    public String mContent;
+    public String content;
 
     @Column
-    public long mSenderId;
+    public long senderId;
 
     @Column
-    public long mChannelId;
+    public long channelId;
 }

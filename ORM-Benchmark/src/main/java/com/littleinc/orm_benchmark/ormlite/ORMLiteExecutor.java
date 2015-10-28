@@ -100,31 +100,6 @@ public class ORMLiteExecutor implements BenchmarkExecutable {
     }
 
     @Override
-    public long readIndexedField() throws SQLException {
-        long start = System.nanoTime();
-        Log.d(TAG,
-                "Read, "
-                        + mHelper
-                                .getDao(Message.class)
-                                .queryForEq(Message.COMMAND_ID,
-                                        LOOK_BY_INDEXED_FIELD).size() + " rows");
-        return System.nanoTime() - start;
-    }
-
-    @Override
-    public long readSearch() throws SQLException {
-        SelectArg arg = new SelectArg("%" + SEARCH_TERM + "%");
-        long start = System.nanoTime();
-        Log.d(TAG,
-                "Read, "
-                        + mHelper.getDao(Message.class).queryBuilder()
-                        .limit(SEARCH_LIMIT).where()
-                        .like(Message.CONTENT, arg).query().size()
-                        + " rows");
-        return System.nanoTime() - start;
-    }
-
-    @Override
     public long dropDb() throws SQLException {
         long start = System.nanoTime();
         ConnectionSource connectionSource = mHelper.getConnectionSource();

@@ -24,6 +24,7 @@ import com.littleinc.orm_benchmark.sqliteoptimized.OptimizedSQLiteExecutor;
 import com.littleinc.orm_benchmark.squeaky.SqueakyExecutor;
 import com.littleinc.orm_benchmark.squidb.SquidbExecutor;
 import com.littleinc.orm_benchmark.sugarorm.SugarOrmExecutor;
+import com.littleinc.orm_benchmark.tasks.OrmBenchmarksTask;
 import com.littleinc.orm_benchmark.util.Util;
 
 import java.sql.SQLException;
@@ -31,6 +32,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+
+import co.touchlab.android.threading.eventbus.EventBusExt;
+import co.touchlab.android.threading.tasks.TaskQueue;
+import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 
 
 import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.CREATE_DB;
@@ -42,31 +48,15 @@ import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.WRITE_DATA;
 
 public class MainActivity extends FragmentActivity {
 
-    private static final boolean USE_IN_MEMORY_DB = true;
-
-    private static final int NUM_ITERATIONS = 5;
-
-    private int mCount = 0;
-
-    private String mResults;
-
+    public static final String BENCHMARK_RESULTS = "BENCHMARK_RESULTS";
     private Button mShowResultsBtn;
-
-
-    private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[] {
-            new SquidbExecutor(),
-                        new SugarOrmExecutor(),
-            new SQLiteExecutor(), new SqueakyExecutor(), new CupboardExecutor(),
-                        new com.littleinc.orm_benchmark.squeakyfinal.SqueakyExecutor(),
-                        new RealmExecutor(),
-                        new DBFlowExecutor(),
-            new OptimizedSQLiteExecutor(), new ORMLiteExecutor(),
-                        new GreenDaoExecutor()
-    };
 
     private boolean mWasInitialized = false;
 
     private Map<String, Map<Task, List<Long>>> mGlobalResults;
+
+    private String results;
+    private Button runBenchmark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -74,160 +64,104 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(savedInstanceState != null)
+        {
+            results = savedInstanceState.getString(BENCHMARK_RESULTS);
+        }
+
         mGlobalResults = new HashMap<>();
+        runBenchmark = (Button) findViewById(R.id.runBenchmark);
+        runBenchmark.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                runBenchmark();
+            }
+        });
         mShowResultsBtn = (Button) findViewById(R.id.show_results_btn);
+        mShowResultsBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                showGlobalResults();
+            }
+        });
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        if(! mWasInitialized)
-        {
-            for(BenchmarkExecutable orm : mOrms)
-            {
-                orm.init(this, USE_IN_MEMORY_DB);
-            }
+        refreshUi();
 
-            mWasInitialized = true;
+        EventBusExt.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        EventBusExt.getDefault().unregister(this);
+    }
+
+    void refreshUi()
+    {
+        if(benchmarkRuning())
+        {
+            mShowResultsBtn.setEnabled(false);
+            runBenchmark.setEnabled(false);
+        }
+        else
+        {
+            runBenchmark.setEnabled(true);
+            mShowResultsBtn.setEnabled(results != null);
         }
     }
 
-    public void showGlobalResults(View v)
+    public void runBenchmark()
     {
-        ResultDialog dialog = ResultDialog.newInstance(R.string.results_title, mResults);
+        if(! benchmarkRuning())
+            TaskQueue.loadQueueDefault(this).execute(new OrmBenchmarksTask());
+
+        refreshUi();
+    }
+
+    private boolean benchmarkRuning()
+    {
+        return TaskQueueHelper
+                .hasTasksOfType(TaskQueue.loadQueueDefault(this), OrmBenchmarksTask.class);
+    }
+
+    public void showGlobalResults()
+    {
+        ResultDialog dialog = ResultDialog.newInstance(R.string.results_title, results);
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
         tx.add(dialog, ResultDialog.class.getSimpleName());
         tx.commit();
     }
 
-    public void runBenchmark(View v)
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
     {
-        if(mCount < NUM_ITERATIONS)
-        {
-            v.setEnabled(false);
-            mShowResultsBtn.setEnabled(false);
-
-            new ProfilerTask(v)
-                    .execute(CREATE_DB, WRITE_DATA, READ_DATA, READ_INDEXED, READ_SEARCH, DROP_DB);
-        }
-        else
-        {
-            mResults = buildResults();
-            Log.d(MainActivity.class.getSimpleName(), "Results:\n" + mResults);
-
-            mCount = 0;
-            v.setEnabled(true);
-            mShowResultsBtn.setEnabled(true);
-        }
+        super.onSaveInstanceState(outState);
+        outState.putString(BENCHMARK_RESULTS, results);
     }
 
-    private String buildResults()
+    @SuppressWarnings("unused")
+    public void onEventMainThread(OrmBenchmarksTask task)
     {
-        StringBuilder builder = new StringBuilder();
-        Task[] reportTasks = new Task[] {WRITE_DATA, READ_DATA};
-        tasks:
-        for(Task task : reportTasks)
-        {
-            builder.append("<b>Task ").append(task).append("</b><br />");
-            orms:
-            for(BenchmarkExecutable orm : mOrms)
-            {
-
-                Map<Task, List<Long>> results = mGlobalResults.get(orm.getOrmName());
-
-                if (results == null) {
-                    continue orms;
-                }
-                List<Long> resultsPerTask = results.get(task);
-                if (resultsPerTask == null) {
-                    continue tasks;
-                }
-                int numExecutions = resultsPerTask.size();
-                long resultsCount = 0;
-                for (Long result : resultsPerTask) {
-                    resultsCount += result;
-                }
-                builder.append(orm.getOrmName())
-                        .append(" - Avg: ")
-                        .append(Util.formatElapsedTime(resultsCount
-                                / numExecutions)).append("ms (avg)<br />");
-            }
-            builder.append("<br />");
-        }
-        return builder.toString();
+        results = task.resultString;
+        refreshUi();
     }
 
-    private class ProfilerTask extends AsyncTask<Task, Void, Void> {
-
-        private View mView;
-
-        public ProfilerTask(View v) {
-            mView = v;
-        }
-
-        @Override
-        protected Void doInBackground(Task... params) {
-            for (BenchmarkExecutable item : mOrms) {
-                for (Task task : params) {
-                    try {
-                        long result = 0;
-
-                        switch (task) {
-                            case CREATE_DB:
-                                result = item.createDbStructure();
-                                break;
-                            case DROP_DB:
-                                result = item.dropDb();
-                                break;
-                            case READ_DATA:
-                                result = item.readWholeData();
-                                break;
-                            case READ_INDEXED:
-                                result = item.readIndexedField();
-                                break;
-                            case READ_SEARCH:
-                                result = item.readSearch();
-                                break;
-                            case WRITE_DATA:
-                                result = item.writeWholeData();
-                                break;
-                        }
-                        addProfilerResult(item.getOrmName(), task, result);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                        continue;
-                    }
-                }
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-            mCount++;
-            runBenchmark(mView);
-        };
-
-        private void addProfilerResult(String benchmarkName, Task task, long result) {
-            Map<Task, List<Long>> profilerResults = mGlobalResults.get(benchmarkName);
-            if (profilerResults == null) {
-                profilerResults = new HashMap<>();
-                profilerResults.put(task, new LinkedList<Long>());
-                mGlobalResults.put(benchmarkName, profilerResults);
-            }
-            List<Long> resultPerTask = profilerResults.get(task);
-            if (resultPerTask == null) {
-                resultPerTask = new LinkedList<>();
-                profilerResults.put(task, resultPerTask);
-            }
-            resultPerTask.add(result);
-        }
-    }
-
-    public static class ResultDialog extends DialogFragment {
+    public static class ResultDialog extends DialogFragment
+    {
 
         private static String TITLE_RES_ID = "title_res_id";
 
         private static String MESSAGE = "message";
 
-        public static ResultDialog newInstance(int titleResId, String message) {
+        public static ResultDialog newInstance(int titleResId, String message)
+        {
             ResultDialog dialog = new ResultDialog();
 
             Bundle args = new Bundle();
@@ -239,11 +173,10 @@ public class MainActivity extends FragmentActivity {
         }
 
         @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
+        public Dialog onCreateDialog(Bundle savedInstanceState)
+        {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            return builder
-                    .setTitle(getArguments().getInt(TITLE_RES_ID))
-                    .setMessage(Html.fromHtml(getArguments().getString(MESSAGE)))
+            return builder.setTitle(getArguments().getInt(TITLE_RES_ID)).setMessage(Html.fromHtml(getArguments().getString(MESSAGE)))
                     .create();
         }
     }

@@ -12,11 +12,11 @@ public class User extends BaseModel
 {
     @Column
     @PrimaryKey(autoincrement = true)
-    public long mId;
+    public long id;
 
     @Column
-    public String mLastName;
+    public String lastName;
 
     @Column
-    public String mFirstName;
+    public String firstName;
 }

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 import co.touchlab.squeaky.dao.Dao;
+import co.touchlab.squeaky.stmt.Where;
 import co.touchlab.squeaky.table.TableUtils;
 
 /**
@@ -35,7 +36,8 @@ public class SqueakyExecutor implements BenchmarkExecutable
     public long createDbStructure() throws SQLException
     {
         long start = System.nanoTime();
-        co.touchlab.squeaky.table.TableUtils.createTables(mHelper.getWritableDatabase(), User.class, Message.class);
+        TableUtils.createTables(mHelper.getWritableDatabase(), User.class,
+                                                              Message.class);
         return System.nanoTime() - start;
     }
 
@@ -74,13 +76,13 @@ public class SqueakyExecutor implements BenchmarkExecutable
         try {
             Dao userDao = mHelper.getDao(User.class);
             for (User user : users) {
-                userDao.createOrUpdate(user);
+                userDao.create(user);
             }
             Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
 
             Dao messageDao = mHelper.getDao(Message.class);
             for (Message message : messages) {
-                messageDao.createOrUpdate(message);
+                messageDao.create(message);
             }
             Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
 
@@ -101,38 +103,9 @@ public class SqueakyExecutor implements BenchmarkExecutable
     }
 
     @Override
-    public long readIndexedField() throws SQLException {
-        long start = System.nanoTime();
-        Log.d(TAG,
-              "Read, "
-                      + mHelper
-                      .getDao(Message.class)
-                      .queryForEq(Message.COMMAND_ID,
-                                  LOOK_BY_INDEXED_FIELD).list().size() + " rows");
-        return System.nanoTime() - start;
-    }
-
-    @Override
-    public long readSearch() throws SQLException {
-//        SelectArg arg = new SelectArg("%" + SEARCH_TERM + "%");
-        long start = System.nanoTime();
-        /*Dao dao = mHelper.getDao(Message.class);
-        Where where = dao.createWhere()
-                            .like(Message.COMMAND_ID, "%" + SEARCH_TERM + "%");
-
-        dao.query()
-        Log.d(TAG,
-              "Read, "
-                      + mHelper.mHelper.getDao(Message.class).queryBuilder()
-                               .limit(SEARCH_LIMIT).where()
-                               .like(Message.CONTENT, arg).query().size()
-                      + " rows");*/
-        return System.nanoTime() - start;
-    }
-
-    @Override
     public long dropDb() throws SQLException {
         long start = System.nanoTime();
+
         TableUtils.dropTables(mHelper.getWritableDatabase(), true, User.class, Message.class);
         return System.nanoTime() - start;
     }

@@ -56,8 +56,8 @@ public class DBFlowExecutor  implements BenchmarkExecutable
         for(int i = 0; i < NUM_USER_INSERTS; i++)
         {
             User newUser = new User();
-            newUser.mLastName = (getRandomString(10));
-            newUser.mFirstName = (getRandomString(10));
+            newUser.lastName = (getRandomString(10));
+            newUser.firstName = (getRandomString(10));
 
             users.add(newUser);
         }
@@ -65,19 +65,15 @@ public class DBFlowExecutor  implements BenchmarkExecutable
         List<Message> messages = new LinkedList<Message>();
         for (int i = 0; i < NUM_MESSAGE_INSERTS; i++) {
             Message newMessage = new Message();
-            newMessage.mCommandId = i;
-
-
-
-
-            newMessage.mSortedBy = System.nanoTime();
-            newMessage.mContent = Util.getRandomString(100);
-            newMessage.mClientId = System.currentTimeMillis();
+            newMessage.commandId = i;
+            newMessage.sortedBy = System.nanoTime();
+            newMessage.content = Util.getRandomString(100);
+            newMessage.clientId = System.currentTimeMillis();
             newMessage
-                    .mSenderId = (Math.round(Math.random() * NUM_USER_INSERTS));
+                    .senderId = (Math.round(Math.random() * NUM_USER_INSERTS));
             newMessage
-                    .mChannelId = (Math.round(Math.random() * NUM_USER_INSERTS));
-            newMessage.mCreatedAt = ((int) (System.currentTimeMillis() / 1000L));
+                    .channelId = (Math.round(Math.random() * NUM_USER_INSERTS));
+            newMessage.createdAt = ((int) (System.currentTimeMillis() / 1000L));
 
             messages.add(newMessage);
         }
@@ -111,31 +107,6 @@ public class DBFlowExecutor  implements BenchmarkExecutable
         Log.d(TAG,
               "Read, " + messages.size()
                       + " rows");
-        return System.nanoTime() - start;
-    }
-
-    @Override
-    public long readIndexedField() throws SQLException {
-        long start = System.nanoTime();
-        /*Log.d(TAG,
-              "Read, "
-                      + mHelper
-                      .getDao(Message.class)
-                      .queryForEq(Message.COMMAND_ID,
-                                  LOOK_BY_INDEXED_FIELD).size() + " rows");*/
-        return System.nanoTime() - start;
-    }
-
-    @Override
-    public long readSearch() throws SQLException {
-        SelectArg arg = new SelectArg("%" + SEARCH_TERM + "%");
-        long start = System.nanoTime();
-        /*Log.d(TAG,
-              "Read, "
-                      + mHelper.getDao(Message.class).queryBuilder()
-                               .limit(SEARCH_LIMIT).where()
-                               .like(Message.CONTENT, arg).query().size()
-                      + " rows");*/
         return System.nanoTime() - start;
     }
 

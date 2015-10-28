@@ -20,6 +20,8 @@ android {
 }
 
 dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'de.greenrobot:eventbus:2.2.1'
     compile 'com.android.support:support-v4:21.+'
 
     compile 'de.greenrobot:greendao:2.0.0'
@@ -31,8 +33,8 @@ dependencies {
     compile "com.raizlabs.android:DBFlow-Core:2.0.0"
     compile "com.raizlabs.android:DBFlow:2.0.0"
 
-    compile 'co.touchlab.squeaky:squeaky-core:0.3.1.0'
-    apt 'co.touchlab.squeaky:squeaky-processor:0.3.1.0'
+    compile 'co.touchlab.squeaky:squeaky-query:0.3.3.0'
+    apt 'co.touchlab.squeaky:squeaky-processor:0.3.3.0'
 
     compile 'io.realm:realm-android:0.83.1'
 

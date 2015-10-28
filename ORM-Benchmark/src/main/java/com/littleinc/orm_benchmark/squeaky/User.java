@@ -9,12 +9,12 @@ import co.touchlab.squeaky.table.DatabaseTable;
 @DatabaseTable
 public class User
 {
-    @DatabaseField(generatedId = true, dataType = DataType.LONG)
+    @DatabaseField(generatedId = true)
     public long id;
 
-    @DatabaseField(dataType = DataType.STRING)
+    @DatabaseField
     public String lastName;
 
-    @DatabaseField(dataType = DataType.STRING)
+    @DatabaseField
     public String firstName;
 }

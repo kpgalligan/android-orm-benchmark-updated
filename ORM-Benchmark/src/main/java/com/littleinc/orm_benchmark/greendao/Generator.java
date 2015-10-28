@@ -1,7 +1,5 @@
 package com.littleinc.orm_benchmark.greendao;
 
-import android.util.Log;
-
 import java.io.File;
 
 import de.greenrobot.daogenerator.DaoGenerator;

@@ -1,20 +1,15 @@
 package com.littleinc.orm_benchmark.sugarorm;
 import android.content.Context;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
-import com.littleinc.orm_benchmark.squeaky.*;
 import com.littleinc.orm_benchmark.util.Util;
-import com.orm.SugarApp;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
-import co.touchlab.squeaky.dao.Dao;
 
 /**
  * Created by kgalligan on 10/24/15.
@@ -57,7 +52,6 @@ public class SugarOrmExecutor implements BenchmarkExecutable
         }
 
         List<Message> messages = new LinkedList<Message>();
-        Message lastMessage = null;
 
         for (int i = 0; i < NUM_MESSAGE_INSERTS; i++) {
             Message newMessage = new Message();
@@ -70,9 +64,6 @@ public class SugarOrmExecutor implements BenchmarkExecutable
             newMessage
                     .channelId = (Math.round(Math.random() * NUM_USER_INSERTS));
             newMessage.createdAt = ((int) (System.currentTimeMillis() / 1000L));
-
-            newMessage.chasingTail = lastMessage;
-            lastMessage = newMessage;
 
             messages.add(newMessage);
         }
@@ -89,18 +80,8 @@ public class SugarOrmExecutor implements BenchmarkExecutable
             }*/
             Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
 
-            int count = 0;
-            long nextPrint = 1;
             for (Message message : messages) {
                 message.save();
-
-                count++;
-
-                if(count >= nextPrint)
-                {
-                    nextPrint *= 2;
-                    Log.w(TAG, "count: "+ count +"/time: "+ (System.nanoTime() - start));
-                }
             }
             Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
 
@@ -116,21 +97,9 @@ public class SugarOrmExecutor implements BenchmarkExecutable
     {
         long start = System.nanoTime();
 
-        long id = DatabaseUtils.longForQuery(sugarApp.sneakyBreakEncapsulationBecause().getDB(),
-                                             "select max(id) from message", null);
-        Message bigChain = Message.findById(Message.class, id);
-
-        int countChain = 0;
-        while(bigChain.chasingTail != null)
-        {
-            bigChain = bigChain.chasingTail;
-            countChain++;
-        }
         Log.d(TAG,
-              "countChain: "+ countChain);
-//        Log.d(TAG,
-//              "Read, " + Message.listAll(Message.class).size()
-//                      + " rows");
+              "Read, " + Message.listAll(Message.class).size()
+                      + " rows");
         return System.nanoTime() - start;
     }
 

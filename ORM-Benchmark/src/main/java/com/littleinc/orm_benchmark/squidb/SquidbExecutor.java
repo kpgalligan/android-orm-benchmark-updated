@@ -1,6 +1,5 @@
 package com.littleinc.orm_benchmark.squidb;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
@@ -12,8 +11,6 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
-import co.touchlab.squeaky.dao.Dao;
 
 /**
  * Created by kgalligan on 10/24/15.

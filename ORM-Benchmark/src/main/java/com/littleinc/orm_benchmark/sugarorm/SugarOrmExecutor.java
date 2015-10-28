@@ -90,17 +90,16 @@ public class SugarOrmExecutor implements BenchmarkExecutable
             Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
 
             int count = 0;
-            long lastLogCount = 0;
+            long nextPrint = 1;
             for (Message message : messages) {
                 message.save();
 
                 count++;
 
-                long logCount = Math.round(Math.log(count));
-                if(logCount > lastLogCount)
+                if(count >= nextPrint)
                 {
-                    Log.w(TAG, "count: "+ count +"/time: "+ (System.currentTimeMillis() - start));
-                    lastLogCount = logCount;
+                    nextPrint *= 2;
+                    Log.w(TAG, "count: "+ count +"/time: "+ (System.nanoTime() - start));
                 }
             }
             Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
@@ -120,9 +119,18 @@ public class SugarOrmExecutor implements BenchmarkExecutable
         long id = DatabaseUtils.longForQuery(sugarApp.sneakyBreakEncapsulationBecause().getDB(),
                                              "select max(id) from message", null);
         Message bigChain = Message.findById(Message.class, id);
+
+        int countChain = 0;
+        while(bigChain.chasingTail != null)
+        {
+            bigChain = bigChain.chasingTail;
+            countChain++;
+        }
         Log.d(TAG,
-              "Read, " + Message.listAll(Message.class).size()
-                      + " rows");
+              "countChain: "+ countChain);
+//        Log.d(TAG,
+//              "Read, " + Message.listAll(Message.class).size()
+//                      + " rows");
         return System.nanoTime() - start;
     }
 

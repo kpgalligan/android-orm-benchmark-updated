@@ -7,6 +7,7 @@ import com.j256.ormlite.stmt.SelectArg;
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
 import com.littleinc.orm_benchmark.util.Util;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.index.Index;
 import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
@@ -42,6 +43,9 @@ public class DBFlowExecutor  implements BenchmarkExecutable
 
         FlowManager.init(applicationContext);
         FlowManager.getDatabase(DatabaseModule.NAME);
+        Index<Message> index = new Index<Message>("index_friendName")
+                .on(Message.class, Message$Table.COMMANDID);
+        index.enable();
         /*ConnectionSource connectionSource = mHelper.getConnectionSource();
         TableUtils.createTable(connectionSource, User.class);
         TableUtils.createTable(connectionSource, Message.class);*/

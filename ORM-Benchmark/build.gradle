@@ -41,4 +41,6 @@ dependencies {
     compile 'com.yahoo.squidb:squidb:2.0.0'
     compile 'com.yahoo.squidb:squidb-annotations:2.0.0'
     apt 'com.yahoo.squidb:squidb-processor:2.0.0'
+
+    compile 'nl.qbusict:cupboard:2.1.1'
 }

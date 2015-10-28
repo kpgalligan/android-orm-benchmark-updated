@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable.Task;
+import com.littleinc.orm_benchmark.cupboard.CupboardExecutor;
 import com.littleinc.orm_benchmark.dbflow.DBFlowExecutor;
 import com.littleinc.orm_benchmark.greendao.GreenDaoExecutor;
 import com.littleinc.orm_benchmark.ormlite.ORMLiteExecutor;
@@ -53,15 +54,13 @@ public class MainActivity extends FragmentActivity {
 
 
     private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[] {
-            new SquidbExecutor(),
+//            new SquidbExecutor(),
             //            new SugarOrmExecutor(),
-                        new SQLiteExecutor(),
-                        new SqueakyExecutor(),
+            new SQLiteExecutor(), new SqueakyExecutor(), new CupboardExecutor(),
             //            new com.littleinc.orm_benchmark.squeakyfinal.SqueakyExecutor(),
             //            new RealmExecutor(),
             //            new DBFlowExecutor(),
-                        new OptimizedSQLiteExecutor(),
-                        new ORMLiteExecutor(),
+//            new OptimizedSQLiteExecutor(), new ORMLiteExecutor(),
             //            new GreenDaoExecutor()
     };
 
@@ -128,7 +127,9 @@ public class MainActivity extends FragmentActivity {
         for(Task task : reportTasks)
         {
             builder.append("<b>Task ").append(task).append("</b><br />");
-            orms: for (BenchmarkExecutable orm : mOrms) {
+            orms:
+            for(BenchmarkExecutable orm : mOrms)
+            {
 
                 Map<Task, List<Long>> results = mGlobalResults.get(orm.getOrmName());
 

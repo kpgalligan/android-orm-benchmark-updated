@@ -105,10 +105,13 @@ public class OrmBenchmarksTask extends Task
             Map<String, Long> stringLongMap = benchmarkResults.get(bTask.name());
             for(String ormName : stringLongMap.keySet())
             {
+
                 long result = stringLongMap.get(ormName);
                 double printResult = ((double) result / (double) NUM_ITERATIONS) / ((double) 1000000);
                 sb.append(ormName).append(" - ").append(Math.round(printResult)).append("ms")
                   .append("<br/>");
+
+                Log.w("FOR_SPREADSHEET", ormName + "," + Math.round(printResult));
             }
         }
 

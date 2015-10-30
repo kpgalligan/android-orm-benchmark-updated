@@ -2,6 +2,8 @@
 
 ##Hey!
 
+Slides from my DroidconUK talk: https://docs.google.com/a/touchlab.co/presentation/d/1jZW-SKdlMmOZG2QrcnWNP7EPJj5bIunLXiHdUeVZq2U/edit?usp=sharing
+
 This project was originally built to basically show how much faster GreenDAO is than ORMLite.
 The speed difference was mostly caused by putting a foreign collection on the ORMLite entity,
 and not on the GreenDAO entity, so ORMLite was WAY slower in measurements.  As a general rule,

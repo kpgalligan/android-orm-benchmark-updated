@@ -31,17 +31,17 @@ public class OrmBenchmarksTask extends Task
 
     private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[]
             {
-                    new SquidbExecutor(),
-                    new SugarOrmExecutor(),
-                    new SQLiteExecutor(),
-                    new DBFlowExecutor(),
-                    new SqueakyExecutor(),
-                    new CupboardExecutor(),
-                    new com.littleinc.orm_benchmark.squeakyfinal.SqueakyExecutor(),
+//                    new SquidbExecutor(),
+//                    new SugarOrmExecutor(),
+//                    new SQLiteExecutor(),
+//                    new DBFlowExecutor(),
+//                    new SqueakyExecutor(),
+//                    new CupboardExecutor(),
+//                    new com.littleinc.orm_benchmark.squeakyfinal.SqueakyExecutor(),
                     new RealmExecutor(),
-                    new OptimizedSQLiteExecutor(),
-                    new ORMLiteExecutor(),
-                    new GreenDaoExecutor()
+//                    new OptimizedSQLiteExecutor(),
+//                    new ORMLiteExecutor(),
+//                    new GreenDaoExecutor()
             };
 
     public String resultString;

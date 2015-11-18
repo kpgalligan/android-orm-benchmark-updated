@@ -1,6 +1,5 @@
 package com.littleinc.orm_benchmark.squeakyfinal;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 import co.touchlab.squeaky.dao.Dao;
+import co.touchlab.squeaky.db.SQLiteDatabase;
 import co.touchlab.squeaky.table.TableUtils;
 
 /**
@@ -36,7 +36,7 @@ public class SqueakyExecutor implements BenchmarkExecutable
     public long createDbStructure() throws SQLException
     {
         long start = System.nanoTime();
-        TableUtils.createTables(mHelper.getWritableDatabase(), User.class, Message.class);
+        TableUtils.createTables(mHelper.getDatabase(), User.class, Message.class);
         return System.nanoTime() - start;
     }
 
@@ -63,7 +63,7 @@ public class SqueakyExecutor implements BenchmarkExecutable
         }
 
         long start = System.nanoTime();
-        SQLiteDatabase db = mHelper.getReadableDatabase();
+        SQLiteDatabase db = mHelper.getDatabase();
         db.beginTransaction();
 
         try {
@@ -98,7 +98,7 @@ public class SqueakyExecutor implements BenchmarkExecutable
     @Override
     public long dropDb() throws SQLException {
         long start = System.nanoTime();
-        TableUtils.dropTables(mHelper.getWritableDatabase(), true, User.class, Message.class);
+        TableUtils.dropTables(mHelper.getDatabase(), true, User.class, Message.class);
         return System.nanoTime() - start;
     }
 

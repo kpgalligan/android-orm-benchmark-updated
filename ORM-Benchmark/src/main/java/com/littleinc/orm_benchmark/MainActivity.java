@@ -157,25 +157,6 @@ public class MainActivity extends FragmentActivity {
     {
         results = task.resultString;
         refreshUi();
-
-        Realm realm = Realm.getInstance(this);
-        long start = System.currentTimeMillis();
-        RealmResults<Message> result = realm.where(Message.class).findAll();
-        Iterator<Message> iterator = result.iterator();
-        while(iterator.hasNext())
-        {
-            Message next = iterator.next();
-            long channelId = next.getChannelId();
-        }
-        Log.w("asdf", "select time: "+ (System.currentTimeMillis() - start));
-
-        /*result.addChangeListener(
-                new RealmChangeListener() {
-                    @Override
-                    public void onChange() { // called once the query complete and on every update
-                        UiThreadContext.assertUiThread();
-                    }
-                });*/
     }
 
     public static class ResultDialog extends DialogFragment

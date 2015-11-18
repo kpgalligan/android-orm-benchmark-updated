@@ -3,6 +3,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
+import com.littleinc.orm_benchmark.sugarorm.SugarWeirdAppExtensionBecauseBadDesign;
 import com.littleinc.orm_benchmark.util.Util;
 
 import java.sql.SQLException;
@@ -32,7 +33,7 @@ public class RealmExecutor implements BenchmarkExecutable
     public void init(Context context, boolean useInMemoryDb)
     {
         mContext = context;
-        Realm.getInstance(context);
+        Realm.getInstance(SugarWeirdAppExtensionBecauseBadDesign.realmConfiguration);
 
     }
 
@@ -80,7 +81,7 @@ public class RealmExecutor implements BenchmarkExecutable
             messages.add(newMessage);
         }
 
-        Realm realm = Realm.getInstance(mContext);
+        Realm realm = Realm.getInstance(SugarWeirdAppExtensionBecauseBadDesign.realmConfiguration);
 
         long start = System.nanoTime();
 
@@ -115,7 +116,7 @@ public class RealmExecutor implements BenchmarkExecutable
     @Override
     public long readWholeData() throws SQLException
     {
-        Realm realm = Realm.getInstance(mContext);
+        Realm realm = Realm.getInstance(SugarWeirdAppExtensionBecauseBadDesign.realmConfiguration);
 
         long start = System.nanoTime();
 
@@ -160,7 +161,7 @@ public class RealmExecutor implements BenchmarkExecutable
     public long dropDb() throws SQLException
     {
         long start = System.nanoTime();
-        Realm realm = Realm.getInstance(mContext);
+        Realm realm = Realm.getInstance(SugarWeirdAppExtensionBecauseBadDesign.realmConfiguration);
 
         realm.beginTransaction();
         realm.where(User.class).findAll().clear();

@@ -9,6 +9,8 @@ def releasePassword = properties.getProperty('releasePassword')
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
+    versionCode 100
+    versionName "0.1.0"
 
     defaultConfig {
         applicationId "com.littleinc.orm_benchmark"
@@ -29,6 +31,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
         }
     }
 }

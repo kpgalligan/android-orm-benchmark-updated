@@ -46,8 +46,7 @@ public class DataBaseHelper extends SqueakyOpenHelper
                   {
                       return PASSPHRSE;
                   }
-              },
-              User.class, Message.class);
+              });
     }
 
     @Override

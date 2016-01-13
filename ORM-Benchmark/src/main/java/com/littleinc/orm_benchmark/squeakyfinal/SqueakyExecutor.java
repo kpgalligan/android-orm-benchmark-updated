@@ -36,7 +36,7 @@ public class SqueakyExecutor implements BenchmarkExecutable
     public long createDbStructure() throws SQLException
     {
         long start = System.nanoTime();
-        TableUtils.createTables(mHelper.getWritableDatabase(), User.class, Message.class);
+        TableUtils.createTables(mHelper.getWrappedDatabase(), User.class, Message.class);
         return System.nanoTime() - start;
     }
 
@@ -98,7 +98,7 @@ public class SqueakyExecutor implements BenchmarkExecutable
     @Override
     public long dropDb() throws SQLException {
         long start = System.nanoTime();
-        TableUtils.dropTables(mHelper.getWritableDatabase(), true, User.class, Message.class);
+        TableUtils.dropTables(mHelper.getWrappedDatabase(), true, User.class, Message.class);
         return System.nanoTime() - start;
     }
 

@@ -3,7 +3,7 @@ package com.littleinc.orm_benchmark.squeaky;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import co.touchlab.squeaky.dao.SqueakyOpenHelper;
+import co.touchlab.squeaky.db.sqlite.SqueakyOpenHelper;
 
 public class DataBaseHelper extends SqueakyOpenHelper
 {
@@ -30,7 +30,7 @@ public class DataBaseHelper extends SqueakyOpenHelper
     }
 
     private DataBaseHelper(Context context, boolean isInMemory) {
-        super(context, (isInMemory ? null : DB_NAME), null, DB_VERSION, User.class, Message.class);
+        super(context, (isInMemory ? null : DB_NAME), null, DB_VERSION);
     }
 
     @Override

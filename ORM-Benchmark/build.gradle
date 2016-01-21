@@ -9,13 +9,13 @@ def releasePassword = properties.getProperty('releasePassword')
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
-    versionCode 100
-    versionName "0.1.0"
 
     defaultConfig {
         applicationId "com.littleinc.orm_benchmark"
         minSdkVersion 14
         targetSdkVersion 21
+        versionCode 101
+        versionName "0.1.1"
     }
 
     signingConfigs {

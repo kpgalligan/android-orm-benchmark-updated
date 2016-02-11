@@ -12,10 +12,10 @@ android {
 
     defaultConfig {
         applicationId "com.littleinc.orm_benchmark"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 21
-        versionCode 101
-        versionName "0.1.1"
+        versionCode 102
+        versionName "0.1.2"
     }
 
     signingConfigs {
@@ -62,4 +62,8 @@ dependencies {
     apt 'com.yahoo.squidb:squidb-processor:2.0.0'
 
     compile 'nl.qbusict:cupboard:2.1.1'
+
+    compile 'io.requery:requery:1.0-SNAPSHOT'
+    compile 'io.requery:requery-android:1.0-SNAPSHOT' // for android
+    apt 'io.requery:requery-processor:1.0-SNAPSHOT'   // prefer an APT plugin
 }

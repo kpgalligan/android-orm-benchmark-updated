@@ -4,6 +4,7 @@ buildscript {
     repositories {
         jcenter()
         mavenLocal()
+        maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.0.1'
@@ -18,5 +19,6 @@ allprojects {
         jcenter()
         mavenLocal()
         maven { url "https://raw.github.com/Raizlabs/maven-releases/master/releases" }
+        maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
     }
 }

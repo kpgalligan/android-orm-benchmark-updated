@@ -8,6 +8,7 @@ import com.littleinc.orm_benchmark.dbflow.DBFlowExecutor;
 import com.littleinc.orm_benchmark.greendao.GreenDaoExecutor;
 import com.littleinc.orm_benchmark.ormlite.ORMLiteExecutor;
 import com.littleinc.orm_benchmark.realm.RealmExecutor;
+import com.littleinc.orm_benchmark.requery.RequeryExecutor;
 import com.littleinc.orm_benchmark.sqlite.SQLiteExecutor;
 import com.littleinc.orm_benchmark.sqliteoptimized.OptimizedSQLiteExecutor;
 import com.littleinc.orm_benchmark.squeaky.SqueakyExecutor;
@@ -25,12 +26,11 @@ import co.touchlab.android.threading.tasks.Task;
  */
 public class OrmBenchmarksTask extends Task
 {
-    public static final String TAG = "OrmBenchmarksTask";
+    public static final  String  TAG              = "OrmBenchmarksTask";
     private static final boolean USE_IN_MEMORY_DB = false;
-    private static final int NUM_ITERATIONS = 5;
+    private static final int     NUM_ITERATIONS   = 5;
 
-    private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[]
-            {
+    private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[] {
                     new SquidbExecutor(),
                     new SugarOrmExecutor(),
                     new SQLiteExecutor(),
@@ -39,17 +39,21 @@ public class OrmBenchmarksTask extends Task
                     new CupboardExecutor(),
                     new com.littleinc.orm_benchmark.squeakyfinal.SqueakyExecutor(),
                     new RealmExecutor(),
+                    new RequeryExecutor(),
                     new OptimizedSQLiteExecutor(),
                     new ORMLiteExecutor(),
-                    new GreenDaoExecutor()
-            };
+                    new GreenDaoExecutor()};
 
     public String resultString;
 
     Map<String, Map<String, Long>> benchmarkResults = new TreeMap<>();
 
-    enum BenchmarkTask {
-        CREATE_DB, WRITE_DATA, READ_DATA, DROP_DB;
+    enum BenchmarkTask
+    {
+        CREATE_DB,
+        WRITE_DATA,
+        READ_DATA,
+        DROP_DB;
     }
 
     @Override
@@ -61,7 +65,7 @@ public class OrmBenchmarksTask extends Task
             Log.w(TAG, orm.getOrmName() + " init");
         }
 
-        for(int i=0; i<NUM_ITERATIONS; i++)
+        for(int i = 0; i < NUM_ITERATIONS; i++)
         {
             for(BenchmarkExecutable item : mOrms)
             {
@@ -69,7 +73,7 @@ public class OrmBenchmarksTask extends Task
                 {
                     long result = 0;
 
-                    Log.w(TAG, item.getOrmName() + "-" + task.name() +" start");
+                    Log.w(TAG, item.getOrmName() + "-" + task.name() + " start");
                     switch(task)
                     {
                         case CREATE_DB:

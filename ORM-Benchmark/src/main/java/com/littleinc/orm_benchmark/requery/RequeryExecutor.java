@@ -105,15 +105,8 @@ public class RequeryExecutor implements BenchmarkExecutable
 
         final EntityDataStore<Persistable> userStore = new EntityDataStore<>(
                 mHelper.getConfiguration());
-        try
-        {
-            userStore.select(MessageEntity.class).get().toList().size();
-        }
-        catch(Exception e)
-        {
-            //Looks like this should work, but it fails
-            Log.w(TAG, "This should work", e);
-        }
+
+        userStore.select(MessageEntity.class).get().toList().size();
 
         return System.nanoTime() - start;
     }

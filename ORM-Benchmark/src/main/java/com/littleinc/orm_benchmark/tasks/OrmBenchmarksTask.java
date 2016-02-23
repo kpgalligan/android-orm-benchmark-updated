@@ -15,6 +15,9 @@ import com.littleinc.orm_benchmark.squeaky.SqueakyExecutor;
 import com.littleinc.orm_benchmark.squidb.SquidbExecutor;
 import com.littleinc.orm_benchmark.sugarorm.SugarOrmExecutor;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -42,7 +45,8 @@ public class OrmBenchmarksTask extends Task
                     new RequeryExecutor(),
                     new OptimizedSQLiteExecutor(),
                     new ORMLiteExecutor(),
-                    new GreenDaoExecutor()};
+                    new GreenDaoExecutor()
+};
 
     public String resultString;
 
@@ -65,8 +69,11 @@ public class OrmBenchmarksTask extends Task
             Log.w(TAG, orm.getOrmName() + " init");
         }
 
+        List<BenchmarkExecutable> failed = new ArrayList<>();
+
         for(int i = 0; i < NUM_ITERATIONS; i++)
         {
+
             for(BenchmarkExecutable item : mOrms)
             {
                 for(BenchmarkTask task : BenchmarkTask.values())
@@ -74,21 +81,31 @@ public class OrmBenchmarksTask extends Task
                     long result = 0;
 
                     Log.w(TAG, item.getOrmName() + "-" + task.name() + " start");
-                    switch(task)
+
+                    try
                     {
-                        case CREATE_DB:
-                            result = item.createDbStructure();
-                            break;
-                        case DROP_DB:
-                            result = item.dropDb();
-                            break;
-                        case READ_DATA:
-                            result = item.readWholeData();
-                            break;
-                        case WRITE_DATA:
-                            result = item.writeWholeData();
-                            break;
+                        switch(task)
+                        {
+                            case CREATE_DB:
+                                result = item.createDbStructure();
+                                break;
+                            case DROP_DB:
+                                result = item.dropDb();
+                                break;
+                            case READ_DATA:
+                                result = item.readWholeData();
+                                break;
+                            case WRITE_DATA:
+                                result = item.writeWholeData();
+                                break;
+                        }
                     }
+                    catch(Exception e)
+                    {
+                        result = Long.MIN_VALUE;
+                        failed.add(item);
+                    }
+
                     Log.w(TAG, item.getOrmName() + "-" + task.name() +" end");
                     addProfilerResult(item.getOrmName(), task, result);
                 }
@@ -107,15 +124,28 @@ public class OrmBenchmarksTask extends Task
         {
             sb.append("<b>").append(bTask.name()).append("</b>").append("<br/>");
             Map<String, Long> stringLongMap = benchmarkResults.get(bTask.name());
-            for(String ormName : stringLongMap.keySet())
+            if(stringLongMap != null)
             {
+                for(String ormName : stringLongMap.keySet())
+                {
 
-                long result = stringLongMap.get(ormName);
-                double printResult = ((double) result / (double) NUM_ITERATIONS) / ((double) 1000000);
-                sb.append(ormName).append(" - ").append(Math.round(printResult)).append("ms")
-                  .append("<br/>");
+                    long result = stringLongMap.get(ormName);
+                    double printResult = ((double) result / (double) NUM_ITERATIONS) / ((double) 1000000);
+                    sb.append(ormName).append(" - ");
 
-                Log.w("FOR_SPREADSHEET", ormName + "," + Math.round(printResult));
+                    if(printResult < 0)
+                    {
+                        sb.append("(crashed)");
+                    }
+                    else
+                    {
+                        sb.append(Math.round(printResult)).append("ms");
+                    }
+
+                    sb.append("<br/>");
+
+                    Log.w("FOR_SPREADSHEET", ormName + "," + Math.round(printResult));
+                }
             }
         }
 

@@ -1,0 +1,8 @@
+CREATE TABLE user (
+  id LONG NOT NULL PRIMARY KEY AUTOINCREMENT,
+  lastName STRING NOT NULL,
+  firstName STRING NOT NULL
+);
+
+select_all:
+SELECT * FROM user;

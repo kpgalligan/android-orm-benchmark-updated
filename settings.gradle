@@ -1,1 +1,1 @@
-include ':ORM-Benchmark', ':GreenDAO-Generator'
+include ':javalib', ':ORM-Benchmark', ':GreenDAO-Generator'

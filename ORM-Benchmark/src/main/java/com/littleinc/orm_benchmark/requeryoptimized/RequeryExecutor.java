@@ -1,9 +1,12 @@
-package com.littleinc.orm_benchmark.requery;
+package com.littleinc.orm_benchmark.requeryoptimized;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
+import com.littleinc.orm_benchmark.requery.Message;
+import com.littleinc.orm_benchmark.requery.MessageEntity;
+import com.littleinc.orm_benchmark.requery.User;
+import com.littleinc.orm_benchmark.requery.UserEntity;
 import com.littleinc.orm_benchmark.util.Util;
 
 import java.sql.SQLException;
@@ -21,7 +24,7 @@ import io.requery.sql.EntityDataStore;
 public class RequeryExecutor implements BenchmarkExecutable
 {
 
-    private static final String TAG = "RequeryExecutor";
+    private static final String TAG = "RequeryOptExecutor";
 
     private DataBaseHelper mHelper;
 
@@ -82,11 +85,14 @@ public class RequeryExecutor implements BenchmarkExecutable
             @Override
             public Object call() throws Exception
             {
-
-                userStore.insert(users);
+                for (User user : users) {
+                    userStore.insert(user);
+                }
                 Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
 
-                userStore.insert(messages);
+                for (Message message : messages) {
+                    userStore.insert(message);
+                }
                 Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
 
                 return null;
@@ -117,6 +123,6 @@ public class RequeryExecutor implements BenchmarkExecutable
 
     @Override
     public String getOrmName() {
-        return "Requery";
+        return "RequeryOptimized";
     }
 }

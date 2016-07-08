@@ -25,10 +25,10 @@ public class MessageDao extends AbstractDao<Message, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Content = new Property(1, String.class, "content", false, "CONTENT");
-        public final static Property Client_id = new Property(2, Long.class, "client_id", false, "CLIENT_ID");
-        public final static Property Created_at = new Property(3, Integer.class, "created_at", false, "CREATED_AT");
-        public final static Property Sorted_by = new Property(4, Double.class, "sorted_by", false, "SORTED_BY");
-        public final static Property Command_id = new Property(5, Long.class, "command_id", false, "COMMAND_ID");
+        public final static Property Client_id = new Property(2, long.class, "client_id", false, "CLIENT_ID");
+        public final static Property Created_at = new Property(3, int.class, "created_at", false, "CREATED_AT");
+        public final static Property Sorted_by = new Property(4, double.class, "sorted_by", false, "SORTED_BY");
+        public final static Property Command_id = new Property(5, long.class, "command_id", false, "COMMAND_ID");
         public final static Property Sender_id = new Property(6, long.class, "sender_id", false, "SENDER_ID");
         public final static Property Channel_id = new Property(7, long.class, "channel_id", false, "CHANNEL_ID");
     };
@@ -51,10 +51,10 @@ public class MessageDao extends AbstractDao<Message, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'MESSAGE' (" + //
                 "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "'CONTENT' TEXT," + // 1: content
-                "'CLIENT_ID' INTEGER," + // 2: client_id
-                "'CREATED_AT' INTEGER," + // 3: created_at
-                "'SORTED_BY' REAL," + // 4: sorted_by
-                "'COMMAND_ID' INTEGER," + // 5: command_id
+                "'CLIENT_ID' INTEGER NOT NULL ," + // 2: client_id
+                "'CREATED_AT' INTEGER NOT NULL ," + // 3: created_at
+                "'SORTED_BY' REAL NOT NULL ," + // 4: sorted_by
+                "'COMMAND_ID' INTEGER NOT NULL ," + // 5: command_id
                 "'SENDER_ID' INTEGER NOT NULL ," + // 6: sender_id
                 "'CHANNEL_ID' INTEGER NOT NULL );"); // 7: channel_id
         // Add Indexes
@@ -82,26 +82,10 @@ public class MessageDao extends AbstractDao<Message, Long> {
         if (content != null) {
             stmt.bindString(2, content);
         }
- 
-        Long client_id = entity.getClient_id();
-        if (client_id != null) {
-            stmt.bindLong(3, client_id);
-        }
- 
-        Integer created_at = entity.getCreated_at();
-        if (created_at != null) {
-            stmt.bindLong(4, created_at);
-        }
- 
-        Double sorted_by = entity.getSorted_by();
-        if (sorted_by != null) {
-            stmt.bindDouble(5, sorted_by);
-        }
- 
-        Long command_id = entity.getCommand_id();
-        if (command_id != null) {
-            stmt.bindLong(6, command_id);
-        }
+        stmt.bindLong(3, entity.getClient_id());
+        stmt.bindLong(4, entity.getCreated_at());
+        stmt.bindDouble(5, entity.getSorted_by());
+        stmt.bindLong(6, entity.getCommand_id());
         stmt.bindLong(7, entity.getSender_id());
         stmt.bindLong(8, entity.getChannel_id());
     }
@@ -124,10 +108,10 @@ public class MessageDao extends AbstractDao<Message, Long> {
         Message entity = new Message( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // content
-            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // client_id
-            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // created_at
-            cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4), // sorted_by
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // command_id
+            cursor.getLong(offset + 2), // client_id
+            cursor.getInt(offset + 3), // created_at
+            cursor.getDouble(offset + 4), // sorted_by
+            cursor.getLong(offset + 5), // command_id
             cursor.getLong(offset + 6), // sender_id
             cursor.getLong(offset + 7) // channel_id
         );
@@ -139,10 +123,10 @@ public class MessageDao extends AbstractDao<Message, Long> {
     public void readEntity(Cursor cursor, Message entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setContent(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setClient_id(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
-        entity.setCreated_at(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
-        entity.setSorted_by(cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4));
-        entity.setCommand_id(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
+        entity.setClient_id(cursor.getLong(offset + 2));
+        entity.setCreated_at(cursor.getInt(offset + 3));
+        entity.setSorted_by(cursor.getDouble(offset + 4));
+        entity.setCommand_id(cursor.getLong(offset + 5));
         entity.setSender_id(cursor.getLong(offset + 6));
         entity.setChannel_id(cursor.getLong(offset + 7));
      }

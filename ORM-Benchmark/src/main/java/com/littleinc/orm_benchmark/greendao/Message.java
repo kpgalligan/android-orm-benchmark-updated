@@ -12,10 +12,10 @@ public class Message {
 
     private Long id;
     private String content;
-    private Long client_id;
-    private Integer created_at;
-    private Double sorted_by;
-    private Long command_id;
+    private long client_id;
+    private int created_at;
+    private double sorted_by;
+    private long command_id;
     private long sender_id;
     private long channel_id;
 
@@ -34,7 +34,7 @@ public class Message {
         this.id = id;
     }
 
-    public Message(Long id, String content, Long client_id, Integer created_at, Double sorted_by, Long command_id, long sender_id, long channel_id) {
+    public Message(Long id, String content, long client_id, int created_at, double sorted_by, long command_id, long sender_id, long channel_id) {
         this.id = id;
         this.content = content;
         this.client_id = client_id;
@@ -67,35 +67,35 @@ public class Message {
         this.content = content;
     }
 
-    public Long getClient_id() {
+    public long getClient_id() {
         return client_id;
     }
 
-    public void setClient_id(Long client_id) {
+    public void setClient_id(long client_id) {
         this.client_id = client_id;
     }
 
-    public Integer getCreated_at() {
+    public int getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(Integer created_at) {
+    public void setCreated_at(int created_at) {
         this.created_at = created_at;
     }
 
-    public Double getSorted_by() {
+    public double getSorted_by() {
         return sorted_by;
     }
 
-    public void setSorted_by(Double sorted_by) {
+    public void setSorted_by(double sorted_by) {
         this.sorted_by = sorted_by;
     }
 
-    public Long getCommand_id() {
+    public long getCommand_id() {
         return command_id;
     }
 
-    public void setCommand_id(Long command_id) {
+    public void setCommand_id(long command_id) {
         this.command_id = command_id;
     }
 

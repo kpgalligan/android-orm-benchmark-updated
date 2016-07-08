@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
-import com.littleinc.orm_benchmark.greendao.MessageDao.Properties;
 import com.littleinc.orm_benchmark.util.Util;
 
 import java.sql.SQLException;
@@ -73,16 +72,13 @@ public class GreenDaoExecutor implements BenchmarkExecutable {
             @Override
             public void run() {
                 UserDao userDao = mDaoSession.getUserDao();
-                for (User user : users) {
-                    userDao.insert(user);
-                }
+                userDao.insertInTx(users);
+
                 Log.d(GreenDaoExecutor.class.getSimpleName(), "Done, wrote "
                         + NUM_USER_INSERTS + " users");
 
                 MessageDao messageDao = mDaoSession.getMessageDao();
-                for (Message message : messages) {
-                    messageDao.insert(message);
-                }
+                messageDao.insertInTx(messages);
                 Log.d(GreenDaoExecutor.class.getSimpleName(), "Done, wrote "
                         + NUM_MESSAGE_INSERTS + " messages");
             }

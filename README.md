@@ -50,6 +50,8 @@ SquiDB
 
 SugarORM
 
+# *Everything below this is from the original benchmark. Its probably old.*
+
 ##Summary
 
 ORM-Benchmark is an Android application built in Eclipse that benchmarks the following against each other:

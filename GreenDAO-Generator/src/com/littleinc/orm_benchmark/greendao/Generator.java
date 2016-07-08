@@ -53,13 +53,12 @@ public class Generator {
         message.addLongProperty(COMMAND_ID).index();
         message.addLongProperty(SENDER_ID).notNull();
         message.addLongProperty(CHANNEL_ID).notNull();
-        message.add
 
         // One-to-many relationship
         message.addToMany(user, userPk, READERS);
 
         try {
-            new DaoGenerator().generateAll(schema, "../ORM-Benchmark/src/");
+            new DaoGenerator().generateAll(schema, "../ORM-Benchmark/src/main/java/");
         } catch (Exception e) {
             e.printStackTrace();
         }

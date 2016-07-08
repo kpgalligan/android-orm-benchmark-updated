@@ -1,6 +1,7 @@
 package com.littleinc.orm_benchmark.greendao;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
@@ -22,7 +23,7 @@ public class GreenDaoExecutor implements BenchmarkExecutable {
 
     private DataBaseHelper mHelper;
 
-    private DaoMaster mDaoMaster;
+    private DaoSession mDaoSession;
 
     @Override
     public void init(Context context, boolean useInMemoryDb) {
@@ -34,10 +35,11 @@ public class GreenDaoExecutor implements BenchmarkExecutable {
     @Override
     public long createDbStructure() throws SQLException {
         long start = System.nanoTime();
-        if (mDaoMaster == null) {
-            mDaoMaster = new DaoMaster(mHelper.getWritableDatabase());
+        SQLiteDatabase db = mHelper.getWritableDatabase();
+        if (mDaoSession == null) {
+            mDaoSession = new DaoMaster(db).newSession();
         } else {
-            DaoMaster.createAllTables(mHelper.getWritableDatabase(), true);
+            DaoMaster.createAllTables(db, true);
         }
         return System.nanoTime() - start;
     }
@@ -66,46 +68,50 @@ public class GreenDaoExecutor implements BenchmarkExecutable {
         }
 
         long start = System.nanoTime();
-        final DaoSession daoSession = mDaoMaster.newSession();
-        daoSession.runInTx(new Runnable() {
+        mDaoSession.runInTx(new Runnable() {
 
             @Override
             public void run() {
-                UserDao userDao = daoSession.getUserDao();
+                UserDao userDao = mDaoSession.getUserDao();
                 for (User user : users) {
                     userDao.insertOrReplace(user);
                 }
                 Log.d(GreenDaoExecutor.class.getSimpleName(), "Done, wrote "
                         + NUM_USER_INSERTS + " users");
 
-                MessageDao messageDao = daoSession.getMessageDao();
+                MessageDao messageDao = mDaoSession.getMessageDao();
                 for (Message message : messages) {
                     messageDao.insertOrReplace(message);
                 }
                 Log.d(GreenDaoExecutor.class.getSimpleName(), "Done, wrote "
                         + NUM_MESSAGE_INSERTS + " messages");
-                daoSession.clear();
             }
         });
-        return System.nanoTime() - start;
+        long time = System.nanoTime() - start;
+        mDaoSession.clear();
+        return time;
     }
 
     @Override
     public long readWholeData() throws SQLException {
         long start = System.nanoTime();
-        DaoSession daoSession = mDaoMaster.newSession();
-        MessageDao messageDao = daoSession.getMessageDao();
-        Log.d(GreenDaoExecutor.class.getSimpleName(), "Read, "
-                + messageDao.queryBuilder().list().size() + " rows");
-        daoSession.clear();
-        return System.nanoTime() - start;
+        int size = mDaoSession.getMessageDao().loadAll().size();
+        // Logging should be outside of time measurement, but others tests do it too
+        Log.d(GreenDaoExecutor.class.getSimpleName(), "Read, " + size + " rows");
+        long time = System.nanoTime() - start;
+        mDaoSession.clear();
+        return time;
     }
 
     @Override
     public long dropDb() throws SQLException {
         long start = System.nanoTime();
-        DaoMaster.dropAllTables(mHelper.getWritableDatabase(), true);
-        return System.nanoTime() - start;
+        SQLiteDatabase db = mHelper.getWritableDatabase();
+        DaoMaster.dropAllTables(db, true);
+        // Reset version, so OpenHelper does not get confused
+        db.setVersion(0);
+        long time = System.nanoTime() - start;
+        return time;
     }
 
     @Override

@@ -50,6 +50,12 @@ SquiDB
 
 SugarORM
 
+## Update
+
+Got a pull request for an update to greed dao, and a request to refresh realm with a new version. Will work on getting that checked in and pushed to store asap.
+
+# *Everything below this is from the original benchmark. Its probably old.*
+
 ##Summary
 
 ORM-Benchmark is an Android application built in Eclipse that benchmarks the following against each other:

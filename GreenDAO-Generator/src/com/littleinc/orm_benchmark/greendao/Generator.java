@@ -47,19 +47,18 @@ public class Generator {
         Entity message = schema.addEntity(MESSAGE_ENTITY);
         message.addIdProperty().autoincrement();
         message.addStringProperty(CONTENT);
-        message.addLongProperty(CLIENT_ID);
-        message.addIntProperty(CREATED_AT);
-        message.addDoubleProperty(SORTED_BY);
-        message.addLongProperty(COMMAND_ID).index();
+        message.addLongProperty(CLIENT_ID).notNull();
+        message.addIntProperty(CREATED_AT).notNull();
+        message.addDoubleProperty(SORTED_BY).notNull();
+        message.addLongProperty(COMMAND_ID).notNull().index();
         message.addLongProperty(SENDER_ID).notNull();
         message.addLongProperty(CHANNEL_ID).notNull();
-        message.add
 
         // One-to-many relationship
         message.addToMany(user, userPk, READERS);
 
         try {
-            new DaoGenerator().generateAll(schema, "../ORM-Benchmark/src/");
+            new DaoGenerator().generateAll(schema, "../ORM-Benchmark/src/main/java/");
         } catch (Exception e) {
             e.printStackTrace();
         }

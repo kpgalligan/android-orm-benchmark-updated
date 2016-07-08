@@ -11,12 +11,20 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.greenrobot.dao.identityscope.IdentityScopeType;
 
 import static com.littleinc.orm_benchmark.util.Util.getRandomString;
 
 public class GreenDaoExecutor implements BenchmarkExecutable {
 
     private static final String TAG = "GreenDaoExecutor";
+
+    /**
+     * The identity scope tracks all entity objects to assure the same object is returned for one specific ID.
+     * Of course this comes with some overhead (map with weak references): thus it should only be used for comparing to
+     * other ORMs that also have a similar feature (e.g. caches).
+     */
+    private boolean USE_IDENTITY_SCOPE = false;
 
     private static String DB_NAME = "greendao_db";
 
@@ -36,7 +44,8 @@ public class GreenDaoExecutor implements BenchmarkExecutable {
         long start = System.nanoTime();
         SQLiteDatabase db = mHelper.getWritableDatabase();
         if (mDaoSession == null) {
-            mDaoSession = new DaoMaster(db).newSession();
+            mDaoSession = new DaoMaster(db).newSession(USE_IDENTITY_SCOPE ?
+                    IdentityScopeType.Session : IdentityScopeType.None);
         } else {
             DaoMaster.createAllTables(db, true);
         }
@@ -84,7 +93,9 @@ public class GreenDaoExecutor implements BenchmarkExecutable {
             }
         });
         long time = System.nanoTime() - start;
-        mDaoSession.clear();
+        if(USE_IDENTITY_SCOPE) {
+            mDaoSession.clear();
+        }
         return time;
     }
 
@@ -95,7 +106,9 @@ public class GreenDaoExecutor implements BenchmarkExecutable {
         // Logging should be outside of time measurement, but others tests do it too
         Log.d(GreenDaoExecutor.class.getSimpleName(), "Read, " + size + " rows");
         long time = System.nanoTime() - start;
-        mDaoSession.clear();
+        if(USE_IDENTITY_SCOPE) {
+            mDaoSession.clear();
+        }
         return time;
     }
 

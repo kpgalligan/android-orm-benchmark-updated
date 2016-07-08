@@ -102,6 +102,7 @@ public class OrmBenchmarksTask extends Task
                     }
                     catch(Exception e)
                     {
+                        Log.e(TAG, item.getOrmName() + "-" + task.name() +" failed", e);
                         result = Long.MIN_VALUE;
                         failed.add(item);
                     }

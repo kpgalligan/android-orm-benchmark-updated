@@ -74,14 +74,14 @@ public class GreenDaoExecutor implements BenchmarkExecutable {
             public void run() {
                 UserDao userDao = mDaoSession.getUserDao();
                 for (User user : users) {
-                    userDao.insertOrReplace(user);
+                    userDao.insert(user);
                 }
                 Log.d(GreenDaoExecutor.class.getSimpleName(), "Done, wrote "
                         + NUM_USER_INSERTS + " users");
 
                 MessageDao messageDao = mDaoSession.getMessageDao();
                 for (Message message : messages) {
-                    messageDao.insertOrReplace(message);
+                    messageDao.insert(message);
                 }
                 Log.d(GreenDaoExecutor.class.getSimpleName(), "Done, wrote "
                         + NUM_MESSAGE_INSERTS + " messages");

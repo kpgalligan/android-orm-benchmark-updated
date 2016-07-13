@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
@@ -32,7 +33,7 @@ public class RealmExecutor implements BenchmarkExecutable
     public void init(Context context, boolean useInMemoryDb)
     {
         mContext = context;
-        Realm.getInstance(context);
+//        Realm.getInstance(context);
 
     }
 
@@ -80,27 +81,36 @@ public class RealmExecutor implements BenchmarkExecutable
             messages.add(newMessage);
         }
 
-        Realm realm = Realm.getInstance(mContext);
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(mContext).build();
+        // Open the Realm for the UI thread.
+        Realm realm = Realm.getInstance(realmConfig);
 
         long start = System.nanoTime();
 
         realm.beginTransaction();
 
-        for(User newUser : users)
+        String userLog;
+        long messageStart;
+        try
         {
-            realm.copyToRealm(newUser);
+            for(User newUser : users)
+            {
+                realm.copyToRealm(newUser);
+            }
+
+            userLog = "Done, wrote " + NUM_USER_INSERTS + " users" + (System.nanoTime() - start);
+
+            messageStart = System.nanoTime();
+
+            for(Message message : messages)
+            {
+                realm.copyToRealm(message);
+            }
         }
-
-        String userLog = "Done, wrote " + NUM_USER_INSERTS + " users" + (System.nanoTime() - start);
-
-        long messageStart = System.nanoTime();
-
-        for(Message message : messages)
+        finally
         {
-            realm.copyToRealm(message);
+            realm.commitTransaction();
         }
-
-        realm.commitTransaction();
 
         long totalTime = System.nanoTime() - start;
 
@@ -115,9 +125,10 @@ public class RealmExecutor implements BenchmarkExecutable
     @Override
     public long readWholeData() throws SQLException
     {
-        Realm realm = Realm.getInstance(mContext);
-
         long start = System.nanoTime();
+
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(mContext).build();
+        Realm realm = Realm.getInstance(realmConfig);
 
         RealmQuery<User> userQuery = realm.where(User.class);
         RealmResults<User> userResults = userQuery.findAll();
@@ -160,12 +171,19 @@ public class RealmExecutor implements BenchmarkExecutable
     public long dropDb() throws SQLException
     {
         long start = System.nanoTime();
-        Realm realm = Realm.getInstance(mContext);
+
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(mContext).build();
+        Realm realm = Realm.getInstance(realmConfig);
 
         realm.beginTransaction();
-        realm.where(User.class).findAll().clear();
-        realm.where(Message.class).findAll().clear();
-        realm.commitTransaction();
+        try
+        {
+            realm.deleteAll();
+        }
+        finally
+        {
+            realm.commitTransaction();
+        }
 
         realm.close();
         return System.nanoTime() - start;

@@ -2,55 +2,25 @@ package com.littleinc.orm_benchmark;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable.Task;
-import com.littleinc.orm_benchmark.cupboard.CupboardExecutor;
-import com.littleinc.orm_benchmark.dbflow.DBFlowExecutor;
-import com.littleinc.orm_benchmark.greendao.GreenDaoExecutor;
-import com.littleinc.orm_benchmark.ormlite.ORMLiteExecutor;
-import com.littleinc.orm_benchmark.realm.Message;
-import com.littleinc.orm_benchmark.realm.RealmExecutor;
-import com.littleinc.orm_benchmark.sqlite.SQLiteExecutor;
-import com.littleinc.orm_benchmark.sqliteoptimized.OptimizedSQLiteExecutor;
-import com.littleinc.orm_benchmark.squeaky.SqueakyExecutor;
-import com.littleinc.orm_benchmark.squidb.SquidbExecutor;
-import com.littleinc.orm_benchmark.sugarorm.SugarOrmExecutor;
 import com.littleinc.orm_benchmark.tasks.OrmBenchmarksTask;
-import com.littleinc.orm_benchmark.util.Util;
 
-import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
-import co.touchlab.android.threading.utils.UiThreadContext;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmResults;
-
-
-import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.CREATE_DB;
-import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.DROP_DB;
-import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.READ_DATA;
-import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.READ_INDEXED;
-import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.READ_SEARCH;
-import static com.littleinc.orm_benchmark.BenchmarkExecutable.Task.WRITE_DATA;
 
 public class MainActivity extends FragmentActivity {
 
@@ -157,25 +127,6 @@ public class MainActivity extends FragmentActivity {
     {
         results = task.resultString;
         refreshUi();
-
-        Realm realm = Realm.getInstance(this);
-        long start = System.currentTimeMillis();
-        RealmResults<Message> result = realm.where(Message.class).findAll();
-        Iterator<Message> iterator = result.iterator();
-        while(iterator.hasNext())
-        {
-            Message next = iterator.next();
-            long channelId = next.getChannelId();
-        }
-        Log.w("asdf", "select time: "+ (System.currentTimeMillis() - start));
-
-        /*result.addChangeListener(
-                new RealmChangeListener() {
-                    @Override
-                    public void onChange() { // called once the query complete and on every update
-                        UiThreadContext.assertUiThread();
-                    }
-                });*/
     }
 
     public static class ResultDialog extends DialogFragment

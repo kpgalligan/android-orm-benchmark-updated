@@ -3,12 +3,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.littleinc.orm_benchmark.cupboard.Message;
-import com.littleinc.orm_benchmark.cupboard.User;
-
-
-import static nl.qbusict.cupboard.CupboardFactory.cupboard;
-
 /**
  * Created by kgalligan on 10/27/15.
  */

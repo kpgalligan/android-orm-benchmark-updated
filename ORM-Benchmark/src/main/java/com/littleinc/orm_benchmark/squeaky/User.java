@@ -1,5 +1,4 @@
 package com.littleinc.orm_benchmark.squeaky;
-import co.touchlab.squeaky.field.DataType;
 import co.touchlab.squeaky.field.DatabaseField;
 import co.touchlab.squeaky.table.DatabaseTable;
 

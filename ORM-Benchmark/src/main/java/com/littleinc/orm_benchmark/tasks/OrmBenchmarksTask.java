@@ -15,7 +15,6 @@ import com.littleinc.orm_benchmark.squeaky.SqueakyExecutor;
 import com.littleinc.orm_benchmark.squidb.SquidbExecutor;
 import com.littleinc.orm_benchmark.sugarorm.SugarOrmExecutor;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

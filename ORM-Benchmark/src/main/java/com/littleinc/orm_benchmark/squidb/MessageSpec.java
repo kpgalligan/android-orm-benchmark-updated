@@ -1,5 +1,4 @@
 package com.littleinc.orm_benchmark.squidb;
-import com.yahoo.squidb.annotations.ColumnSpec;
 import com.yahoo.squidb.annotations.PrimaryKey;
 import com.yahoo.squidb.annotations.TableModelSpec;
 

@@ -1,6 +1,4 @@
 package com.littleinc.orm_benchmark.requery;
-import com.orm.SugarRecord;
-
 import io.requery.Entity;
 import io.requery.Generated;
 import io.requery.Key;

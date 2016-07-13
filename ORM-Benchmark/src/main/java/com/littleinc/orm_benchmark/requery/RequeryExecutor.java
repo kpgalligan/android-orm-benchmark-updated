@@ -1,6 +1,5 @@
 package com.littleinc.orm_benchmark.requery;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;

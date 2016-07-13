@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Random;
 
 import co.touchlab.squeaky.dao.Dao;
-import co.touchlab.squeaky.stmt.Where;
 import co.touchlab.squeaky.table.TableUtils;
 
 /**

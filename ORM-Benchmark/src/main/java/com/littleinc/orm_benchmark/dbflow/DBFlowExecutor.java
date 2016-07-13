@@ -3,7 +3,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.j256.ormlite.stmt.SelectArg;
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
 import com.littleinc.orm_benchmark.util.Util;
 import com.raizlabs.android.dbflow.config.FlowManager;

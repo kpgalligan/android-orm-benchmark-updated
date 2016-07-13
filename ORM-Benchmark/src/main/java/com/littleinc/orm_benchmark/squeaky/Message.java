@@ -1,8 +1,5 @@
 package com.littleinc.orm_benchmark.squeaky;
 
-import android.provider.BaseColumns;
-
-import co.touchlab.squeaky.field.DataType;
 import co.touchlab.squeaky.field.DatabaseField;
 import co.touchlab.squeaky.table.DatabaseTable;
 

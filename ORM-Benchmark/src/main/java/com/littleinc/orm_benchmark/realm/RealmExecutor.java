@@ -93,19 +93,13 @@ public class RealmExecutor implements BenchmarkExecutable
         long messageStart;
         try
         {
-            for(User newUser : users)
-            {
-                realm.insert(newUser);
-            }
+            realm.insert(users);
 
             userLog = "Done, wrote " + NUM_USER_INSERTS + " users" + (System.nanoTime() - start);
 
             messageStart = System.nanoTime();
 
-            for(Message message : messages)
-            {
-                realm.insert(message);
-            }
+            realm.insert(messages);
         }
         finally
         {

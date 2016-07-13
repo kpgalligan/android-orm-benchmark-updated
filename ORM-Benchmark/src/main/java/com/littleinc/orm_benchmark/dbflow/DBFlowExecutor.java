@@ -5,10 +5,11 @@ import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
 import com.littleinc.orm_benchmark.util.Util;
+import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
-import com.raizlabs.android.dbflow.sql.index.Index;
 import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -40,11 +41,12 @@ public class DBFlowExecutor  implements BenchmarkExecutable
     {
         long start = System.nanoTime();
 
-        FlowManager.init(applicationContext);
+        FlowManager.init(
+            new FlowConfig.Builder(applicationContext)
+                .openDatabasesOnInit(true)
+            .build()
+        );
         FlowManager.getDatabase(DatabaseModule.NAME);
-        Index<Message> index = new Index<Message>("index_friendName")
-                .on(Message.class, Message$Table.COMMANDID);
-        index.enable();
         /*ConnectionSource connectionSource = mHelper.getConnectionSource();
         TableUtils.createTable(connectionSource, User.class);
         TableUtils.createTable(connectionSource, Message.class);*/
@@ -82,7 +84,7 @@ public class DBFlowExecutor  implements BenchmarkExecutable
         }
 
         long start = System.nanoTime();
-        SQLiteDatabase db = FlowManager.getDatabase(DatabaseModule.NAME).getWritableDatabase();
+        DatabaseWrapper db = FlowManager.getDatabase(DatabaseModule.NAME).getWritableDatabase();
         db.beginTransaction();
 
         try {

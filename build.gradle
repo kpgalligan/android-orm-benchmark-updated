@@ -22,7 +22,7 @@ allprojects {
         jcenter()
         mavenLocal()
         mavenCentral()
-        maven { url "https://raw.github.com/Raizlabs/maven-releases/master/releases" }
+        maven { url "https://www.jitpack.io" }
         maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
     }
 }

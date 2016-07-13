@@ -95,7 +95,7 @@ public class RealmExecutor implements BenchmarkExecutable
         {
             for(User newUser : users)
             {
-                realm.copyToRealm(newUser);
+                realm.insert(newUser);
             }
 
             userLog = "Done, wrote " + NUM_USER_INSERTS + " users" + (System.nanoTime() - start);
@@ -104,7 +104,7 @@ public class RealmExecutor implements BenchmarkExecutable
 
             for(Message message : messages)
             {
-                realm.copyToRealm(message);
+                realm.insert(message);
             }
         }
         finally

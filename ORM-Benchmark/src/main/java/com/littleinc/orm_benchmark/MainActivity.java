@@ -10,6 +10,7 @@ import android.text.Html;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable.Task;
 import com.littleinc.orm_benchmark.tasks.OrmBenchmarksTask;
@@ -33,6 +34,7 @@ public class MainActivity extends FragmentActivity {
 
     private String results;
     private Button runBenchmark;
+    private TextView statusStringView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,6 +67,8 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
+        statusStringView = (TextView) findViewById(R.id.statusString);
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         refreshUi();
@@ -78,6 +82,8 @@ public class MainActivity extends FragmentActivity {
         super.onDestroy();
         EventBusExt.getDefault().unregister(this);
     }
+
+
 
     void refreshUi()
     {
@@ -96,7 +102,11 @@ public class MainActivity extends FragmentActivity {
     public void runBenchmark()
     {
         if(! benchmarkRuning())
+        {
+            allStatus = "";
+            statusStringView.setText("Running...");
             TaskQueue.loadQueueDefault(this).execute(new OrmBenchmarksTask());
+        }
 
         refreshUi();
     }
@@ -126,8 +136,18 @@ public class MainActivity extends FragmentActivity {
     public void onEventMainThread(OrmBenchmarksTask task)
     {
         results = task.resultString;
+        statusStringView.setText("Done!");
         refreshUi();
     }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(OrmBenchmarksTask.StatusUpdate statusUpdate)
+    {
+        allStatus = statusUpdate.status + "\n" + allStatus;
+        statusStringView.setText(allStatus);
+    }
+
+    private String allStatus;
 
     public static class ResultDialog extends DialogFragment
     {

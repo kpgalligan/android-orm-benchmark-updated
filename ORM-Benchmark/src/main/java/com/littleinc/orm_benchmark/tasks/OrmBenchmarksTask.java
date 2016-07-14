@@ -30,7 +30,7 @@ public class OrmBenchmarksTask extends Task
 {
     public static final  String  TAG              = "OrmBenchmarksTask";
     private static final boolean USE_IN_MEMORY_DB = false;
-    private static final int     NUM_ITERATIONS   = 5;
+    private static final int     NUM_ITERATIONS   = 3;
 
     private BenchmarkExecutable[] mOrms = new BenchmarkExecutable[] {
                     new SquidbExecutor(),
@@ -75,6 +75,8 @@ public class OrmBenchmarksTask extends Task
 
             for(BenchmarkExecutable item : mOrms)
             {
+                sendStatusUpdate("Iteration: "+ (i+1) +"/"+ item.getOrmName() +" running");
+
                 for(BenchmarkTask task : BenchmarkTask.values())
                 {
                     long result = 0;
@@ -109,12 +111,31 @@ public class OrmBenchmarksTask extends Task
                     Log.w(TAG, item.getOrmName() + "-" + task.name() +" end");
                     addProfilerResult(item.getOrmName(), task, result);
                 }
+
+                sendStatusUpdate("Iteration: "+ (i+1) +"/"+ item.getOrmName() +" complete");
             }
         }
 
         buildResultString();
     }
 
+    private void sendStatusUpdate(String status) throws InterruptedException
+    {
+        EventBusExt.getDefault().post(new StatusUpdate(status));
+
+        //Let the main thread breath and update status
+        Thread.sleep(200);
+    }
+
+    public static class StatusUpdate
+    {
+        public final String status;
+
+        public StatusUpdate(String status)
+        {
+            this.status = status;
+        }
+    }
     private void buildResultString()
     {
         StringBuilder sb = new StringBuilder();

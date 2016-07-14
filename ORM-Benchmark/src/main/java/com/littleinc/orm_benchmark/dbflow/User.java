@@ -7,7 +7,8 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 /**
  * Created by kgalligan on 10/12/15.
  */
-@Table(database = DatabaseModule.class)
+@Table(database = DatabaseModule.class,
+    orderedCursorLookUp = true)
 public class User extends BaseModel
 {
     @Column

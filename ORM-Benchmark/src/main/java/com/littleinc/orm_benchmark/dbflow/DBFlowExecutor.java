@@ -1,6 +1,6 @@
 package com.littleinc.orm_benchmark.dbflow;
+
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
@@ -10,12 +10,11 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
+import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
-
 
 import static com.littleinc.orm_benchmark.util.Util.getRandomString;
 
@@ -33,7 +32,6 @@ public class DBFlowExecutor  implements BenchmarkExecutable
     {
         Log.d(TAG, "Creating DataBaseHelper");
         applicationContext = context.getApplicationContext();
-//        FlowManager.init(applicationContext);
     }
 
     @Override
@@ -46,18 +44,13 @@ public class DBFlowExecutor  implements BenchmarkExecutable
                 .openDatabasesOnInit(true)
             .build()
         );
-        FlowManager.getDatabase(DatabaseModule.NAME);
-        /*ConnectionSource connectionSource = mHelper.getConnectionSource();
-        TableUtils.createTable(connectionSource, User.class);
-        TableUtils.createTable(connectionSource, Message.class);*/
         return System.nanoTime() - start;
     }
 
     @Override
     public long writeWholeData() throws SQLException
     {
-        Random random = new Random();
-        List<User> users = new LinkedList<User>();
+        final List<User> users = new LinkedList<User>();
         for(int i = 0; i < NUM_USER_INSERTS; i++)
         {
             User newUser = new User();
@@ -67,7 +60,7 @@ public class DBFlowExecutor  implements BenchmarkExecutable
             users.add(newUser);
         }
 
-        List<Message> messages = new LinkedList<Message>();
+        final List<Message> messages = new LinkedList<Message>();
         for (int i = 0; i < NUM_MESSAGE_INSERTS; i++) {
             Message newMessage = new Message();
             newMessage.commandId = i;
@@ -84,24 +77,22 @@ public class DBFlowExecutor  implements BenchmarkExecutable
         }
 
         long start = System.nanoTime();
-        DatabaseWrapper db = FlowManager.getDatabase(DatabaseModule.NAME).getWritableDatabase();
-        db.beginTransaction();
 
-        try {
-            for (User user : users) {
-                user.save();
+        FlowManager.getDatabase(DatabaseModule.NAME).executeTransaction(new ITransaction() {
+            @Override
+            public void execute(DatabaseWrapper databaseWrapper) {
+                for (User user : users) {
+                    user.save();
+                }
+                Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
+
+                for (Message message : messages) {
+                    message.save();
+                }
+                Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
             }
-            Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
+        });
 
-            for (Message message : messages) {
-                message.save();
-            }
-            Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
-
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
         return System.nanoTime() - start;
     }
 
@@ -120,10 +111,6 @@ public class DBFlowExecutor  implements BenchmarkExecutable
         long start = System.nanoTime();
         Delete.table(Message.class);
         Delete.table(User.class);
-//        applicationContext.deleteDatabase(DatabaseModule.NAME +".db");
-        /*ConnectionSource connectionSource = mHelper.getConnectionSource();
-        TableUtils.dropTable(connectionSource, User.class, true);
-        TableUtils.dropTable(connectionSource, Message.class, true);*/
         return System.nanoTime() - start;
     }
 

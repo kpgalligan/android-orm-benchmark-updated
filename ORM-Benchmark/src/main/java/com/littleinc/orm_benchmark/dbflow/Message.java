@@ -13,7 +13,8 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 @Table(database = DatabaseModule.class,
     indexGroups = {
         @IndexGroup(number = 1, name = "index")
-    })
+    },
+    orderedCursorLookUp = true)
 public class Message extends BaseModel
 {
     @Column

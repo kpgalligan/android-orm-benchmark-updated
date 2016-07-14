@@ -7,7 +7,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 /**
  * Created by kgalligan on 10/12/15.
  */
-@Table(databaseName = DatabaseModule.NAME)
+@Table(database = DatabaseModule.class)
 public class User extends BaseModel
 {
     @Column

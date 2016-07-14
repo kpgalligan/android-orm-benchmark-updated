@@ -47,7 +47,6 @@ public class DBFlowExecutor  implements BenchmarkExecutable
                 .openDatabasesOnInit(true)
             .build()
         );
-        FlowManager.getDatabase(DatabaseModule.NAME);
         /*ConnectionSource connectionSource = mHelper.getConnectionSource();
         TableUtils.createTable(connectionSource, User.class);
         TableUtils.createTable(connectionSource, Message.class);*/

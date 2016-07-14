@@ -1,6 +1,6 @@
 package com.littleinc.orm_benchmark.dbflow;
+
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
@@ -15,8 +15,6 @@ import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
-
 
 import static com.littleinc.orm_benchmark.util.Util.getRandomString;
 
@@ -34,7 +32,6 @@ public class DBFlowExecutor  implements BenchmarkExecutable
     {
         Log.d(TAG, "Creating DataBaseHelper");
         applicationContext = context.getApplicationContext();
-//        FlowManager.init(applicationContext);
     }
 
     @Override
@@ -47,16 +44,12 @@ public class DBFlowExecutor  implements BenchmarkExecutable
                 .openDatabasesOnInit(true)
             .build()
         );
-        /*ConnectionSource connectionSource = mHelper.getConnectionSource();
-        TableUtils.createTable(connectionSource, User.class);
-        TableUtils.createTable(connectionSource, Message.class);*/
         return System.nanoTime() - start;
     }
 
     @Override
     public long writeWholeData() throws SQLException
     {
-        Random random = new Random();
         final List<User> users = new LinkedList<User>();
         for(int i = 0; i < NUM_USER_INSERTS; i++)
         {
@@ -118,10 +111,6 @@ public class DBFlowExecutor  implements BenchmarkExecutable
         long start = System.nanoTime();
         Delete.table(Message.class);
         Delete.table(User.class);
-//        applicationContext.deleteDatabase(DatabaseModule.NAME +".db");
-        /*ConnectionSource connectionSource = mHelper.getConnectionSource();
-        TableUtils.dropTable(connectionSource, User.class, true);
-        TableUtils.dropTable(connectionSource, Message.class, true);*/
         return System.nanoTime() - start;
     }
 

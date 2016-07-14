@@ -10,6 +10,7 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
+import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -57,7 +58,7 @@ public class DBFlowExecutor  implements BenchmarkExecutable
     public long writeWholeData() throws SQLException
     {
         Random random = new Random();
-        List<User> users = new LinkedList<User>();
+        final List<User> users = new LinkedList<User>();
         for(int i = 0; i < NUM_USER_INSERTS; i++)
         {
             User newUser = new User();
@@ -67,7 +68,7 @@ public class DBFlowExecutor  implements BenchmarkExecutable
             users.add(newUser);
         }
 
-        List<Message> messages = new LinkedList<Message>();
+        final List<Message> messages = new LinkedList<Message>();
         for (int i = 0; i < NUM_MESSAGE_INSERTS; i++) {
             Message newMessage = new Message();
             newMessage.commandId = i;
@@ -84,24 +85,22 @@ public class DBFlowExecutor  implements BenchmarkExecutable
         }
 
         long start = System.nanoTime();
-        DatabaseWrapper db = FlowManager.getDatabase(DatabaseModule.NAME).getWritableDatabase();
-        db.beginTransaction();
 
-        try {
-            for (User user : users) {
-                user.save();
+        FlowManager.getDatabase(DatabaseModule.NAME).executeTransaction(new ITransaction() {
+            @Override
+            public void execute(DatabaseWrapper databaseWrapper) {
+                for (User user : users) {
+                    user.save();
+                }
+                Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
+
+                for (Message message : messages) {
+                    message.save();
+                }
+                Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
             }
-            Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
+        });
 
-            for (Message message : messages) {
-                message.save();
-            }
-            Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
-
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
         return System.nanoTime() - start;
     }
 

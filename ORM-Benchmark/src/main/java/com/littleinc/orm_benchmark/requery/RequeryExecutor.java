@@ -71,24 +71,20 @@ public class RequeryExecutor implements BenchmarkExecutable
             messages.add(newMessage);
         }
 
-        final EntityDataStore<Persistable> userStore = new EntityDataStore<>(
+        final EntityDataStore<Persistable> store = new EntityDataStore<>(
                 mHelper.getConfiguration());
 
         long start = System.nanoTime();
 
-        userStore.runInTransaction(new Callable<Object>()
+        store.runInTransaction(new Callable<Object>()
         {
             @Override
             public Object call() throws Exception
             {
-                for (User user : users) {
-                    userStore.insert(user);
-                }
+                store.insert(users, User.class);
                 Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
 
-                for (Message message : messages) {
-                    userStore.insert(message);
-                }
+                store.insert(messages, Message.class);
                 Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
 
                 return null;

@@ -16,8 +16,8 @@ android {
         applicationId "com.littleinc.orm_benchmark"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 106
-        versionName "0.1.6"
+        versionCode 107
+        versionName "0.1.7"
     }
 
     signingConfigs {

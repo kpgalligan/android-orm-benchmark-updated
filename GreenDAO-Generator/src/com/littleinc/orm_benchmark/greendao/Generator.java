@@ -1,9 +1,11 @@
 package com.littleinc.orm_benchmark.greendao;
 
-import de.greenrobot.daogenerator.DaoGenerator;
-import de.greenrobot.daogenerator.Entity;
-import de.greenrobot.daogenerator.Property;
-import de.greenrobot.daogenerator.Schema;
+import org.greenrobot.greendao.generator.DaoGenerator;
+import org.greenrobot.greendao.generator.Entity;
+import org.greenrobot.greendao.generator.Property;
+import org.greenrobot.greendao.generator.Schema;
+
+import java.io.File;
 
 public class Generator {
 
@@ -58,7 +60,8 @@ public class Generator {
         message.addToMany(user, userPk, READERS);
 
         try {
-            new DaoGenerator().generateAll(schema, "../ORM-Benchmark/src/main/java/");
+            System.out.println("current path: " + new File(".").getAbsolutePath());
+            new DaoGenerator().generateAll(schema, "./ORM-Benchmark/src/main/java/");
         } catch (Exception e) {
             e.printStackTrace();
         }

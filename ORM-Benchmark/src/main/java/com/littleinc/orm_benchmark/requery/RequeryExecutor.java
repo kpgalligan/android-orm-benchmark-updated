@@ -1,4 +1,5 @@
 package com.littleinc.orm_benchmark.requery;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -8,7 +9,6 @@ import com.littleinc.orm_benchmark.util.Util;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.Callable;
 
 import io.requery.Persistable;
@@ -17,24 +17,21 @@ import io.requery.sql.EntityDataStore;
 /**
  * Created by kgalligan on 10/24/15.
  */
-public class RequeryExecutor implements BenchmarkExecutable
-{
+public class RequeryExecutor implements BenchmarkExecutable {
 
     private static final String TAG = "RequeryExecutor";
 
     private DataBaseHelper mHelper;
 
     @Override
-    public void init(Context context, boolean useInMemoryDb)
-    {
+    public void init(Context context, boolean useInMemoryDb) {
         Log.d(TAG, "Creating DataBaseHelper");
         DataBaseHelper.init(context, useInMemoryDb);
         mHelper = DataBaseHelper.getInstance();
     }
 
     @Override
-    public long createDbStructure() throws SQLException
-    {
+    public long createDbStructure() throws SQLException {
         long start = System.nanoTime();
 
         mHelper.createTables(mHelper.getWritableDatabase());
@@ -43,9 +40,7 @@ public class RequeryExecutor implements BenchmarkExecutable
     }
 
     @Override
-    public long writeWholeData() throws SQLException
-    {
-        Random random = new Random();
+    public long writeWholeData() throws SQLException {
         final List<UserEntity> users = new LinkedList<UserEntity>();
         for (int i = 0; i < NUM_USER_INSERTS; i++) {
             UserEntity newUser = new UserEntity();
@@ -71,29 +66,26 @@ public class RequeryExecutor implements BenchmarkExecutable
             messages.add(newMessage);
         }
 
-        final EntityDataStore<Persistable> userStore = new EntityDataStore<>(
-                mHelper.getConfiguration());
+        final EntityDataStore<Persistable> userStore = new EntityDataStore<>(mHelper.getConfiguration());
 
         long start = System.nanoTime();
 
-        userStore.runInTransaction(new Callable<Object>()
-        {
+        userStore.runInTransaction(new Callable<Object>() {
             @Override
-            public Object call() throws Exception
-            {
-                for (User user : users) {
-                    userStore.insert(user);
-                }
+            public Object call() throws Exception {
+                userStore.insert(users, User.class);
+
                 Log.d(TAG, "Done, wrote " + NUM_USER_INSERTS + " users");
 
-                for (Message message : messages) {
-                    userStore.insert(message);
-                }
+                userStore.insert(messages, Message.class);
+
                 Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages");
 
                 return null;
             }
         });
+
+        userStore.close();
 
         return System.nanoTime() - start;
     }
@@ -105,7 +97,19 @@ public class RequeryExecutor implements BenchmarkExecutable
         final EntityDataStore<Persistable> userStore = new EntityDataStore<>(
                 mHelper.getConfiguration());
 
-        userStore.select(MessageEntity.class).get().toList().size();
+        final List<UserEntity> userEntities = userStore.select(UserEntity.class).get().toList();
+
+        String userLog = "Read " + userEntities.size() + " users in " + (System.nanoTime() - start);
+
+        long messageStart = System.nanoTime();
+
+        final List<MessageEntity> messageEntities = userStore.select(MessageEntity.class).get().toList();
+
+        Log.d(TAG, userLog);
+        Log.d(TAG, "Read " + messageEntities.size() + " messages in "
+                + (System.nanoTime() - messageStart));
+
+        userStore.close();
 
         return System.nanoTime() - start;
     }

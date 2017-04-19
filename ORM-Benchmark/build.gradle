@@ -9,13 +9,13 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 def releasePassword = properties.getProperty('releasePassword')
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.littleinc.orm_benchmark"
         minSdkVersion 15
-        targetSdkVersion 21
+        targetSdkVersion 25
         versionCode 108
         versionName "0.1.8"
     }
@@ -41,7 +41,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'de.greenrobot:eventbus:2.2.1'
-    compile 'com.android.support:support-v4:21.+'
+    compile 'com.android.support:support-v4:25.3.1'
 
     compile 'de.greenrobot:greendao:2.0.0'
     compile 'de.greenrobot:greendao-generator:2.0.0'

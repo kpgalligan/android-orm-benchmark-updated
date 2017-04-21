@@ -7,11 +7,12 @@ import android.util.Log;
 import com.littleinc.orm_benchmark.BenchmarkExecutable;
 import com.littleinc.orm_benchmark.util.Util;
 
+import org.greenrobot.greendao.database.StandardDatabase;
+import org.greenrobot.greendao.identityscope.IdentityScopeType;
+
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-
-import de.greenrobot.dao.identityscope.IdentityScopeType;
 
 import static com.littleinc.orm_benchmark.util.Util.getRandomString;
 
@@ -26,7 +27,7 @@ public class GreenDaoExecutor implements BenchmarkExecutable {
      */
     private boolean USE_IDENTITY_SCOPE = false;
 
-    private static String DB_NAME = "greendao_db";
+    private static final String DB_NAME = "greendao_db";
 
     private DataBaseHelper mHelper;
 
@@ -42,7 +43,7 @@ public class GreenDaoExecutor implements BenchmarkExecutable {
     @Override
     public long createDbStructure() throws SQLException {
         long start = System.nanoTime();
-        SQLiteDatabase db = mHelper.getWritableDatabase();
+        final StandardDatabase db = new StandardDatabase(mHelper.getWritableDatabase());
         if (mDaoSession == null) {
             mDaoSession = new DaoMaster(db).newSession(USE_IDENTITY_SCOPE ?
                     IdentityScopeType.Session : IdentityScopeType.None);
@@ -115,12 +116,12 @@ public class GreenDaoExecutor implements BenchmarkExecutable {
     @Override
     public long dropDb() throws SQLException {
         long start = System.nanoTime();
-        SQLiteDatabase db = mHelper.getWritableDatabase();
+        final SQLiteDatabase sqliteDb = mHelper.getWritableDatabase();
+        final StandardDatabase db = new StandardDatabase(sqliteDb);
         DaoMaster.dropAllTables(db, true);
         // Reset version, so OpenHelper does not get confused
-        db.setVersion(0);
-        long time = System.nanoTime() - start;
-        return time;
+        sqliteDb.setVersion(0);
+        return System.nanoTime() - start;
     }
 
     @Override

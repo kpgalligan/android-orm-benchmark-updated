@@ -11,10 +11,8 @@ import java.util.List;
 import java.util.Random;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
-
 
 import static com.littleinc.orm_benchmark.util.Util.getRandomString;
 
@@ -26,15 +24,13 @@ public class RealmExecutor implements BenchmarkExecutable
 
     private static final String TAG = "RealmExecutor";
 
-    //private DataBaseHelper mHelper;
     private Context mContext;
 
     @Override
     public void init(Context context, boolean useInMemoryDb)
     {
         mContext = context;
-//        Realm.getInstance(context);
-
+        Realm.init(mContext);
     }
 
     @Override
@@ -52,7 +48,6 @@ public class RealmExecutor implements BenchmarkExecutable
     @Override
     public long writeWholeData() throws SQLException
     {
-        Random random = new Random();
         List<User> users = new ArrayList<User>(NUM_USER_INSERTS);
         for (int i = 0; i < NUM_USER_INSERTS; i++) {
             User newUser = new User();
@@ -81,16 +76,15 @@ public class RealmExecutor implements BenchmarkExecutable
             messages.add(newMessage);
         }
 
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(mContext).build();
+        final Realm realm = Realm.getDefaultInstance();
         // Open the Realm for the UI thread.
-        Realm realm = Realm.getInstance(realmConfig);
+        realm.beginTransaction();
 
         long start = System.nanoTime();
 
-        realm.beginTransaction();
-
         String userLog;
         long messageStart;
+
         try
         {
             realm.insert(users);
@@ -104,11 +98,10 @@ public class RealmExecutor implements BenchmarkExecutable
         finally
         {
             realm.commitTransaction();
+            realm.close();
         }
 
         long totalTime = System.nanoTime() - start;
-
-        realm.close();
 
         Log.d(TAG, userLog);
         Log.d(TAG, "Done, wrote " + NUM_MESSAGE_INSERTS + " messages"  + (System.nanoTime() - messageStart));
@@ -119,10 +112,8 @@ public class RealmExecutor implements BenchmarkExecutable
     @Override
     public long readWholeData() throws SQLException
     {
+        final Realm realm = Realm.getDefaultInstance();
         long start = System.nanoTime();
-
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(mContext).build();
-        Realm realm = Realm.getInstance(realmConfig);
 
         RealmQuery<User> userQuery = realm.where(User.class);
         RealmResults<User> userResults = userQuery.findAll();
@@ -133,12 +124,12 @@ public class RealmExecutor implements BenchmarkExecutable
             String last = user.getmLastName();
         }
 
-        String userLog = "Read " + NUM_USER_INSERTS + " users in " + (System.nanoTime() - start);
+        String userLog = "Read " + userResults.size() + " users in " + (System.nanoTime() - start);
 
         long messageStart = System.nanoTime();
 
         RealmQuery <Message> messageQuery = realm.where(Message.class);
-        RealmResults<Message> messageResults =messageQuery.findAll();
+        RealmResults<Message> messageResults = messageQuery.findAll();
         for(Message message : messageResults)
         {
             int id = message.getId();
@@ -153,10 +144,11 @@ public class RealmExecutor implements BenchmarkExecutable
 
         long totalTime = System.nanoTime() - start;
 
-        realm.close();
         Log.d(TAG, userLog);
         Log.d(TAG,
-              "Read " + NUM_MESSAGE_INSERTS + " messages in " + (System.nanoTime() - messageStart));
+              "Read " + messageResults.size() + " messages in " + (System.nanoTime() - messageStart));
+
+        realm.close();
 
         return totalTime;
     }
@@ -166,20 +158,19 @@ public class RealmExecutor implements BenchmarkExecutable
     {
         long start = System.nanoTime();
 
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(mContext).build();
-        Realm realm = Realm.getInstance(realmConfig);
+        final Realm realm = Realm.getDefaultInstance();
 
-        realm.beginTransaction();
         try
         {
+            realm.beginTransaction();
             realm.deleteAll();
         }
         finally
         {
             realm.commitTransaction();
+            realm.close();
         }
 
-        realm.close();
         return System.nanoTime() - start;
     }
 }

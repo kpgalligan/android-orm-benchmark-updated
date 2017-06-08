@@ -1,10 +1,8 @@
 package com.littleinc.orm_benchmark.room;
 
 import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -18,12 +16,6 @@ public interface MessageDao {
 
     @Insert(onConflict = REPLACE)
     void addMessage(Message message);
-
-    @Delete
-    void deleteMessage(Message message);
-
-    @Update(onConflict = REPLACE)
-    void updateMessage(Message message);
 
     @Query("DELETE FROM Message")
     void dropTable();

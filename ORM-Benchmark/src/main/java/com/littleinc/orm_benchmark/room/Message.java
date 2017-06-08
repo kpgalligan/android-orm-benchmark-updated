@@ -5,11 +5,14 @@ import android.arch.persistence.room.PrimaryKey;
 
 import com.littleinc.orm_benchmark.util.Util;
 
+import org.greenrobot.greendao.annotation.Index;
+
 @Entity
 public class Message {
     @PrimaryKey(autoGenerate = true)
     public int id;
     public long clientId;
+    @Index
     public long commandId;
     public double sortedBy;
     public int createdAt;

@@ -24,4 +24,7 @@ public interface MessageDao {
 
     @Update(onConflict = REPLACE)
     void updateMessage(Message message);
+
+    @Query("DELETE FROM Message")
+    void dropTable();
 }

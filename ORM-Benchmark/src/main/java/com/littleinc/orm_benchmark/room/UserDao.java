@@ -24,4 +24,7 @@ public interface UserDao {
 
     @Update(onConflict = REPLACE)
     void updateUser(User user);
+
+    @Query("DELETE FROM User")
+    void dropTable();
 }

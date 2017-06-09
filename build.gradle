@@ -22,5 +22,6 @@ allprojects {
         mavenCentral()
         maven { url "https://www.jitpack.io" }
         maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
+        maven { url 'https://maven.google.com' }
     }
 }

@@ -9,6 +9,7 @@ import com.littleinc.orm_benchmark.greendao.GreenDaoExecutor;
 import com.littleinc.orm_benchmark.ormlite.ORMLiteExecutor;
 import com.littleinc.orm_benchmark.realm.RealmExecutor;
 import com.littleinc.orm_benchmark.requery.RequeryExecutor;
+import com.littleinc.orm_benchmark.room.RoomExecutor;
 import com.littleinc.orm_benchmark.sqlite.SQLiteExecutor;
 import com.littleinc.orm_benchmark.sqliteoptimized.OptimizedSQLiteExecutor;
 import com.littleinc.orm_benchmark.squeaky.SqueakyExecutor;
@@ -44,7 +45,8 @@ public class OrmBenchmarksTask extends Task
                     new RequeryExecutor(),
                     new OptimizedSQLiteExecutor(),
                     new ORMLiteExecutor(),
-                    new GreenDaoExecutor()
+                    new GreenDaoExecutor(),
+                    new RoomExecutor()
 };
 
     public String resultString;
